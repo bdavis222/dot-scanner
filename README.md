@@ -77,4 +77,4 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 When using this program on data used in published works, please cite:
 
-Allen, H.E., & Davis, B.D. 2022 (in prep.)
+Allen, H., & Davis, B., Patel, J., & Gu, Y. 2022 (in prep.)
