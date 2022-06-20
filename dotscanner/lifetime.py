@@ -77,8 +77,8 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
 		dotCoords, blobCoords = getCoordsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
-														middleImageThresholds, dotSize, 
-														middleImagePolygonCoordMap)
+								middleImageThresholds, dotSize, 
+								middleImagePolygonCoordMap)
 		dp.cleanDotCoords(microscopeImage.sums, dotCoords, blobCoords, blobSize, dotSize)
 		
 		imageNumberToCoordMap[index] = dotCoords
@@ -95,21 +95,21 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		for y, xSet in coordMap.items():
 			for x in xSet:
 				updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-										imageNumberToCoordMap, coordsInPrevFrames, userSettings)
+							imageNumberToCoordMap, coordsInPrevFrames, userSettings)
 		ui.printProgressBar(imageNumber + 1, imageNumberToCoordMapSize)
 	
 	if userSettings.removeEdgeFrames:
 		print("Removing dots in edge frames...")
 		lifetimesCleaned, resultCoordsCleaned, startImagesCleaned = removeDotsInEdgeFrames(
-																		imageNumberToCoordMap, 
-																		coordsInPrevFrames, 
-																		lifetimes, resultCoords, 
-																		startImages, skipsAllowed)
+										imageNumberToCoordMap, 
+										coordsInPrevFrames, 
+										lifetimes, resultCoords, 
+										startImages, skipsAllowed)
 		saveLifetimeDataFiles(directory, lifetimesCleaned, resultCoordsCleaned, startImagesCleaned,
-								imageNumberToCoordMap, imageNumberToFilenameMap, userSettings)
+					imageNumberToCoordMap, imageNumberToFilenameMap, userSettings)
 	else:
 		saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, 
-								imageNumberToCoordMap, imageNumberToFilenameMap, userSettings)
+					imageNumberToCoordMap, imageNumberToFilenameMap, userSettings)
 
 def removeDotsInEdgeFrames(imageNumberToCoordMap, coordsInPrevFrames, lifetimes, resultCoords, 
 							startImages, skipsAllowed):
@@ -144,7 +144,7 @@ def coordExistsInSpecificFrames(y, x, coordMap, listOfFrameNumbers):
 	return False
 
 def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, coordsInPrevFrames, userSettings):
+				imageNumberToCoordMap, coordsInPrevFrames, userSettings):
 	skipsAllowed = userSettings.skipsAllowed
 	dotSize = userSettings.dotSize
 	
@@ -187,7 +187,7 @@ def getCoordLifetime(y, x, imageNumber, imageNumberToCoordMap, skipsAllowed):
 	return nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
 
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, imageNumberToFilenameMap, userSettings):
+				imageNumberToCoordMap, imageNumberToFilenameMap, userSettings):
 	dotSize = userSettings.dotSize
 	saveFigures = userSettings.saveFigures
 	
@@ -210,7 +210,7 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages,
 	
 	if saveFigures:
 		saveLifetimeFigures(directory, dotSize, imageNumberToCoordMap, imageNumberToFilenameMap, 
-							userSettings)
+					userSettings)
 
 def saveLifetimeFigures(directory, dotSize, imageNumberToCoordMap, imageNumberToFilenameMap, 
 						userSettings):
