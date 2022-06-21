@@ -10,7 +10,7 @@ backgroundSubtractionTypeException = "BACKGROUND_SUBTRACTION_TYPE can only be 'm
 checkExtension = "Please check the file extension provided in the configurations file."
 
 densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
-lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize"
+lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize\n"
 
 fileNumberingException = "Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes"
