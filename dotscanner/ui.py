@@ -117,7 +117,6 @@ class RegionSelector:
 		self.yList = []
 		
 		self.image = image
-		self.program = userSettings.program
 		self.dotSize = userSettings.dotSize
 		self.blobSize = userSettings.blobSize
 		self.data = image.data
@@ -126,7 +125,7 @@ class RegionSelector:
 		manager = pl.get_current_fig_manager()
 		geometry = f"{cfg.WINDOW_WIDTH}x{cfg.WINDOW_HEIGHT}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
 		manager.window.geometry(geometry)
-		manager.window.title(f"Dot Scanner - Region Selection ({self.program})")
+		manager.window.title(f"Dot Scanner - Region Selection")
 		
 		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=0, vmax=2 * np.std(self.data))
 		self.dotScatter = self.axes.scatter([None], [None], s=5 * self.dotSize, facecolors="none", 
@@ -231,7 +230,6 @@ class ThresholdAdjuster:
 		self.editingThresholds = False
 		
 		self.image = image
-		self.program = userSettings.program
 		self.dotSize = userSettings.dotSize
 		self.blobSize = userSettings.blobSize
 		self.defaultThresholds = userSettings.thresholds
@@ -257,7 +255,7 @@ class ThresholdAdjuster:
 		manager = pl.get_current_fig_manager()
 		geometry = f"{cfg.WINDOW_WIDTH}x{cfg.WINDOW_HEIGHT}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
 		manager.window.geometry(geometry)
-		manager.window.title(f"Dot Scanner - Threshold Adjustment ({self.program})")
+		manager.window.title(f"Dot Scanner - Threshold Adjustment")
 		
 		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=0, vmax=2 * np.std(self.data))
 		self.dotScatter = self.axes.scatter([None], [None], s=50 * self.dotSize, facecolors="none", 
