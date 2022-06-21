@@ -23,11 +23,11 @@ matplotlib.rcParams["ytick.left"] = False
 matplotlib.rcParams["ytick.labelleft"] = False
 
 class MicroscopeImage:
-	memoizedCoords = {}
-	polygon = [] # Vertices of the polygonal region selected for analysis (mutated by other classes)
-	skipped = False # Whether analysis of the image should be skipped (mutated by other classes)
-	
 	def __init__(self, directory, filename, userSettings):
+		self.memoizedCoords = {}
+		self.polygon = [] # Vertices of the region selected for analysis (mutated by other classes)
+		self.skipped = False # Whether the image should be skipped (mutated by other classes)
+		
 		self.dotSize = userSettings.dotSize
 		self.blobSize = userSettings.blobSize
 		self.saveFigures = userSettings.saveFigures
@@ -112,11 +112,10 @@ class MicroscopeImage:
 					self.lowerBlobThreshScale)
 
 class RegionSelector:
-	"""Draw a polygon on a plot by clicking the vertices of the polygon."""
-	xList = []
-	yList = []
-	
 	def __init__(self, image, userSettings, skipButton=True):
+		self.xList = []
+		self.yList = []
+		
 		self.image = image
 		self.program = userSettings.program
 		self.dotSize = userSettings.dotSize
@@ -227,10 +226,10 @@ class RegionSelector:
 		pl.close("all")
 
 class ThresholdAdjuster:
-	index = 0
-	editingThresholds = False
-	
 	def __init__(self, image, userSettings, skipButton=True):
+		self.index = 0
+		self.editingThresholds = False
+		
 		self.image = image
 		self.program = userSettings.program
 		self.dotSize = userSettings.dotSize
