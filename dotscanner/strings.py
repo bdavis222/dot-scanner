@@ -5,10 +5,6 @@ if cfg.SCALE is None:
 else:
 	UNITS = "um"
 
-backgroundSubtractionTypeException = "BACKGROUND_SUBTRACTION_TYPE can only be 'mean' or 'median'."
-
-checkExtension = "Please check the file extension provided in the configurations file."
-
 densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
 lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize\n"
 
@@ -51,8 +47,3 @@ def editThresholds(thresholds):
 \nThe current threshold scale values are: \
 \nlowerDotThreshScale  upperDotThreshScale  lowerBlobThreshScale\n     \
 {thresholds[0]}                   {thresholds[1]}                   {thresholds[2]}\n"
-
-def extensionSuggestion(fileExtension, suggestion):
-	return f"The file extension '{fileExtension}' was not found. \
-\nThe most common file extension in this directory is \'{suggestion}'. \
-\nWould you like to use these files? y/(n) "
