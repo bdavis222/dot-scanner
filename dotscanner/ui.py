@@ -585,8 +585,9 @@ class UserSettings:
 			self.labelSelectedPath.configure(text=displayedFolder, bg="white", fg="black")
 
 	def browseStartingImage(self):
-		chosenImage = filedialog.askopenfilename(initialdir=self.filepath, 
-			title="Select the starting image for the lifetime measurement")
+		chosenFilepath = filedialog.askopenfilename(initialdir=self.filepath, 
+						title="Select the starting image for the lifetime measurement")
+		chosenImage = os.path.basename(chosenFilepath)
 		if chosenImage != "":
 			try:
 				trailingNumberString = str(files.getTrailingNumber(chosenImage))
