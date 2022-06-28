@@ -86,13 +86,13 @@ def saveDensityDataFiles(directory, filename, density, error, microscopeImage, u
 			file.write(strings.densityOutputFileHeader)
 			
 	if skipped:
-		output = f"{filename} skipped - - - - - - -\n"
+		output = f"{filename} skipped - - - - - - - -\n"
 		
 	else:
 		density = np.round(density, 7)
 		error = np.round(error, 7)
 		output = strings.densityOutput(filename, density, error, microscopeImage.thresholds, 
-										dotSize, blobSize)
+										dotSize, blobSize, microscopeImage.polygon)
 	
 	with open(targetPath, "a") as file:
 		file.write(output)
