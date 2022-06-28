@@ -9,17 +9,48 @@ import matplotlib.pyplot as pl
 import numpy as np
 import os
 
+def addToPlotCoords(coordsToPlot, y, x, imageNumber, lifetime):
+	for frame in range(imageNumber, imageNumber + lifetime):
+		if frame not in coordsToPlot:
+			coordsToPlot[frame] = set()
+		if (x, y) not in coordsToPlot[frame]:
+			coordsToPlot[frame].add((x, y))
+
 def checkEnoughFramesForLifetimes(filenames, userSettings):
 	if len(filenames) <= 2 * (userSettings.skipsAllowed + 1):
 		raise Exception(strings.tooFewFramesException)
 
-def getThresholds(microscopeImage):
-	sums = microscopeImage.sums
-	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = microscopeImage.thresholds
-	lowerDotThresh = lowerDotThreshScale * np.std(sums)
-	upperDotThresh = upperDotThreshScale * np.std(sums)
-	lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
-	return lowerDotThresh, upperDotThresh, lowerBlobThresh
+def coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
+							skipsAllowed):
+	firstFrameNumber = max(0, imageNumber - skipsAllowed - 1)
+	frameNumbers = range(firstFrameNumber, imageNumber)
+	for frameNumber in frameNumbers:
+		frameCoords = imageNumberToCoordMap[frameNumber]
+		if dp.coordExistsWithinRadius(y, x, frameCoords, dotSize):
+			return True
+	return False
+
+def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
+						skipsAllowed, removeEdgeFrames):
+	skipsRemaining = skipsAllowed
+	nextImageNumber = imageNumber + 1
+	while nextImageNumber in imageNumberToCoordMap:
+		nextCoords = imageNumberToCoordMap[nextImageNumber]
+		
+		if dp.coordExistsWithinRadius(y, x, nextCoords, dotSize):
+			if removeEdgeFrames and nextImageNumber in edgeFrameNumbers:
+				return None
+			
+			if skipsRemaining < skipsAllowed:
+				skipsRemaining = skipsAllowed
+				
+		else:
+			if skipsRemaining == 0:
+				break
+			skipsRemaining -= 1
+		nextImageNumber += 1
+			
+	return nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
 
 def getCoordsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, polygonCoordMap, xMin, xMax, yMin, yMax):
 	dotCoords = {}
@@ -41,6 +72,16 @@ def getCoordsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlob
 							else:
 								dp.addCoordinate(y, x, dotCoords)
 	return dotCoords, blobCoords
+
+def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
+	firstFrame = 0
+	lastFrameOfFrontEdge = skipsAllowed + 1
+	firstFrameOfBackEdge = list(imageNumberToCoordMap.keys())[-1] - skipsAllowed
+	lastFrame = list(imageNumberToCoordMap.keys())[-1] + 1
+	
+	firstFrames = range(firstFrame, lastFrameOfFrontEdge)
+	lastFrames = range(firstFrameOfBackEdge, lastFrame)
+	return set(list(firstFrames) + list(lastFrames))
 
 def getInPolygonCoordMap(microscopeImage):
 	data = microscopeImage.data
@@ -78,6 +119,14 @@ def getPolygonLimits(polygon):
 	polygonXMax = int(round(polygonXMax, 0))
 	
 	return polygonXMin, polygonXMax, polygonYMin, polygonYMax
+
+def getThresholds(microscopeImage):
+	sums = microscopeImage.sums
+	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = microscopeImage.thresholds
+	lowerDotThresh = lowerDotThreshScale * np.std(sums)
+	upperDotThresh = upperDotThreshScale * np.std(sums)
+	lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
+	return lowerDotThresh, upperDotThresh, lowerBlobThresh
 
 def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	blobSize = userSettings.blobSize
@@ -124,74 +173,6 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
 							imageNumberToFilenameMap, middleMicroscopeImage, userSettings, 
 							coordsToPlot)
-
-def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
-	firstFrame = 0
-	lastFrameOfFrontEdge = skipsAllowed + 1
-	firstFrameOfBackEdge = list(imageNumberToCoordMap.keys())[-1] - skipsAllowed
-	lastFrame = list(imageNumberToCoordMap.keys())[-1] + 1
-	
-	firstFrames = range(firstFrame, lastFrameOfFrontEdge)
-	lastFrames = range(firstFrameOfBackEdge, lastFrame)
-	return set(list(firstFrames) + list(lastFrames))
-
-def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
-							removeEdgeFrames, saveFigures, coordsToPlot):
-	if not removeEdgeFrames or imageNumber > skipsAllowed:
-		if not coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
-										dotSize, skipsAllowed):
-			
-			coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
-												imageNumberToCoordMap, dotSize, skipsAllowed, 
-												removeEdgeFrames)
-			
-			if coordLifetime is not None:
-				lifetimes.append(coordLifetime)
-				resultCoords.append((y, x))
-				startImages.append(imageNumber)
-				
-				if saveFigures:
-					addToPlotCoords(coordsToPlot, y, x, imageNumber, coordLifetime)
-
-def addToPlotCoords(coordsToPlot, y, x, imageNumber, lifetime):
-	for frame in range(imageNumber, imageNumber + lifetime):
-		if frame not in coordsToPlot:
-			coordsToPlot[frame] = set()
-		if (x, y) not in coordsToPlot[frame]:
-			coordsToPlot[frame].add((x, y))
-
-def coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
-							skipsAllowed):
-	firstFrameNumber = max(0, imageNumber - skipsAllowed - 1)
-	frameNumbers = range(firstFrameNumber, imageNumber)
-	for frameNumber in frameNumbers:
-		frameCoords = imageNumberToCoordMap[frameNumber]
-		if dp.coordExistsWithinRadius(y, x, frameCoords, dotSize):
-			return True
-	return False
-
-def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
-						skipsAllowed, removeEdgeFrames):
-	skipsRemaining = skipsAllowed
-	nextImageNumber = imageNumber + 1
-	while nextImageNumber in imageNumberToCoordMap:
-		nextCoords = imageNumberToCoordMap[nextImageNumber]
-		
-		if dp.coordExistsWithinRadius(y, x, nextCoords, dotSize):
-			if removeEdgeFrames and nextImageNumber in edgeFrameNumbers:
-				return None
-			
-			if skipsRemaining < skipsAllowed:
-				skipsRemaining = skipsAllowed
-				
-		else:
-			if skipsRemaining == 0:
-				break
-			skipsRemaining -= 1
-		nextImageNumber += 1
-			
-	return nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
 
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, 
 							imageNumberToCoordMap, imageNumberToFilenameMap, microscopeImage, 
@@ -244,3 +225,22 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToFilenameMap, userS
 		
 		count += 1
 		ui.printProgressBar(count, coordsToPlotSize)
+
+def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
+							imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
+							removeEdgeFrames, saveFigures, coordsToPlot):
+	if not removeEdgeFrames or imageNumber > skipsAllowed:
+		if not coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
+										dotSize, skipsAllowed):
+			
+			coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
+												imageNumberToCoordMap, dotSize, skipsAllowed, 
+												removeEdgeFrames)
+			
+			if coordLifetime is not None:
+				lifetimes.append(coordLifetime)
+				resultCoords.append((y, x))
+				startImages.append(imageNumber)
+				
+				if saveFigures:
+					addToPlotCoords(coordsToPlot, y, x, imageNumber, coordLifetime)
