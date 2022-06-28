@@ -63,7 +63,7 @@ python -m unittest
 
 ## Authors
 
-Holly Allen (hollyallen_8@hotmail.com)
+Holly Allen (holly.allen@colorado.edu)
 
 Brian Davis
 
