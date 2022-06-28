@@ -1,6 +1,5 @@
 import numpy as np
 from PIL import Image
-import threading
 
 def addCoordinate(y, x, coordMap):
 	if y not in coordMap:
@@ -167,26 +166,9 @@ def removeDotsNearBlobs(dotCoords, blobCoords, blobSize):
 		if coordIsNearBlob(y, x, blobCoords, blobSize):
 			removeCoordinate(y, x, dotCoords)
 
-def runMultipleThreads(listOfTargets, listOfArgTuples):
-	threads = []
-	for target, argTuple in zip(listOfTargets, listOfArgTuples):
-		thread = threading.Thread(target=target, args=argTuple)
-		thread.start()
-		threads.append(thread)
-	
-	for thread in threads:
-		thread.join()
-
 def setScatterData(dotCoords, blobCoords, dotScatter, blobScatter):
-	runMultipleThreads(
-		[
-			setScatterOffset, 
-			setScatterOffset
-		], 
-		[
-			(dotCoords, dotScatter), 
-			(blobCoords, blobScatter)
-		])
+	setScatterOffset(dotCoords, dotScatter)
+	setScatterOffset(blobCoords, blobScatter)
 
 def setScatterOffset(coordMap, scatterPlot):
 	coordList = getCoordPairsFromCoordMap(coordMap)
