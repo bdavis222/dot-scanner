@@ -41,15 +41,15 @@ REMOVE_EDGE_FRAMES = True
 # Whether edge frames should be removed from a lifetime calculation
 
 SAVE_FIGURES = False
-# Whether the displayed figures should be saved in a "Figures" directory. Default is False.
+# Whether the displayed figures should be saved in a "figures" directory. Default is False.
 
 WINDOW_WIDTH = 700
 WINDOW_HEIGHT = 700
-# Dimensions of figures IN PIXELS
+# Dimensions of figures in pixels
 
 WINDOW_X = 10
 WINDOW_Y = 30
-# Starting position of the upper left corner of GUI windows
+# Starting position of the upper left corner of GUI windows in pixels
 
 DOT_COLOR = "lime"
 # The color used for dot markers in plots. 
