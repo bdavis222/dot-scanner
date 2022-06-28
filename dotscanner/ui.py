@@ -190,16 +190,15 @@ class RegionSelector:
 		self.line.figure.canvas.draw_idle()
 	
 	def finish(self, _event):
+		pl.close("all")
 		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
 			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
 			self.yList.append(self.yList[0])
 			for y, x in zip(self.yList, self.xList):
-				self.image.polygon.append([y, x])
+				self.image.polygon.append([int(round(y, 0)), int(round(x, 0))])
 		
 		else: # An invalid polygon was drawn
 			print(strings.invalidPolygonWarning)
-			
-		pl.close("all")
 	
 	def quit(self, event):
 		quit()
@@ -586,7 +585,7 @@ class UserSettings:
 
 	def browseStartingImage(self):
 		chosenFilepath = filedialog.askopenfilename(initialdir=self.filepath, 
-						title="Select the starting image for the lifetime measurement")
+			title="Select the starting image for the lifetime measurement")
 		chosenImage = os.path.basename(chosenFilepath)
 		if chosenImage != "":
 			try:
