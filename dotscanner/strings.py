@@ -6,7 +6,8 @@ else:
 	UNITS = "um"
 
 densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
-lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize\n"
+lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
+polygon vertices (x, y)\n"
 
 fileNumberingException = "Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes"
@@ -14,8 +15,6 @@ lifetimes"
 filepathException = "Filepath must point to a file or directory."
 
 invalidPolygonWarning = "No valid, enclosed polygon drawn. No measurements made."
-
-lifetimeOutputFileHeader = "# x | y | lifetime | starting image\n"
 
 lowerBlobThreshScaleWarning = "WARNING: lower blob threshold scale set below 1.0, which means \
 blobs can be dimmer than the brightest dots, which shouldn't happen. Setting to 1.0."
@@ -38,12 +37,33 @@ measurements."
 upperDotThreshScaleWarning = "WARNING: upper dot threshold scale set below lower dot threshold \
 scale. Setting to the value of lower dot threshold scale."
 
-def densityOutput(filename, density, error, thresholds, dotSize, blobSize):
+def densityOutput(filename, density, error, thresholds, dotSize, blobSize, polygon):
+	verticesStringList = []
+	for vertex in polygon[:-1]:
+		y, x = vertex
+		verticesStringList.append(f"({x}, {y})")
+	verticesString = ", ".join(verticesStringList)
+	
 	return f"{filename} {density} {error} {thresholds[0]} {thresholds[1]} {thresholds[2]} \
-{blobSize} {dotSize}\n"
+{blobSize} {dotSize} {verticesString}\n"
 
 def editThresholds(thresholds):
 	return f"\nGive three threshold scales to set their new values (RETURN to cancel). \
 \nThe current threshold scale values are: \
 \nlowerDotThreshScale  upperDotThreshScale  lowerBlobThreshScale\n     \
 {thresholds[0]}                   {thresholds[1]}                   {thresholds[2]}\n"
+
+def lifetimeOutputFileHeader(polygon, thresholds):
+	verticesStringList = []
+	for vertex in polygon[:-1]:
+		y, x = vertex
+		verticesStringList.append(f"({x}, {y})")
+	verticesString = ", ".join(verticesStringList)
+	
+	thresholdsStringList = []
+	for threshold in thresholds:
+		thresholdsStringList.append(str(threshold))
+	thresholdsString = ", ".join(thresholdsStringList)
+	return f"# Selected polygon vertices (x, y): {verticesString}\n\
+# Selected threshold scales: {thresholdsString}\n\
+#\n# x | y | lifetime | starting image\n"
