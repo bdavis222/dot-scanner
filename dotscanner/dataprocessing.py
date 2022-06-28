@@ -17,6 +17,16 @@ def coordExists(y, x, coordMap):
 			return True
 	return False
 
+def coordExistsWithinRadius(y, x, coordMap, radius):
+	yRange = range(y - radius, y + radius + 1)
+	xRange = range(x - radius, x + radius + 1)
+	for currentY in yRange:
+		if currentY in coordMap:
+			for currentX in xRange:
+				if currentX in coordMap[currentY]:
+					return True
+	return False
+
 def coordIsNearBlob(y, x, blobCoords, blobSize):
 	yRange = range(y - blobSize, y + blobSize + 1)
 	xRange = range(x - blobSize, x + blobSize + 1)
