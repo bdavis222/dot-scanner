@@ -70,13 +70,15 @@ Several configuration options are available for both the density and lifetime pr
 
 #### Save Figures
 
-This option will output graphical plots to a `figures` directory that will be created within the working directory of the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis. 
+Selecting this option will output graphical plots to a `figures` directory that will be created within the working directory of the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis. 
 
 #### Blob Size
 
 This option sets the size of a "blob" in the dataset---a region of the image that is saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel, and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"---the dimmer particles of interest in the image---are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
 
 #### Dot Size
+
+This sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer dots within a brighter dot's region will be removed. 
 
 #### Thresholds
 
