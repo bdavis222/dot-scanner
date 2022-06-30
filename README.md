@@ -26,7 +26,7 @@ To install this software and its dependencies:
 python setup.py install
 ```
 
-This should automate the dependency installation process. Alternatively, the matplotlib and numpy dependencies can be installed independently via the following commands:
+This should automate the dependency installation process. Alternatively, the [matplotlib](https://pypi.org/project/matplotlib/) and [numpy](https://pypi.org/project/numpy/) dependencies can be installed independently via the following commands:
 
 ```
 pip install matplotlib
