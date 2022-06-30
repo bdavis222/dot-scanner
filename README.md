@@ -49,18 +49,20 @@ If repeated analysis is being performed at the same target filepath, the user ca
 
 To measure the density of particles detected in a microscope image, one will run the "density" program. This is selected via a dropdown list in the GUI, and may already be set as the default program, depending on the preferences set in `config.py`.
 
-For a "density" program setting, the user will use the next window that loads to adjust the detection thresholds used by the program. After this, another window will load to allow the user to click on the screen to draw the vertices of a polygon that will enclose a custom region for density measurement. A major benefit of this software is its ability to automatically reject portions of this custom region with bright, overexposed, or saturated data. Because of this, the user doesn't have to draw around those regions when defining the polygon, as the program will calculate the area used in the density measurement by subtracting the area taken up by the rejected portions of the image within the polygon.
+For a "density" program setting, the user will use the next window that loads to adjust the detection thresholds used by the program. After this, another window will load to allow the user to click on the screen to draw the vertices of a polygon that will enclose a custom region for density measurement. 
+
+A major benefit of this software is its ability to automatically reject portions of this custom region with bright, overexposed, or saturated data. Because of this, the user doesn't have to draw around those regions when defining the polygon, as the program will calculate the area used in the density measurement by subtracting the area taken up by the rejected portions of the image within the polygon.
 
 #### Lifetime Measurement
 
-In addition to the density program, a "lifetime" program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly do two things:
+In addition to the density measuremnt program, a "lifetime" measurement program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly do two things:
 
 1. Allow the user to adjust thresholds
 2. Define a study region where the lifetimes of the particles in a series of images will be measured
 
 Because this only works with a series of images, the user must initially select a directory, not a single file.
 
-For each of these programs, there are several configuration options. For more information, see the publication listed in the Citations section at the bottom of this readme file.
+Several configuration options are available for both the density and lifetime programs. For more information, see the publication listed in the Citations section at the bottom of this readme file.
 
 ## Development
 
