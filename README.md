@@ -82,7 +82,15 @@ This sets the size of a "dot" in the dataset. Because dots should not overlap, t
 
 #### Thresholds
 
+There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes in the startup GUI correspond to the following variables in `config.py` (displayed from left to right in the GUI):
+
+1. LOWER_DOT_THRESH_SCALE: This sets the lower brightness boundary for a dot to be detected. The value provided is the number of standard deviations above the mean brightness in the image. 
+2. UPPER_DOT_THRESH_SCALE: This sets the upper brightness boundary for a dot to be detected. The value provided is the number of standard deviations above the mean brightness in the image. 
+3. LOWER_BLOB_THRESH_SCALE: This sets the lower brightness boundary for a blob to be detected. The value provided is the . 
+
 #### Start Image
+
+This option sets the first image to be considered 
 
 #### Remove Edge Frames
 
