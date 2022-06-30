@@ -98,7 +98,7 @@ This option sets the first image to be considered in a lifetime calculation.
 
 #### Remove Edge Frames
 
-This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation. If the number of skips allowed in the lifetime calculation is greater than zero, this will affect how many edge frames are removed from analysis. 
+This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis. 
 
 ## Authors
 
