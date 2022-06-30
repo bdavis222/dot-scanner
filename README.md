@@ -45,6 +45,8 @@ When launched, the user must select the file or directory of files to be analyze
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the `config.py` file, only selecting values that are explicitly allowed, as explained in the comments within the file.
 
+The software will run as expected on any directory where the most common file extension within the directory belongs to the images wanting to be analyzed. By default, the entire directory will be scanned, and the most common file type found within the directory will be set as the file type to analyze. If the user is experiencing issues with the wrong file type being selected, it is recommended that they reorganize their data into directories containing only their images to be analyzed. 
+
 #### Density Measurement
 
 To measure the density of particles detected in a microscope image, one will run the "density" program. This is selected via a dropdown list in the GUI, and may already be set as the default program, depending on the preferences set in `config.py`.
@@ -62,9 +64,21 @@ In addition to the density measuremnt program, a "lifetime" measurement program 
 
 Because this only works with a series of images, the user must initially select a directory, not a single file.
 
-#### Other Configuration Options
+### Other Configuration Options
 
-Several configuration options are available for both the density and lifetime programs. For more information, see the publication listed in the Citations section at the bottom of this readme file.
+Several configuration options are available for both the density and lifetime programs, as described below. All of these have default values that can be modified in the `config.py` file. For more information, see the publication listed in the Citations section at the bottom of this readme file.
+
+#### Save Figures
+
+#### Blob Size
+
+#### Dot Size
+
+#### Thresholds
+
+#### Start Image
+
+#### Remove Edge Frames
 
 ## Authors
 
