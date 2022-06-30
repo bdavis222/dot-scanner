@@ -93,7 +93,7 @@ python -m unittest
 
 ### Bug Reports and Feature Requests
 
-To report a bug, visit our [issues page](https://github.com/bdavis222/dotscanner/issues). New feature requests are also welcome!
+To report a bug, visit the [issues page](https://github.com/bdavis222/dotscanner/issues). New feature requests are also welcome!
 
 ## Citations
 
