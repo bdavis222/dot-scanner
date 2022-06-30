@@ -43,7 +43,7 @@ python -m dotscanner
 
 When launched, the user must select the file or directory of files to be analyzed. The "File" and "Folder" buttons will allow the user to navigate their filesystem to select the desired filepath.
 
-If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the `config.py` file, only selecting values that are explicitly allowed, as explained in the comments within the file.
+If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the configurations file, only selecting values that are explicitly allowed, as explained in the comments within the file.
 
 The software will run as expected on any directory where the most common file extension within the directory belongs to the images wanting to be analyzed. By default, the entire directory will be scanned, and the most common file type found within the directory will be set as the file type to analyze. If the user is experiencing issues with the wrong file type being selected, it is recommended that they reorganize their data into directories containing only their images to be analyzed. 
 
@@ -70,7 +70,11 @@ Several configuration options are available for both the density and lifetime pr
 
 #### Save Figures
 
+This option will output graphical plots to a `figures` directory that will be created within the working directory of the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis. 
+
 #### Blob Size
+
+This option sets the size of a "blob" in the dataset---a region of the image that is saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel, and all of the pixels within those regions will be ignored during analysis. This ensures that no "dots"---the dimmer particles of interest in the image---are too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
 
 #### Dot Size
 
