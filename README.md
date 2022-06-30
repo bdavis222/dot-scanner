@@ -74,7 +74,7 @@ This option will output graphical plots to a `figures` directory that will be cr
 
 #### Blob Size
 
-This option sets the size of a "blob" in the dataset---a region of the image that is saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel, and all of the pixels within those regions will be ignored during analysis. This ensures that no "dots"---the dimmer particles of interest in the image---are too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
+This option sets the size of a "blob" in the dataset---a region of the image that is saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel, and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"---the dimmer particles of interest in the image---are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
 
 #### Dot Size
 
