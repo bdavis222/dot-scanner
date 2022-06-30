@@ -10,13 +10,13 @@ One to two paragraph statement about the product and what it does.
 ### Dependencies
 
 The requirements to run this software are:
-- Python 3
-- matplotlib
-- numpy
+- [Python 3](https://www.python.org/downloads/)
+- [matplotlib](https://pypi.org/project/matplotlib/)
+- [numpy](https://pypi.org/project/numpy/)
 
 ### Installation
 
-To install dependencies, navigate to the top-level directory of the downloaded project in a terminal window and run the following command:
+To install this software and its dependencies, download this project, navigate to the top-level directory of the downloaded project in a terminal window, and run the following command:
 
 ```
 python setup.py install
