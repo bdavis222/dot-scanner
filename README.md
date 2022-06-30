@@ -86,7 +86,7 @@ There are three thresholds that can be set to adjust the detection sensitivity f
 
 1. LOWER_DOT_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the dots. The default is 1.5, which corresponds to 1.5 standard deviations above the mean. Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
 2. UPPER_DOT_THRESH_SCALE: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
-3. LOWER_BLOB_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of upperDotThreshScale. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
+3. LOWER_BLOB_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of UPPER_DOT_THRESH_SCALE. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
 
 #### Skips Allowed
 
