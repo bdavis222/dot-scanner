@@ -62,6 +62,8 @@ In addition to the density measuremnt program, a "lifetime" measurement program 
 
 Because this only works with a series of images, the user must initially select a directory, not a single file.
 
+#### Other Configuration Options
+
 Several configuration options are available for both the density and lifetime programs. For more information, see the publication listed in the Citations section at the bottom of this readme file.
 
 ## Development
