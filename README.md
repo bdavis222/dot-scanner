@@ -53,7 +53,12 @@ For a "density" program setting, the user will use the next window that loads to
 
 #### Lifetime Measurement
 
-In addition to the density program, a "lifetime" program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly 1) allow the user to adjust thresholds, and then 2) define a study region where the lifetimes of the particles in a series of images will be measured. Because this only works with a series of images, the user must initially select a directory, not a single file.
+In addition to the density program, a "lifetime" program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly do two things:
+
+1. Allow the user to adjust thresholds
+2. Define a study region where the lifetimes of the particles in a series of images will be measured
+
+Because this only works with a series of images, the user must initially select a directory, not a single file.
 
 For each of these programs, there are several configuration options. For more information, see the publication listed in the Citations section at the bottom of this readme file.
 
