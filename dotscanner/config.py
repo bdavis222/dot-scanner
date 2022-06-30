@@ -49,7 +49,7 @@ WINDOW_HEIGHT = 700
 
 WINDOW_X = 10
 WINDOW_Y = 30
-# Starting position of the upper left corner of GUI windows in pixels
+# Starting position of the upper left corner of all GUI windows in pixels
 
 DOT_COLOR = "lime"
 # The color used for dot markers in plots. 
