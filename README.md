@@ -90,7 +90,7 @@ There are three thresholds that can be set to adjust the detection sensitivity f
 
 #### Skips Allowed
 
-This sets the number of consecutive images that are allowed to be skipped in a lifetime calculation. 
+This sets the number of consecutive images that are allowed to be skipped in a lifetime calculation. This can be useful for dimmer dots where an image or two in a series are relatively out of focus, resulting in an unwanted non-detection for those frames. By increasing the number of skips allowed, these particles will be retained as long as they are back in focus and bright enough for detection in subsequent frames. 
 
 #### Start Image
 
