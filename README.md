@@ -74,25 +74,31 @@ Selecting this option will output graphical plots to a `figures` directory that 
 
 #### Blob Size
 
-This option sets the size of a "blob" in the dataset---a region of the image that is saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel, and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"---the dimmer particles of interest in the image---are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
+This option sets the radius (or, more precisely, the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel, and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"---the dimmer particles of interest in the image---are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
 
 #### Dot Size
 
-This sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer dots within a brighter dot's region will be removed. 
+Similar to the blob size option, this sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer pixels within a brighter dot's region will not be recognized as dots, and will therefore be removed. 
 
 #### Thresholds
 
 There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes in the startup GUI correspond to the following variables in `config.py` (displayed from left to right in the GUI):
 
-1. LOWER_DOT_THRESH_SCALE: This sets the lower brightness boundary for a dot to be detected. The value provided is the number of standard deviations above the mean brightness in the image. 
-2. UPPER_DOT_THRESH_SCALE: This sets the upper brightness boundary for a dot to be detected. The value provided is the number of standard deviations above the mean brightness in the image. 
-3. LOWER_BLOB_THRESH_SCALE: This sets the lower brightness boundary for a blob to be detected. The value provided is the . 
+1. LOWER_DOT_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the dots. The default is 1.5, which corresponds to 1.5 standard deviations above the mean. Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
+2. UPPER_DOT_THRESH_SCALE: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
+3. LOWER_BLOB_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of upperDotThreshScale. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
+
+#### Skips Allowed
+
+This sets the number of consecutive images that are allowed to be skipped in a lifetime calculation. 
 
 #### Start Image
 
-This option sets the first image to be considered 
+This option sets the first image to be considered in a lifetime calculation.
 
 #### Remove Edge Frames
+
+This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation. If the number of skips allowed in the lifetime calculation is greater than zero, this will affect how many edge frames are removed from analysis. 
 
 ## Authors
 
