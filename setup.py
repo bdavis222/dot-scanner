@@ -8,7 +8,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="Dot Scanner",  # Required
-    version="0.1.0",  # Required
+    version="1.0.0",  # Required
     description="A program designed for analysis of microscope imaging data",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
