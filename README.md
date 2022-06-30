@@ -16,7 +16,11 @@ The requirements to run this software are:
 
 ### Installation
 
-To install this software and its dependencies, download this project, navigate to the top-level directory of the downloaded project in a terminal window, and run the following command:
+To install this software and its dependencies:
+
+1. Download this project
+2. Navigate to the top-level directory of the downloaded project in a terminal window
+3. Run the following command:
 
 ```
 python setup.py install
