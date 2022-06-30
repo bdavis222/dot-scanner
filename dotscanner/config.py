@@ -18,7 +18,7 @@ UPPER_DOT_THRESH_SCALE = 5
 
 LOWER_BLOB_THRESH_SCALE = 2
 # Scaling for the lower threshold defining the brightness of the blobs. The default is 2,
-# which corresponds to 2 times the value of upperDotThreshScale.
+# which corresponds to 2 times the value of UPPER_DOT_THRESH_SCALE.
 # Lower this value to increase the number of blobs detected, or raise it to reduce the number.
 
 THRESHOLD_DELTA = 0.1
