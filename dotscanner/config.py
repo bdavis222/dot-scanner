@@ -45,7 +45,7 @@ SAVE_FIGURES = False
 
 WINDOW_WIDTH = 700
 WINDOW_HEIGHT = 700
-# Dimensions of figures in pixels
+# Dimensions of “threshold adjustment” and “region selection” windows in pixels
 
 WINDOW_X = 10
 WINDOW_Y = 30
