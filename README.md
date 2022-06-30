@@ -66,20 +66,6 @@ Because this only works with a series of images, the user must initially select 
 
 Several configuration options are available for both the density and lifetime programs. For more information, see the publication listed in the Citations section at the bottom of this readme file.
 
-## Development
-
-### Testing
-
-Unit tests for this software were written for use with [Python's built-in unittest framework](https://docs.python.org/3/library/unittest.html), and are stored in the `tests` directory. To run tests, navigate to the top level of the project's directory structure and run the following command:
-
-```
-python -m unittest
-```
-
-### Bug Reports and Feature Requests
-
-To report a bug, visit our [issues page](https://github.com/bdavis222/dotscanner/issues). New feature requests are also welcome!
-
 ## Authors
 
 Holly Allen (holly.allen@colorado.edu)
@@ -94,6 +80,20 @@ Brian Davis
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Development
+
+### Testing
+
+Unit tests for this software were written for use with [Python's built-in unittest framework](https://docs.python.org/3/library/unittest.html), and are stored in the `tests` directory. To run tests, navigate to the top level of the project's directory structure and run the following command:
+
+```
+python -m unittest
+```
+
+### Bug Reports and Feature Requests
+
+To report a bug, visit our [issues page](https://github.com/bdavis222/dotscanner/issues). New feature requests are also welcome!
 
 ## Citations
 
