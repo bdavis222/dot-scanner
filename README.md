@@ -76,7 +76,7 @@ Unit tests for this software were written for use with [Python's built-in unitte
 python -m unittest
 ```
 
-### Bug Reporting
+### Bug Reports and Feature Requests
 
 To report a bug, visit our [issues page](https://github.com/bdavis222/dotscanner/issues). New feature requests are also welcome!
 
