@@ -68,7 +68,7 @@ class MicroscopeImage:
 		else:
 			dotCoords, blobCoords = dp.getCoords(self.data, self.sums, self.thresholds, 
 								self.dotSize)
-			dp.cleanDotCoords(self.sums, dotCoords, blobCoords, self.blobSize, self.dotSize)
+			dp.cleanDotCoords(self.data, dotCoords, blobCoords, self.blobSize, self.dotSize)
 			self.memoizedCoords[self.thresholds] = (dotCoords, blobCoords)
 		return dotCoords, blobCoords
 	
@@ -289,15 +289,13 @@ class ThresholdAdjuster:
 											color="lightgray")
 
 		dotsTextBox = createInactiveTextBox("Dots: ", position=0.47)
-		dotLowerThreshScaleUpButton, dotLowerThreshScaleDownButton = createSmallStackedButtons(
-										topText="ʌ", bottomText="v", position=0.48, 
-										topAction=self.lowerDotThresholdScaleDown, 
+		dotsUpButton, dotsDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
+										position=0.48, topAction=self.lowerDotThresholdScaleDown, 
 										bottomAction=self.lowerDotThresholdScaleUp, 
 										color="lightgray")
 		blobsTextBox = createInactiveTextBox("Blobs: ", position=0.6)
-		dotUpperThreshScaleUpButton, dotUpperThreshScaleDownButton = createSmallStackedButtons(
-										topText="ʌ", bottomText="v", position=0.61, 
-										topAction=self.upperDotThresholdScaleDown, 
+		blobsUpButton, blobsDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
+										position=0.61, topAction=self.upperDotThresholdScaleDown, 
 										bottomAction=self.upperDotThresholdScaleUp, 
 										color="lightgray")
 
@@ -367,46 +365,33 @@ class ThresholdAdjuster:
 
 	def quit(self, event):
 		quit()
+	
+	def showCorrectImage(self, index):
+		self.displayCorrectMarkerSize(index)
+		self.axes.set_xbound(self.xBounds[index])
+		self.axes.set_ybound(self.yBounds[index])
+		self.figure.canvas.draw_idle()
+		pl.pause(0.01)
 
 	def showWholeImage(self, event):
 		self.index = 0
-		self.displayCorrectMarkerSize(self.index)
-		self.axes.set_xbound(self.xBounds[self.index])
-		self.axes.set_ybound(self.yBounds[self.index])
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.showCorrectImage(self.index)
 
 	def showTopLeftRegion(self, event):
 		self.index = 1
-		self.displayCorrectMarkerSize(self.index)
-		self.axes.set_xbound(self.xBounds[self.index])
-		self.axes.set_ybound(self.yBounds[self.index])
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.showCorrectImage(self.index)
 
 	def showTopRightRegion(self, event):
 		self.index = 2
-		self.displayCorrectMarkerSize(self.index)
-		self.axes.set_xbound(self.xBounds[self.index])
-		self.axes.set_ybound(self.yBounds[self.index])
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.showCorrectImage(self.index)
 
 	def showBottomLeftRegion(self, event):
 		self.index = 3
-		self.displayCorrectMarkerSize(self.index)
-		self.axes.set_xbound(self.xBounds[self.index])
-		self.axes.set_ybound(self.yBounds[self.index])
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.showCorrectImage(self.index)
 
 	def showBottomRightRegion(self, event):
 		self.index = 4
-		self.displayCorrectMarkerSize(self.index)
-		self.axes.set_xbound(self.xBounds[self.index])
-		self.axes.set_ybound(self.yBounds[self.index])
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.showCorrectImage(self.index)
 	
 	def skip(self, event):
 		self.image.skipped = True
