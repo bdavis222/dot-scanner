@@ -6,9 +6,9 @@ def addCoordinate(y, x, coordMap):
 		coordMap[y] = set()
 	coordMap[y].add(x)
 
-def cleanDotCoords(sums, dotCoords, blobCoords, blobSize, dotSize):
+def cleanDotCoords(data, dotCoords, blobCoords, blobSize, dotSize):
 	removeDotsNearBlobs(dotCoords, blobCoords, blobSize)
-	removeDimmerOverlappingDots(dotCoords, sums, dotSize)
+	removeDimmerOverlappingDots(dotCoords, data, dotSize)
 
 def coordExists(y, x, coordMap):
 	if y in coordMap:
@@ -26,26 +26,6 @@ def coordExistsWithinRadius(y, x, coordMap, radius):
 					return True
 	return False
 
-def coordIsNearBlob(y, x, blobCoords, blobSize):
-	yRange = range(y - blobSize, y + blobSize + 1)
-	xRange = range(x - blobSize, x + blobSize + 1)
-	for currentY in yRange:
-		if currentY in blobCoords:
-			for currentX in xRange:
-				if currentX in blobCoords[currentY]:
-					return True
-	return False
-
-def coordIsNearDot(y, x, dotCoords, dotSize):
-	yRange = range(y - dotSize, y + dotSize + 1)
-	xRange = range(x - dotSize, x + dotSize + 1)
-	for currentY in yRange:
-		if currentY in dotCoords:
-			for currentX in xRange:
-				if currentX in dotCoords[currentY]:
-					return True
-	return False
-
 def findIndexOfMaxElement(array):
 	maxIndex = 0
 	maxElement = float("-inf")
@@ -54,7 +34,7 @@ def findIndexOfMaxElement(array):
 			maxElement = element
 			maxIndex = index
 	return maxIndex
-	
+
 def getCoordPairsFromCoordMap(coordMap):
 	coordList = []
 	for y, xSet in coordMap.items():
@@ -86,17 +66,6 @@ def getCoords(data, sums, thresholds, dotSize):
 							
 	return dotCoords, blobCoords
 
-def getCoordsOfNeighbors(y, x, coordMap, dotSize):
-	neighborCoords = []
-	yRange = range(y - dotSize, y + dotSize + 1)
-	xRange = range(x - dotSize, x + dotSize + 1)
-	for currentY in yRange:
-		if currentY in coordMap:
-			for currentX in xRange:
-				if currentX in coordMap[currentY]:
-					neighborCoords.append((currentY, currentX))
-	return neighborCoords
-
 def getData(directory, filename):
 	image = Image.open(directory + filename)
 	data = np.array(image)
@@ -120,12 +89,34 @@ def getFullDataSquareSum(data):
 
 	return sums
 
-def getSumsOfNeighbors(neighborCoords, sums):
-	neighborSums = []
+def getNeighborCoords(y, x, coordMap, dotSize):
+	neighborCoords = []
+	yRange = range(y - dotSize, y + dotSize + 1)
+	xRange = range(x - dotSize, x + dotSize + 1)
+	for currentY in yRange:
+		if currentY in coordMap:
+			for currentX in xRange:
+				if currentX in coordMap[currentY]:
+					neighborCoords.append((currentY, currentX))
+	return neighborCoords
+
+def getNeighborData(neighborCoords, data):
+	neighborData = []
 	for coordPair in neighborCoords:
 		y, x = coordPair
-		neighborSums.append(sums[y][x])
-	return neighborSums
+		neighborData.append(data[y][x])
+	return neighborData
+
+# def getSortedCoordPairsFromCoordMap(coordMap, data):
+# 	coordList = []
+# 	dataList = []
+# 	for y, xSet in coordMap.items():
+# 		for x in xSet:
+# 			coordList.append([x, y]) # For use with set_offsets(), which expects (x, y) coords
+# 			dataList.append(data[y][x])
+# 	zippedLists = zip(dataList, coordList)
+# 	sortedCoordList = [x for _, x in sorted(zippedLists)]
+	return sortedCoordList[::-1]
 
 def getYAndXFromCoordList(coordList):
 	yList = []
@@ -149,21 +140,22 @@ def removeCoordinate(y, x, coordMap):
 	else:
 		coordMap[y].remove(x)
 
-def removeDimmerOverlappingDots(dotCoords, sums, dotSize):
+def removeDimmerOverlappingDots(dotCoords, data, dotSize):
 	coordPairs = getCoordPairsFromCoordMap(dotCoords) # Returns (x, y), not (y, x)
+	# coordPairs = getSortedCoordPairsFromCoordMap(dotCoords, data) # Returns (x, y), not (y, x)
 	for coordPair in coordPairs:
 		x, y = coordPair
-		neighborCoords = getCoordsOfNeighbors(y, x, dotCoords, dotSize)
+		neighborCoords = getNeighborCoords(y, x, dotCoords, dotSize)
 		if len(neighborCoords) > 1:
-			neighborSums = getSumsOfNeighbors(neighborCoords, sums)
-			indexOfBrightestSum = findIndexOfMaxElement(neighborSums)
-			removeAllButBrightestCoords(neighborCoords, indexOfBrightestSum, dotCoords)
+			neighborData = getNeighborData(neighborCoords, data)
+			indexOfBrightestNeighbor = findIndexOfMaxElement(neighborData)
+			removeAllButBrightestCoords(neighborCoords, indexOfBrightestNeighbor, dotCoords)
 
 def removeDotsNearBlobs(dotCoords, blobCoords, blobSize):
 	coordPairs = getCoordPairsFromCoordMap(dotCoords) # Returns (x, y), not (y, x)
 	for coordPair in coordPairs:
 		x, y = coordPair
-		if coordIsNearBlob(y, x, blobCoords, blobSize):
+		if coordExistsWithinRadius(y, x, blobCoords, blobSize):
 			removeCoordinate(y, x, dotCoords)
 
 def setScatterData(dotCoords, blobCoords, dotScatter, blobScatter):
