@@ -41,7 +41,7 @@ def getCoordTotals(coordsInPolygon, dotCoords, blobCoords, blobSize):
 	dotTotal, blobTotal = 0, 0
 	for coordPair in coordsInPolygon:
 		y, x = coordPair
-		if dp.coordIsNearBlob(y, x, blobCoords, blobSize):
+		if dp.coordExistsWithinRadius(y, x, blobCoords, blobSize):
 			blobTotal += 1
 		elif y in dotCoords:
 			if x in dotCoords[y]:
