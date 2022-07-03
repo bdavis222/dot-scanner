@@ -90,8 +90,10 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
 		
 		imageNumberToCoordMap[index] = dotCoords
-		imageNumberToBlobCoordMap[index] = blobCoords
 		imageNumberToFilenameMap[index] = filename
+		if cfg.PLOT_BLOBS:
+			imageNumberToBlobCoordMap[index] = blobCoords
+		
 		ui.printProgressBar(index + 1, numberOfFiles)
 	
 	lifetimes, resultCoords, startImages = [], [], []
