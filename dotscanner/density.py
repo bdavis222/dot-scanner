@@ -67,7 +67,7 @@ def measureDensity(directory, filename, microscopeImage, userSettings):
 	
 	density, error = getDensityAndError(microscopeImage, blobSize)
 	
-	dotCoords, blobCoords = dp.getCoordMapsWithinPolygonFromImage(microscopeImage)
+	dotCoords, blobCoords = dp.getCoordMapsWithinPolygonFromImage(microscopeImage, userSettings)
 	dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
 	
 	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
