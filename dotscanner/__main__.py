@@ -1,47 +1,57 @@
+import dotscanner.density as density
+import dotscanner.files as files
 import dotscanner.lifetime as lifetime
-import unittest
+import dotscanner.strings as strings
+from dotscanner.ui import MicroscopeImage, RegionSelector, ThresholdAdjuster, UserSettings
 
-class UserSettingsMock:
-    def __init__(self, skipsAllowed):
-        self.skipsAllowed = skipsAllowed
+def main():
+	userSettings = UserSettings()
+	if userSettings.completed:		
+		directory, filenames = files.getDirectoryAndFilenames(userSettings)
+		if userSettings.program == "density":
+			getDensityData(directory, filenames, userSettings)
+		elif userSettings.program == "lifetime":
+			getLifetimeData(directory, filenames, userSettings)
+		else:
+			raise Exception(strings.programNameException)
 
-class TestLifetime(unittest.TestCase):
-    def test_checkEnoughFramesForLifetimes(self):
-        filenames = ["file1.tif", "file2.tif", "file3.tif", "file4.tif", "file5.tif"]
-        userSettings = UserSettingsMock(skipsAllowed=2)
-        with self.assertRaises(Exception):
-            lifetime.checkEnoughFramesForLifetimes(filenames, userSettings)
-    
-    def test_getEdgeFrameNumbers(self):
-        testImageNumberToCoordMap = {
-            0: {11: {2, 3, 4}, 21: {5, 6, 7}},
-            1: {11: {2, 7, 4}, 21: {5, 6, 8}},
-            2: {11: {2, 0, 4}, 21: {5, 2, 7}},
-            3: {11: {3}, 21: {7}},
-            4: {11: {2, 3, 4}, 21: {5, 6, 7}},
-            5: {11: {2, 7, 4}, 21: {5, 6, 8}},
-            6: {11: {2, 0, 4}, 21: {5, 2, 7}},
-            7: {11: {3}, 21: {7}}
-        }
-        edgeFrameNumbers = lifetime.getEdgeFrameNumbers(testImageNumberToCoordMap, 0)
-        self.assertIn(0, edgeFrameNumbers)
-        self.assertIn(7, edgeFrameNumbers)
-        self.assertNotIn(1, edgeFrameNumbers)
-        self.assertNotIn(2, edgeFrameNumbers)
-        self.assertNotIn(3, edgeFrameNumbers)
-        self.assertNotIn(4, edgeFrameNumbers)
-        self.assertNotIn(5, edgeFrameNumbers)
-        self.assertNotIn(6, edgeFrameNumbers)
-        
-        edgeFrameNumbers = lifetime.getEdgeFrameNumbers(testImageNumberToCoordMap, 2)
-        self.assertIn(0, edgeFrameNumbers)
-        self.assertIn(1, edgeFrameNumbers)
-        self.assertIn(2, edgeFrameNumbers)
-        self.assertIn(5, edgeFrameNumbers)
-        self.assertIn(6, edgeFrameNumbers)
-        self.assertIn(7, edgeFrameNumbers)
-        self.assertNotIn(3, edgeFrameNumbers)
-        self.assertNotIn(4, edgeFrameNumbers)
+def getDensityData(directory, filenames, userSettings):
+	density.checkUnitsConsistent(directory)
+	alreadyMeasured = density.getAlreadyMeasured(directory)
+	for filename in filenames:
+		if filename in alreadyMeasured:
+			continue
+		
+		print(filename)
+		microscopeImage = MicroscopeImage(directory, filename, userSettings)
+		
+		ThresholdAdjuster(microscopeImage, userSettings)
+		if microscopeImage.skipped:
+			density.skipFile(directory, filename, userSettings)
+			continue
+			
+		RegionSelector(microscopeImage, userSettings)
+		if microscopeImage.skipped:
+			density.skipFile(directory, filename, userSettings)
+			continue
+			
+		density.measureDensity(directory, filename, microscopeImage, userSettings)
+
+def getLifetimeData(directory, filenames, userSettings):
+	lifetime.checkEnoughFramesForLifetimes(filenames, userSettings)
+	
+	middleIndex = len(filenames) // 2
+	middleMicroscopeImage = MicroscopeImage(directory, filenames[middleIndex], userSettings)
+	
+	ThresholdAdjuster(middleMicroscopeImage, userSettings, skipButton=False)
+	if middleMicroscopeImage.skipped:
+		quit()
+	
+	RegionSelector(middleMicroscopeImage, userSettings, skipButton=False)
+	if middleMicroscopeImage.skipped:
+		quit()
+	
+	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings)
 
 if __name__ == '__main__':
-    unittest.main()
+	main()
