@@ -2,7 +2,6 @@ import dotscanner.config as cfg
 import dotscanner.dataprocessing as dp
 import dotscanner.files as files
 import dotscanner.strings as strings
-import matplotlib
 import matplotlib.pyplot as pl
 import numpy as np
 import os
@@ -30,13 +29,6 @@ def getAlreadyMeasured(directory):
 				alreadyMeasured.add(filename)
 	return alreadyMeasured
 
-def getCoordsInPolygon(data, points, polygonVertices):
-	path = matplotlib.path.Path(polygonVertices)
-	flattenedMask = path.contains_points(points)
-	mask = flattenedMask.reshape(len(data), len(data[0]))
-	coordsInPolygon = np.argwhere(mask)
-	return coordsInPolygon
-
 def getCoordTotals(coordsInPolygon, dotCoords, blobCoords, blobSize):
 	dotTotal, blobTotal = 0, 0
 	for coordPair in coordsInPolygon:
@@ -55,7 +47,7 @@ def getDensityAndError(microscopeImage, blobSize):
 		for x in range(len(data[0])):
 			points.append((y, x))
 	
-	coordsInPolygon = getCoordsInPolygon(data, points, microscopeImage.polygon)
+	coordsInPolygon = dp.getCoordsInPolygon(data, points, microscopeImage.polygon)
 	dotTotal, blobTotal = getCoordTotals(coordsInPolygon, microscopeImage.dotCoords, 
 											microscopeImage.blobCoords, blobSize)
 
@@ -68,14 +60,31 @@ def getDensityAndError(microscopeImage, blobSize):
 def measureDensity(directory, filename, microscopeImage, userSettings):
 	saveFigures = userSettings.saveFigures
 	blobSize = userSettings.blobSize
+	dotSize = userSettings.dotSize
 	
 	if not len(microscopeImage.polygon):
 		return
+	
+	
+	
+	lowerDotThresh, upperDotThresh, lowerBlobThresh = dp.getThresholds(microscopeImage)
+	polygonCoordMap = dp.getInPolygonCoordMap(microscopeImage)
+	xMin, xMax, yMin, yMax = dp.getPolygonLimits(microscopeImage.polygon)
+	dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
+															lowerDotThresh, upperDotThresh, 
+															lowerBlobThresh, dotSize, 
+															polygonCoordMap, xMin, xMax, yMin, yMax)
+	dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
+	
+	
+	
+	
 	density, error = getDensityAndError(microscopeImage, blobSize)
-	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings)
+	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
+							dotCoords, blobCoords)
 
 def saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
-							skipped=False):
+							dotCoords, blobCoords, skipped=False):
 	saveFigures = userSettings.saveFigures
 	blobSize = userSettings.blobSize
 	dotSize = userSettings.dotSize
@@ -98,26 +107,35 @@ def saveDensityDataFiles(directory, filename, density, error, microscopeImage, u
 		file.write(output)
 	
 	if not skipped and saveFigures:
-		saveDensityFigure(directory, filename, microscopeImage, userSettings)
+		saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords)
 
-def saveDensityFigure(directory, filename, microscopeImage, userSettings):
+def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords):
 	dotSize = userSettings.dotSize
 	program = userSettings.program
 	
 	data = microscopeImage.data
-	dotCoords = microscopeImage.dotCoords
+	# dotCoords = microscopeImage.dotCoords
 	polygon = microscopeImage.polygon
 	
 	figure, axes = pl.subplots()
-	axes.imshow(data, origin="lower", cmap="gray", vmin=0, vmax=2 * np.std(data))
+	axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
+					vmax=userSettings.upperContrast * np.std(data))
 	dotScatter = axes.scatter([None], [None], s=5 * dotSize, facecolors="none", 
-								edgecolors=cfg.DOT_COLOR, linewidths=1)
-	
+								edgecolors=cfg.DOT_COLOR, linewidths=0.25)
 	dp.setScatterOffset(dotCoords, dotScatter)
 	
-	polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
-	underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=2)
-	line, = axes.plot(polygonX, polygonY, linestyle="-", color="C1", linewidth=1.5)
+	if cfg.PLOT_BLOBS:
+		blobSize = userSettings.blobSize
+		# blobCoords = microscopeImage.blobCoords
+		blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
+									edgecolors=cfg.BLOB_COLOR, linewidths=0.5)
+		dp.setScatterOffset(blobCoords, blobScatter)
+	
+	if cfg.PLOT_POLYGON:
+		polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
+		underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75)
+		line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
+							linewidth=cfg.POLYGON_THICKNESS)
 	
 	targetPath = files.getTargetPath(directory, program)
 	
