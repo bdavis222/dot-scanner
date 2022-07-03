@@ -1,3 +1,4 @@
+import dotscanner.dataprocessing as dp
 import dotscanner.density as density
 import numpy as np
 import unittest
@@ -15,7 +16,7 @@ class TestDensity(unittest.TestCase):
         [1, 3],
         [1, 1]
     ]
-    coordsInPolygon = density.getCoordsInPolygon(data, points, polygonVertices)
+    coordsInPolygon = dp.getCoordsInPolygon(data, points, polygonVertices)
     
     def test_getCoordsInPolygon(self):
         coordTuples = []
