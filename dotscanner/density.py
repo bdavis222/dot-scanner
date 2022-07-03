@@ -136,4 +136,3 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoo
 def skipFile(directory, filename, userSettings):
 	saveDensityDataFiles(directory, filename, None, None, None, userSettings, skipped=True)
 	print("File skipped")
-
