@@ -46,7 +46,7 @@ class MicroscopeImage:
 		
 	def decreaseLowerDotThreshScale(self):
 		value = self.lowerDotThreshScale - cfg.THRESHOLD_DELTA
-		value = round(value, 2)
+		value = round(value, 1)
 		if value < 0:
 			value = 0
 		self.lowerDotThreshScale = value
@@ -55,7 +55,7 @@ class MicroscopeImage:
 	
 	def decreaseUpperDotThreshScale(self):
 		value = self.upperDotThreshScale - cfg.THRESHOLD_DELTA
-		value = round(value, 2)
+		value = round(value, 1)
 		if value < self.lowerDotThreshScale:
 			value = self.lowerDotThreshScale
 		self.upperDotThreshScale = value
@@ -74,7 +74,7 @@ class MicroscopeImage:
 	
 	def increaseLowerDotThreshScale(self):
 		value = self.lowerDotThreshScale + cfg.THRESHOLD_DELTA
-		value = round(value, 2)
+		value = round(value, 1)
 		if value > self.upperDotThreshScale:
 			value = self.upperDotThreshScale
 		self.lowerDotThreshScale = value
@@ -83,7 +83,7 @@ class MicroscopeImage:
 	
 	def increaseUpperDotThreshScale(self):
 		value = self.upperDotThreshScale + cfg.THRESHOLD_DELTA
-		value = round(value, 2)
+		value = round(value, 1)
 		self.upperDotThreshScale = value
 		self.updateThresholds()
 		self.dotCoords, self.blobCoords = self.getCoords()
@@ -127,7 +127,8 @@ class RegionSelector:
 		manager.window.geometry(geometry)
 		manager.window.title(f"Dot Scanner - Region Selection")
 		
-		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=0, vmax=2 * np.std(self.data))
+		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
+							vmax=userSettings.upperContrast * np.std(self.data))
 		self.dotScatter = self.axes.scatter([None], [None], s=5 * self.dotSize, facecolors="none", 
 												edgecolors=cfg.DOT_COLOR, linewidths=1)
 		self.blobScatter = self.axes.scatter([None], [None], s=2 * self.blobSize, facecolors="none",
@@ -232,6 +233,7 @@ class ThresholdAdjuster:
 		self.dotSize = userSettings.dotSize
 		self.blobSize = userSettings.blobSize
 		self.defaultThresholds = userSettings.thresholds
+		self.userSettings = userSettings
 		self.data = image.data
 		
 		self.xBounds = [
@@ -256,7 +258,9 @@ class ThresholdAdjuster:
 		manager.window.geometry(geometry)
 		manager.window.title(f"Dot Scanner - Threshold Adjustment")
 		
-		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=0, vmax=2 * np.std(self.data))
+		self.dataPlot = self.axes.imshow(self.data, origin="lower", cmap="gray", 
+											vmin=userSettings.lowerContrast, 
+											vmax=userSettings.upperContrast * np.std(self.data))
 		self.dotScatter = self.axes.scatter([None], [None], s=50 * self.dotSize, facecolors="none", 
 												edgecolors=cfg.DOT_COLOR, linewidths=1)
 		self.blobScatter = self.axes.scatter([None], [None], s=2 * self.blobSize, facecolors="none",
@@ -271,42 +275,49 @@ class ThresholdAdjuster:
 									color="orangered")
 		
 		if skipButton:
-			skipButton = createButton(name="Skip", position=0.095, action=self.skip, 
+			skipButton = createButton(name="Skip", position=0.085, action=self.skip, 
 										color="gold")
 
-		viewTextBox = createInactiveTextBox("View: ", position=0.265)
+		viewTextBox = createInactiveTextBox("View: ", position=0.222)
 		topLeftButton, bottomLeftButton = createSmallStackedButtons(topText="", 
-															bottomText="", position=0.275, 
+															bottomText="", position=0.232, 
 															topAction=self.showTopLeftRegion, 
 															bottomAction=self.showBottomLeftRegion, 
 															color="lightgray")
 		topRightButton, bottomRightButton = createSmallStackedButtons(topText="", 
-															bottomText="", position=0.305, 
+															bottomText="", position=0.262, 
 															topAction=self.showTopRightRegion, 
 															bottomAction=self.showBottomRightRegion,
 															color="lightgray")
-		fullButton = createFullViewButton(name="", position=0.335, action=self.showWholeImage, 
+		fullButton = createFullViewButton(name="", position=0.292, action=self.showWholeImage, 
 											color="lightgray")
+		
+		contrastTextBox = createInactiveTextBox("Contrast: ", position=0.442)
+		contrastUpButton, contrastDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
+														position=0.452, 
+														topAction=self.upperContrastDown, 
+														bottomAction=self.upperContrastUp, 
+														color="lightgray")
 
-		dotsTextBox = createInactiveTextBox("Dots: ", position=0.47)
+		dotsTextBox = createInactiveTextBox("Dots: ", position=0.533)
 		dotsUpButton, dotsDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
-														position=0.48, 
+														position=0.542, 
 														topAction=self.lowerDotThresholdScaleDown, 
 														bottomAction=self.lowerDotThresholdScaleUp, 
 														color="lightgray")
-		blobsTextBox = createInactiveTextBox("Blobs: ", position=0.6)
+		blobsTextBox = createInactiveTextBox("Blobs: ", position=0.63)
 		blobsUpButton, blobsDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
-														position=0.61, 
+														position=0.64, 
 														topAction=self.upperDotThresholdScaleDown, 
 														bottomAction=self.upperDotThresholdScaleUp, 
 														color="lightgray")
 
-		editButton = createButton(name="Edit", position=0.64, action=self.edit, 
+		editButton = createButton(name="Edit", position=0.67, action=self.edit, 
 									color="lightgray")
-		resetButton = createButton(name="Reset", position=0.735, 
+		resetButton = createButton(name="Reset", position=0.755, 
 									action=self.resetThreshScalesToDefaultValues, color="lightgray")
 
-		nextButton = createButton(name="Next", position=0.83, action=self.finish, 
+		nextButton = createButton(name="Next", position=0.84, action=self.finish, 
 									color="cornflowerblue")
 
 		pl.show()
@@ -407,6 +418,24 @@ class ThresholdAdjuster:
 		self.figure.canvas.draw_idle()
 		pl.pause(0.01)
 	
+	def upperContrastDown(self, event):
+		value = self.userSettings.upperContrast - cfg.CONTRAST_DELTA
+		value = round(value, 1)
+		self.userSettings.upperContrast = value
+		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
+								self.userSettings.upperContrast * np.std(self.data))
+		self.figure.canvas.draw_idle()
+		pl.pause(0.01)
+	
+	def upperContrastUp(self, event):
+		value = self.userSettings.upperContrast + cfg.CONTRAST_DELTA
+		value = round(value, 1)
+		self.userSettings.upperContrast = value
+		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
+								self.userSettings.upperContrast * np.std(self.data))
+		self.figure.canvas.draw_idle()
+		pl.pause(0.01)
+	
 	def upperDotThresholdScaleDown(self, event):
 		self.image.decreaseUpperDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
@@ -440,6 +469,8 @@ class UserSettings:
 		self.lowerDotThresh = round(cfg.LOWER_DOT_THRESH_SCALE, 1)
 		self.upperDotThresh = round(cfg.UPPER_DOT_THRESH_SCALE, 1)
 		self.lowerBlobThresh = round(cfg.LOWER_BLOB_THRESH_SCALE, 1)
+		self.lowerContrast = round(cfg.LOWER_CONTRAST, 1)
+		self.upperContrast = round(cfg.UPPER_CONTRAST, 1)
 		self.saveFigures = cfg.SAVE_FIGURES
 		self.removeEdgeFrames = cfg.REMOVE_EDGE_FRAMES
 		self.skipsAllowed = round(cfg.SKIPS_ALLOWED, 0)
@@ -619,21 +650,21 @@ class UserSettings:
 		self.window.destroy()
 
 def createButton(name, position, action, color="whitesmoke", clickedColor="darkgray"):
-	buttonWidth = 45 / 500
+	buttonWidth = 40 / 500
 	buttonHeight = 5 / 100
 	buttonSpacing = 5 / 1000
 	buttonXStart = 0.01 * 5 - (2 * buttonSpacing)
 	buttonYStart = 0.007 * 5 - buttonHeight / 2
 
-	axes = pl.axes([
+	buttonAxes = pl.axes([
 		buttonXStart + position, 
 		buttonYStart, 
 		buttonWidth, 
 		buttonHeight])
 	
-	fontSize = min(13, int(round(cfg.WINDOW_WIDTH * 0.01875, 0)))
+	fontSize = min(11, int(round(cfg.WINDOW_WIDTH * 0.01875, 0)))
 	
-	button = wdgts.Button(axes, name, color=color, hovercolor=color)
+	button = wdgts.Button(buttonAxes, name, color=color, hovercolor=color)
 	button.label.set_fontsize(fontSize)
 	# matplotlib lags a little with hovercolor, so leaving it the same to not confuse users
 	button.on_clicked(action)
@@ -647,12 +678,12 @@ def createFullViewButton(name, position, action, color="whitesmoke", clickedColo
 	buttonXStart = 0.01 * 5 - (2 * buttonSpacing)
 	buttonYStart = 0.007 * 5 - buttonHeight / 2
 
-	axes = pl.axes([
+	buttonAxes = pl.axes([
 		buttonXStart + position, 
 		buttonYStart, 
 		buttonWidth, 
 		buttonHeight])
-	button = wdgts.Button(axes, name, color=color, hovercolor=color)
+	button = wdgts.Button(buttonAxes, name, color=color, hovercolor=color)
 	# matplotlib lags a little with hovercolor, so leaving it the same to not confuse users
 	button.on_clicked(action)
 	
@@ -665,15 +696,15 @@ def createInactiveTextBox(text, position):
 	textBoxXStart = 0.05
 	textBoxYStart = 0.035
 
-	axes = pl.axes([
+	textBoxAxes = pl.axes([
 		textBoxXStart + position, 
 		textBoxYStart, 
 		textBoxWidth, 
 		textBoxHeight])
 	
-	fontSize = min(13, int(round(cfg.WINDOW_WIDTH * 0.01875, 0)))
+	fontSize = min(13, int(round(cfg.WINDOW_WIDTH * 0.015, 0)))
 	
-	textBox = wdgts.TextBox(axes, text, initial="")
+	textBox = wdgts.TextBox(textBoxAxes, text, initial="")
 	textBox.label.set_fontsize(fontSize)
 	return textBox
 
