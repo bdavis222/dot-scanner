@@ -23,7 +23,19 @@ LOWER_BLOB_THRESH_SCALE = 2
 
 THRESHOLD_DELTA = 0.1
 # Amount by which a threshold will change when clicking the up and down arrows in the plotting UI.
-# The default value is 0.1.
+# The default value is 0.1, and will be rounded to the nearest 0.1.
+
+LOWER_CONTRAST = 0.0
+# The lower bound of the plotting range for the data. The default value is 0.0, or 0 standard
+# deviations above the mean of the dataset. Decrease this value if the image is too dark.
+
+UPPER_CONTRAST = 5.0
+# The upper bound of the plotting range for the data. The default value is 5.0, or 5 standard
+# deviations above the mean of the dataset. Increase this value if the image is too saturated.
+
+CONTRAST_DELTA = 0.5
+# Amount by which the contrast will change when clicking the up and down arrows in the plotting UI.
+# The default value is 0.5, and will be rounded to the nearest 0.1.
 
 BLOB_SIZE = 5
 # Radius of exclusion around blobs (in pixels)
@@ -43,6 +55,27 @@ REMOVE_EDGE_FRAMES = True
 SAVE_FIGURES = False
 # Whether the displayed figures should be saved in a "figures" directory. Default is False.
 
+PLOT_BLOBS = False
+# Whether to plot markers on the blobs in outputted figures. Default is False.
+
+DOT_COLOR = "lime"
+# The color used for dot markers in output plots. 
+# Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
+
+BLOB_COLOR = "red"
+# The color used for blob markers in output plots. 
+# Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
+
+PLOT_POLYGON = True
+# Whether to plot the polygon in outputted figures. Default is True.
+
+POLYGON_COLOR = "C1"
+# The color used for the polygon in output plots. 
+# Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
+
+POLYGON_THICKNESS = 0.5
+# The line thickness used for the polygon in output plots. Default is 0.5.
+
 WINDOW_WIDTH = 700
 WINDOW_HEIGHT = 700
 # Dimensions of “threshold adjustment” and “region selection” windows in pixels
@@ -50,14 +83,6 @@ WINDOW_HEIGHT = 700
 WINDOW_X = 10
 WINDOW_Y = 30
 # Starting position of the upper left corner of all GUI windows in pixels
-
-DOT_COLOR = "lime"
-# The color used for dot markers in plots. 
-# Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
-
-BLOB_COLOR = "red"
-# The color used for blob markers in plots. 
-# Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
 
 DENSITY_OUTPUT_FILENAME = "densities.txt"
 # The filename to be saved in the directory containing the images used for density measurement.
