@@ -31,6 +31,12 @@ def coordExistsWithinRadius(y, x, coordMap, radius):
 					return True
 	return False
 
+def countCoordsInCoordMap(coordMap):
+	count = 0
+	for y, xSet in coordMap.items():
+		count += len(xSet)
+	return count
+
 def findIndexOfMaxElement(array):
 	maxIndex = 0
 	maxElement = float("-inf")
@@ -57,8 +63,8 @@ def getCoords(data, sums, thresholds, dotSize):
 	
 	for y in range(len(sums)):
 		for x in range(len(sums[0])):
-			if sums[y, x] > lowerDotThresh:
-				if sums[y, x] < upperDotThresh:
+			if sums[y][x] > lowerDotThresh:
+				if sums[y][x] < upperDotThresh:
 					addCoordinate(y, x, dotCoords)
 				else:
 					if squareSum(data, y, x, dotSize + 1) > lowerBlobThresh:
@@ -83,8 +89,8 @@ def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerB
 		if y in polygonCoordMap:
 			for x in range(xMin, xMax + 1):
 				if x in polygonCoordMap[y]:
-					if sums[y, x] > lowerDotThresh:
-						if sums[y, x] < upperDotThresh:
+					if sums[y][x] > lowerDotThresh:
+						if sums[y][x] < upperDotThresh:
 							addCoordinate(y, x, dotCoords)
 						else:
 							if squareSum(data, y, x, dotSize + 1) > lowerBlobThresh:
