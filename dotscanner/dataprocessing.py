@@ -1,6 +1,10 @@
 import numpy as np
 from PIL import Image
 
+# Note: Coordinates are usually stored in hashmaps mapping a y to a set of corresponding x's
+# e.g., the coordinates (y1, x1) and (y1, x2) would be the following key-value pair:
+# {y1 : {x1, x2}}
+
 def addCoordinate(y, x, coordMap):
 	if y not in coordMap:
 		coordMap[y] = set()
@@ -45,9 +49,6 @@ def getCoordPairsFromCoordMap(coordMap):
 def getCoords(data, sums, thresholds, dotSize):
 	dotCoords = {}
 	blobCoords = {}
-	# Hashmaps mapping each y coordinate to a set of corresponding x coordinates
-	# e.g., the coordinates (y1, x1) and (y1, x2) would be the following key-value pair:
-	# {y1 : {x1, x2}}
 	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = thresholds
 	lowerDotThresh = lowerDotThreshScale * np.std(sums)
 	upperDotThresh = upperDotThreshScale * np.std(sums)
