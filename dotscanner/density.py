@@ -65,21 +65,11 @@ def measureDensity(directory, filename, microscopeImage, userSettings):
 	if not len(microscopeImage.polygon):
 		return
 	
+	density, error = getDensityAndError(microscopeImage, blobSize)
 	
-	
-	lowerDotThresh, upperDotThresh, lowerBlobThresh = dp.getThresholds(microscopeImage)
-	polygonCoordMap = dp.getInPolygonCoordMap(microscopeImage)
-	xMin, xMax, yMin, yMax = dp.getPolygonLimits(microscopeImage.polygon)
-	dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
-															lowerDotThresh, upperDotThresh, 
-															lowerBlobThresh, dotSize, 
-															polygonCoordMap, xMin, xMax, yMin, yMax)
+	dotCoords, blobCoords = dp.getCoordMapsWithinPolygonFromImage(microscopeImage)
 	dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
 	
-	
-	
-	
-	density, error = getDensityAndError(microscopeImage, blobSize)
 	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
 							dotCoords, blobCoords)
 
