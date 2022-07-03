@@ -65,8 +65,8 @@ def lifetimeOutputFileHeader(polygon, userSettings):
 		thresholdsStringList.append(str(threshold))
 	thresholdsString = ", ".join(thresholdsStringList)
 	
-	return f"# Selected polygon vertices (x, y): {verticesString}\n\
-# Selected threshold scales: {thresholdsString}\n\
+	return f"# Polygon vertices (x, y): {verticesString}\n\
+# Threshold scales: {thresholdsString}\n\
 # Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize} | Remove edge frames: \
 {userSettings.removeEdgeFrames} | Skips allowed: {userSettings.skipsAllowed}\n\
 #\n# x | y | lifetime | starting image\n"
