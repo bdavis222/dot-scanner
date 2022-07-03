@@ -107,15 +107,15 @@ def getNeighborData(neighborCoords, data):
 		neighborData.append(data[y][x])
 	return neighborData
 
-# def getSortedCoordPairsFromCoordMap(coordMap, data):
-# 	coordList = []
-# 	dataList = []
-# 	for y, xSet in coordMap.items():
-# 		for x in xSet:
-# 			coordList.append([x, y]) # For use with set_offsets(), which expects (x, y) coords
-# 			dataList.append(data[y][x])
-# 	zippedLists = zip(dataList, coordList)
-# 	sortedCoordList = [x for _, x in sorted(zippedLists)]
+def getSortedCoordPairsFromCoordMap(coordMap, data):
+	coordList = []
+	dataList = []
+	for y, xSet in coordMap.items():
+		for x in xSet:
+			coordList.append([x, y]) # For use with set_offsets(), which expects (x, y) coords
+			dataList.append(data[y][x])
+	zippedLists = zip(dataList, coordList)
+	sortedCoordList = [x for _, x in sorted(zippedLists)]
 	return sortedCoordList[::-1]
 
 def getYAndXFromCoordList(coordList):
