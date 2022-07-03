@@ -1,3 +1,4 @@
+import matplotlib
 import numpy as np
 from PIL import Image
 
@@ -67,6 +68,41 @@ def getCoords(data, sums, thresholds, dotSize):
 							
 	return dotCoords, blobCoords
 
+def getCoordsInPolygon(data, points, polygonVertices):
+	path = matplotlib.path.Path(polygonVertices)
+	flattenedMask = path.contains_points(points)
+	mask = flattenedMask.reshape(len(data), len(data[0]))
+	coordsInPolygon = np.argwhere(mask)
+	return coordsInPolygon
+
+def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
+								polygonCoordMap, xMin, xMax, yMin, yMax):
+	dotCoords = {}
+	blobCoords = {}
+	for y in range(yMin, yMax + 1):
+		if y in polygonCoordMap:
+			for x in range(xMin, xMax + 1):
+				if x in polygonCoordMap[y]:
+					if sums[y, x] > lowerDotThresh:
+						if sums[y, x] < upperDotThresh:
+							addCoordinate(y, x, dotCoords)
+						else:
+							if squareSum(data, y, x, dotSize + 1) > lowerBlobThresh:
+								addCoordinate(y, x, blobCoords)
+							else:
+								addCoordinate(y, x, dotCoords)
+	return dotCoords, blobCoords
+
+def getCoordMapsWithinPolygonFromImage(microscopeImage):
+	lowerDotThresh, upperDotThresh, lowerBlobThresh = dp.getThresholds(microscopeImage)
+	polygonCoordMap = dp.getInPolygonCoordMap(microscopeImage)
+	xMin, xMax, yMin, yMax = dp.getPolygonLimits(microscopeImage.polygon)
+	dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
+															lowerDotThresh, upperDotThresh, 
+															lowerBlobThresh, dotSize, 
+															polygonCoordMap, xMin, xMax, yMin, yMax)
+	return dotCoords, blobCoords
+
 def getData(directory, filename):
 	image = Image.open(directory + filename)
 	data = np.array(image)
@@ -90,6 +126,25 @@ def getFullDataSquareSum(data):
 
 	return sums
 
+def getInPolygonCoordMap(microscopeImage):
+	data = microscopeImage.data
+	points = []
+	for y in range(len(data)):
+		for x in range(len(data[0])):
+			points.append((y, x))
+
+	path = matplotlib.path.Path(microscopeImage.polygon)
+	flattenedMask = path.contains_points(points)
+	mask = flattenedMask.reshape(len(data), len(data[0]))
+	coordsInPolygon = np.argwhere(mask)
+	
+	polygonCoordMap = {}
+	for coordPair in coordsInPolygon:
+		y, x = coordPair
+		addCoordinate(y, x, polygonCoordMap)
+	
+	return polygonCoordMap
+
 def getNeighborCoords(y, x, coordMap, dotSize):
 	neighborCoords = []
 	yRange = range(y - dotSize, y + dotSize + 1)
@@ -108,6 +163,24 @@ def getNeighborData(neighborCoords, data):
 		neighborData.append(data[y][x])
 	return neighborData
 
+def getPolygonLimits(polygon):
+	polygonXMin, polygonXMax = float("inf"), float("-inf")
+	polygonYMin, polygonYMax = float("inf"), float("-inf")
+	
+	for coordPair in polygon:
+		y, x = coordPair
+		polygonYMin = min(y, polygonYMin)
+		polygonYMax = max(y, polygonYMax)
+		polygonXMin = min(x, polygonXMin)
+		polygonXMax = max(x, polygonXMax)
+	
+	polygonYMin = int(round(polygonYMin, 0))
+	polygonYMax = int(round(polygonYMax, 0))
+	polygonXMin = int(round(polygonXMin, 0))
+	polygonXMax = int(round(polygonXMax, 0))
+	
+	return polygonXMin, polygonXMax, polygonYMin, polygonYMax
+
 def getSortedCoordPairsFromCoordMap(coordMap, data):
 	coordList = []
 	dataList = []
@@ -118,6 +191,14 @@ def getSortedCoordPairsFromCoordMap(coordMap, data):
 	zippedLists = zip(dataList, coordList)
 	sortedCoordList = [x for _, x in sorted(zippedLists)]
 	return sortedCoordList[::-1]
+
+def getThresholds(microscopeImage):
+	sums = microscopeImage.sums
+	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = microscopeImage.thresholds
+	lowerDotThresh = lowerDotThreshScale * np.std(sums)
+	upperDotThresh = upperDotThreshScale * np.std(sums)
+	lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
+	return lowerDotThresh, upperDotThresh, lowerBlobThresh
 
 def getYAndXFromCoordList(coordList):
 	yList = []
