@@ -35,12 +35,11 @@ def getCoordTotals(coordsInPolygon, dotCoords, blobCoords, blobSize):
 		y, x = coordPair
 		if dp.coordExistsWithinRadius(y, x, blobCoords, blobSize):
 			blobTotal += 1
-		elif y in dotCoords:
-			if x in dotCoords[y]:
-				dotTotal += 1
+		elif dp.coordExists(y, x, dotCoords):
+			dotTotal += 1
 	return dotTotal, blobTotal
 
-def getDensityAndError(microscopeImage, blobSize):
+def getDensityAndError(microscopeImage, dotCoords, blobCoords, blobSize):
 	points = []
 	data = microscopeImage.data
 	for y in range(len(data)):
@@ -48,12 +47,11 @@ def getDensityAndError(microscopeImage, blobSize):
 			points.append((y, x))
 	
 	coordsInPolygon = dp.getCoordsInPolygon(data, points, microscopeImage.polygon)
-	dotTotal, blobTotal = getCoordTotals(coordsInPolygon, microscopeImage.dotCoords, 
-											microscopeImage.blobCoords, blobSize)
+	dotTotal, blobTotal = getCoordTotals(coordsInPolygon, dotCoords, blobCoords, blobSize)
 
 	surveyedArea = len(coordsInPolygon) - blobTotal
-	density = (dotTotal / surveyedArea * PIXELS_TO_MICRONS)
-	error = (np.sqrt(dotTotal) / surveyedArea * PIXELS_TO_MICRONS)
+	density = dotTotal / surveyedArea * PIXELS_TO_MICRONS
+	error = np.sqrt(dotTotal) / surveyedArea * PIXELS_TO_MICRONS
 	
 	return density, error
 
@@ -65,10 +63,10 @@ def measureDensity(directory, filename, microscopeImage, userSettings):
 	if not len(microscopeImage.polygon):
 		return
 	
-	density, error = getDensityAndError(microscopeImage, blobSize)
-	
 	dotCoords, blobCoords = dp.getCoordMapsWithinPolygonFromImage(microscopeImage, userSettings)
 	dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
+	
+	density, error = getDensityAndError(microscopeImage, dotCoords, blobCoords, blobSize)
 	
 	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
 							dotCoords, blobCoords)
@@ -138,3 +136,4 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoo
 def skipFile(directory, filename, userSettings):
 	saveDensityDataFiles(directory, filename, None, None, None, userSettings, skipped=True)
 	print("File skipped")
+
