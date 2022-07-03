@@ -31,12 +31,6 @@ def coordExistsWithinRadius(y, x, coordMap, radius):
 					return True
 	return False
 
-def countCoordsInCoordMap(coordMap):
-	count = 0
-	for y, xSet in coordMap.items():
-		count += len(xSet)
-	return count
-
 def findIndexOfMaxElement(array):
 	maxIndex = 0
 	maxElement = float("-inf")
