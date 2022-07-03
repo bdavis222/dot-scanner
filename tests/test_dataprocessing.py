@@ -45,23 +45,23 @@ class TestFunctions(unittest.TestCase):
 		}
 		self.assertIn([5, 1], dp.getCoordPairsFromCoordMap(testMap)) # [x, y], not [y, x]
 	
-	# def test_getSortedCoordPairsFromCoordMap(self):
-	# 	testMap = {
-	# 		1: {1, 2, 5},
-	# 		3: {1},
-	# 		4: {8, 3}
-	# 	}
-	# 	data = [
-	# 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 5, 8, 0, 0, 1, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 10, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, 7, 0, 0, 0, 0, 1],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0, 0]
-	# 	]
-	# 	sortedCoordPairs = dp.getSortedCoordPairsFromCoordMap(testMap, data)
-	# 	self.assertIn([5, 1], sortedCoordPairs) # [x, y], not [y, x]
-	# 	self.assertEqual([1, 3], sortedCoordPairs[0])
+	def test_getSortedCoordPairsFromCoordMap(self):
+		testMap = {
+			1: {1, 2, 5},
+			3: {1},
+			4: {8, 3}
+		}
+		data = [
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 5, 8, 0, 0, 1, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 10, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 7, 0, 0, 0, 0, 1],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0]
+		]
+		sortedCoordPairs = dp.getSortedCoordPairsFromCoordMap(testMap, data)
+		self.assertIn([5, 1], sortedCoordPairs) # [x, y], not [y, x]
+		self.assertEqual([1, 3], sortedCoordPairs[0])
 	
 	def test_getNeighborCoords(self):
 		testMap = {
