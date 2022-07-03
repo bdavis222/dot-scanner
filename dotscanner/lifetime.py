@@ -52,7 +52,8 @@ def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap,
 			
 	return nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
 
-def getCoordsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, polygonCoordMap, xMin, xMax, yMin, yMax):
+def getCoordsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
+							polygonCoordMap, xMin, xMax, yMin, yMax):
 	dotCoords = {}
 	blobCoords = {}
 	# Hashmaps mapping each y coordinate to a set of corresponding x coordinates
@@ -148,8 +149,10 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
 		dotCoords, blobCoords = getCoordsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
-								lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
-								middleImagePolygonCoordMap, xMin, xMax, yMin, yMax)
+														lowerDotThresh, upperDotThresh, 
+														lowerBlobThresh, dotSize, 
+														middleImagePolygonCoordMap, xMin, xMax, 
+														yMin, yMax)
 		dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
 		
 		imageNumberToCoordMap[index] = dotCoords
@@ -167,8 +170,9 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		for y, xSet in coordMap.items():
 			for x in xSet:
 				updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
-							removeEdgeFrames, userSettings.saveFigures, coordsToPlot)
+										imageNumberToCoordMap, edgeFrameNumbers, dotSize, 
+										skipsAllowed, removeEdgeFrames, userSettings.saveFigures, 
+										coordsToPlot)
 	
 	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
 							imageNumberToFilenameMap, middleMicroscopeImage, userSettings, 
