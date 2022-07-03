@@ -53,7 +53,7 @@ def editThresholds(thresholds):
 \nlowerDotThreshScale  upperDotThreshScale  lowerBlobThreshScale\n     \
 {thresholds[0]}                   {thresholds[1]}                   {thresholds[2]}\n"
 
-def lifetimeOutputFileHeader(polygon, thresholds):
+def lifetimeOutputFileHeader(polygon, userSettings):
 	verticesStringList = []
 	for vertex in polygon[:-1]:
 		y, x = vertex
@@ -61,9 +61,12 @@ def lifetimeOutputFileHeader(polygon, thresholds):
 	verticesString = ", ".join(verticesStringList)
 	
 	thresholdsStringList = []
-	for threshold in thresholds:
+	for threshold in userSettings.thresholds:
 		thresholdsStringList.append(str(threshold))
 	thresholdsString = ", ".join(thresholdsStringList)
+	
 	return f"# Selected polygon vertices (x, y): {verticesString}\n\
 # Selected threshold scales: {thresholdsString}\n\
+# Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize} | Remove edge frames: \
+{userSettings.removeEdgeFrames} | Skips allowed: {userSettings.skipsAllowed}\n\
 #\n# x | y | lifetime | starting image\n"
