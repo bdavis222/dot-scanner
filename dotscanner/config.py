@@ -95,4 +95,3 @@ FIGURE_DIRECTORY_NAME = "figures/"
 # The directory name where figures are to be saved (only if SAVE_FIGURES = True).
 # The default is "figures/", but this can be changed if the user typically keeps a similarly
 # named folder in their file structure for something else.
-
