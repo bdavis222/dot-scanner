@@ -4,7 +4,6 @@ import dotscanner.dataprocessing as dp
 import dotscanner.strings as strings
 import dotscanner.ui as ui
 from dotscanner.ui import MicroscopeImage
-import matplotlib
 import matplotlib.pyplot as pl
 import numpy as np
 import os
@@ -52,24 +51,6 @@ def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap,
 			
 	return nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
 
-def getCoordsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
-							polygonCoordMap, xMin, xMax, yMin, yMax):
-	dotCoords = {}
-	blobCoords = {}
-	for y in range(yMin, yMax + 1):
-		if y in polygonCoordMap:
-			for x in range(xMin, xMax + 1):
-				if x in polygonCoordMap[y]:
-					if sums[y, x] > lowerDotThresh:
-						if sums[y, x] < upperDotThresh:
-							dp.addCoordinate(y, x, dotCoords)
-						else:
-							if dp.squareSum(data, y, x, dotSize + 1) > lowerBlobThresh:
-								dp.addCoordinate(y, x, blobCoords)
-							else:
-								dp.addCoordinate(y, x, dotCoords)
-	return dotCoords, blobCoords
-
 def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
 	firstFrame = 0
 	lastFrameOfFrontEdge = skipsAllowed + 1
@@ -80,62 +61,18 @@ def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
 	lastFrames = range(firstFrameOfBackEdge, lastFrame)
 	return set(list(firstFrames) + list(lastFrames))
 
-def getInPolygonCoordMap(microscopeImage):
-	data = microscopeImage.data
-	points = []
-	for y in range(len(data)):
-		for x in range(len(data[0])):
-			points.append((y, x))
-
-	path = matplotlib.path.Path(microscopeImage.polygon)
-	flattenedMask = path.contains_points(points)
-	mask = flattenedMask.reshape(len(data), len(data[0]))
-	coordsInPolygon = np.argwhere(mask)
-	
-	polygonCoordMap = {}
-	for coordPair in coordsInPolygon:
-		y, x = coordPair
-		dp.addCoordinate(y, x, polygonCoordMap)
-	
-	return polygonCoordMap
-
-def getPolygonLimits(polygon):
-	polygonXMin, polygonXMax = float("inf"), float("-inf")
-	polygonYMin, polygonYMax = float("inf"), float("-inf")
-	
-	for coordPair in polygon:
-		y, x = coordPair
-		polygonYMin = min(y, polygonYMin)
-		polygonYMax = max(y, polygonYMax)
-		polygonXMin = min(x, polygonXMin)
-		polygonXMax = max(x, polygonXMax)
-	
-	polygonYMin = int(round(polygonYMin, 0))
-	polygonYMax = int(round(polygonYMax, 0))
-	polygonXMin = int(round(polygonXMin, 0))
-	polygonXMax = int(round(polygonXMax, 0))
-	
-	return polygonXMin, polygonXMax, polygonYMin, polygonYMax
-
-def getThresholds(microscopeImage):
-	sums = microscopeImage.sums
-	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = microscopeImage.thresholds
-	lowerDotThresh = lowerDotThreshScale * np.std(sums)
-	upperDotThresh = upperDotThreshScale * np.std(sums)
-	lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
-	return lowerDotThresh, upperDotThresh, lowerBlobThresh
-
 def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	blobSize = userSettings.blobSize
 	dotSize = userSettings.dotSize
 	skipsAllowed = userSettings.skipsAllowed
 	removeEdgeFrames = userSettings.removeEdgeFrames
 	
-	lowerDotThresh, upperDotThresh, lowerBlobThresh = getThresholds(middleMicroscopeImage)
-	middleImagePolygonCoordMap = getInPolygonCoordMap(middleMicroscopeImage)
-	xMin, xMax, yMin, yMax = getPolygonLimits(middleMicroscopeImage.polygon)
+	lowerDotThresh, upperDotThresh, lowerBlobThresh = dp.getThresholds(middleMicroscopeImage)
+	middleImagePolygonCoordMap = dp.getInPolygonCoordMap(middleMicroscopeImage)
+	xMin, xMax, yMin, yMax = dp.getPolygonLimits(middleMicroscopeImage.polygon)
 	
 	imageNumberToCoordMap = {}
+	imageNumberToBlobCoordMap = {}
 	imageNumberToFilenameMap = {}
 	
 	numberOfFiles = len(filenames)
@@ -144,7 +81,8 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	for index, filename in enumerate(filenames):
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
-		dotCoords, blobCoords = getCoordsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
+		dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(
+														microscopeImage.data, microscopeImage.sums, 
 														lowerDotThresh, upperDotThresh, 
 														lowerBlobThresh, dotSize, 
 														middleImagePolygonCoordMap, xMin, xMax, 
@@ -152,6 +90,7 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
 		
 		imageNumberToCoordMap[index] = dotCoords
+		imageNumberToBlobCoordMap[index] = blobCoords
 		imageNumberToFilenameMap[index] = filename
 		ui.printProgressBar(index + 1, numberOfFiles)
 	
@@ -171,12 +110,14 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 										coordsToPlot)
 	
 	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
-							imageNumberToFilenameMap, middleMicroscopeImage, userSettings, 
-							coordsToPlot)
+							imageNumberToBlobCoordMap, imageNumberToFilenameMap, 
+							middleMicroscopeImage, userSettings, coordsToPlot, 
+							middleMicroscopeImage.polygon)
 
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, imageNumberToFilenameMap, microscopeImage, 
-							userSettings, coordsToPlot):
+							imageNumberToCoordMap, imageNumberToBlobCoordMap, 
+							imageNumberToFilenameMap, microscopeImage, userSettings, coordsToPlot, 
+							polygon):
 	dotSize = userSettings.dotSize
 	polygon = microscopeImage.polygon
 	thresholds = microscopeImage.thresholds
@@ -186,7 +127,7 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages,
 		os.remove(targetPath)
 	
 	with open(targetPath, "a") as file:
-		file.write(strings.lifetimeOutputFileHeader(polygon, thresholds))
+		file.write(strings.lifetimeOutputFileHeader(polygon, userSettings))
 		for lifetime, resultCoord, startImage in zip(lifetimes, resultCoords, startImages):
 			y, x = resultCoord
 			filename = imageNumberToFilenameMap[startImage]
@@ -196,9 +137,11 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages,
 	print(f"{cfg.LIFETIME_OUTPUT_FILENAME} saved.")
 	
 	if userSettings.saveFigures:
-		saveLifetimeFigures(directory, coordsToPlot, imageNumberToFilenameMap, userSettings)
+		saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
+							imageNumberToFilenameMap, userSettings, polygon)
 
-def saveLifetimeFigures(directory, coordsToPlot, imageNumberToFilenameMap, userSettings):
+def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
+						imageNumberToFilenameMap, userSettings, polygon):
 	print("Saving figures...")
 	coordsToPlotSize = len(list(coordsToPlot.keys()))
 	count = 0
@@ -209,11 +152,24 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToFilenameMap, userS
 		data = microscopeImage.data
 	
 		figure, axes = pl.subplots()
-		axes.imshow(data, origin="lower", cmap="gray", vmin=0, vmax=2 * np.std(data))
+		axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
+					vmax=userSettings.upperContrast * np.std(data))
 		dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
 									edgecolors=cfg.DOT_COLOR, linewidths=1)
-		
 		dotScatter.set_offsets(list(dotCoordSet))
+		
+		if cfg.PLOT_BLOBS:
+			blobSize = userSettings.blobSize
+			blobCoordMap = imageNumberToBlobCoordMap[imageNumber]
+			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
+										edgecolors=cfg.BLOB_COLOR, linewidths=0.5)
+			dp.setScatterOffset(blobCoordMap, blobScatter)
+		
+		if cfg.PLOT_POLYGON:
+			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
+			underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75)
+			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
+								linewidth=cfg.POLYGON_THICKNESS)
 		
 		targetPath = files.getTargetPath(directory, userSettings.program)
 		truncatedFilename = ".".join(filename.split(".")[:-1])
