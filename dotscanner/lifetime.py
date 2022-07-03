@@ -56,10 +56,6 @@ def getCoordsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlob
 							polygonCoordMap, xMin, xMax, yMin, yMax):
 	dotCoords = {}
 	blobCoords = {}
-	# Hashmaps mapping each y coordinate to a set of corresponding x coordinates
-	# e.g., the coordinates (y1, x1) and (y1, x2) would be the following key-value pair:
-	# {y1 : {x1, x2}}
-	
 	for y in range(yMin, yMax + 1):
 		if y in polygonCoordMap:
 			for x in range(xMin, xMax + 1):
