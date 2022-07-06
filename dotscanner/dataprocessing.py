@@ -93,16 +93,6 @@ def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerB
 								addCoordinate(y, x, dotCoords)
 	return dotCoords, blobCoords
 
-def getCoordMapsWithinPolygonFromImage(microscopeImage, userSettings):
-	lowerDotThresh, upperDotThresh, lowerBlobThresh = getThresholds(microscopeImage)
-	polygonCoordMap = getInPolygonCoordMap(microscopeImage)
-	xMin, xMax, yMin, yMax = getPolygonLimits(microscopeImage.polygon)
-	dotCoords, blobCoords = getCoordMapsWithinPolygon(microscopeImage.data, microscopeImage.sums, 
-															lowerDotThresh, upperDotThresh, 
-															lowerBlobThresh, userSettings.dotSize, 
-															polygonCoordMap, xMin, xMax, yMin, yMax)
-	return dotCoords, blobCoords
-
 def getData(directory, filename):
 	image = Image.open(directory + filename)
 	data = np.array(image)
