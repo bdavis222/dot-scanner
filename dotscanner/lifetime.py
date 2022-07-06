@@ -155,23 +155,26 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 	
 		figure, axes = pl.subplots()
 		axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-					vmax=userSettings.upperContrast * np.std(data))
+					vmax=userSettings.upperContrast * np.std(data), zorder=0)
 		dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
-									edgecolors=cfg.DOT_COLOR, linewidths=1)
+									edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, 
+									zorder=4)
 		dotScatter.set_offsets(list(dotCoordSet))
 		
 		if cfg.PLOT_BLOBS:
 			blobSize = userSettings.blobSize
 			blobCoordMap = imageNumberToBlobCoordMap[imageNumber]
 			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
-										edgecolors=cfg.BLOB_COLOR, linewidths=0.5)
+										edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, 
+										zorder=3)
 			dp.setScatterOffset(blobCoordMap, blobScatter)
 		
 		if cfg.PLOT_POLYGON:
 			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
-			underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75)
+			underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
+									zorder=1)
 			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
-								linewidth=cfg.POLYGON_THICKNESS)
+								linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 		
 		targetPath = files.getTargetPath(directory, userSettings.program)
 		truncatedFilename = ".".join(filename.split(".")[:-1])
