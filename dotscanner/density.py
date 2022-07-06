@@ -29,47 +29,51 @@ def getAlreadyMeasured(directory):
 				alreadyMeasured.add(filename)
 	return alreadyMeasured
 
-def getCoordTotals(coordsInPolygon, dotCoords, blobCoords, blobSize):
+def getTotalsAndCoords(coordsInPolygon, dotCoords, blobCoords, blobSize):
 	dotTotal, blobTotal = 0, 0
+	dotsInPoly, blobsInPoly = [], []
 	for coordPair in coordsInPolygon:
 		y, x = coordPair
 		if dp.coordExistsWithinRadius(y, x, blobCoords, blobSize):
 			blobTotal += 1
+			if dp.coordExists(y, x, blobCoords):
+				blobsInPoly.append((x, y)) # For use with set_offsets(), which expects (x, y)
 		elif dp.coordExists(y, x, dotCoords):
 			dotTotal += 1
-	return dotTotal, blobTotal
+			dotsInPoly.append((x, y)) # For use with set_offsets(), which expects (x, y)
+	return dotTotal, blobTotal, dotsInPoly, blobsInPoly
 
-def getDensityAndError(microscopeImage, dotCoords, blobCoords, blobSize):
-	points = []
+def getDensityErrorAndCoords(microscopeImage, blobSize):
+	dotCoords = microscopeImage.dotCoords
+	blobCoords = microscopeImage.blobCoords
 	data = microscopeImage.data
+	
+	points = []
 	for y in range(len(data)):
 		for x in range(len(data[0])):
 			points.append((y, x))
 	
 	coordsInPolygon = dp.getCoordsInPolygon(data, points, microscopeImage.polygon)
-	dotTotal, blobTotal = getCoordTotals(coordsInPolygon, dotCoords, blobCoords, blobSize)
-
+	
+	dotTotal, blobTotal, dotsInPoly, blobsInPoly = getTotalsAndCoords(coordsInPolygon, dotCoords, 
+																		blobCoords, blobSize)
+	
 	surveyedArea = len(coordsInPolygon) - blobTotal
 	density = dotTotal / surveyedArea * PIXELS_TO_MICRONS
 	error = np.sqrt(dotTotal) / surveyedArea * PIXELS_TO_MICRONS
 	
-	return density, error
+	return density, error, dotsInPoly, blobsInPoly
 
 def measureDensity(directory, filename, microscopeImage, userSettings):
-	saveFigures = userSettings.saveFigures
 	blobSize = userSettings.blobSize
-	dotSize = userSettings.dotSize
 	
 	if not len(microscopeImage.polygon):
 		return
 	
-	dotCoords, blobCoords = dp.getCoordMapsWithinPolygonFromImage(microscopeImage, userSettings)
-	dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
-	
-	density, error = getDensityAndError(microscopeImage, dotCoords, blobCoords, blobSize)
+	density, error, dotsInPoly, blobsInPoly = getDensityErrorAndCoords(microscopeImage, blobSize)
 	
 	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
-							dotCoords, blobCoords)
+							dotsInPoly, blobsInPoly)
 
 def saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
 							dotCoords, blobCoords, skipped=False):
@@ -91,39 +95,39 @@ def saveDensityDataFiles(directory, filename, density, error, microscopeImage, u
 		output = strings.densityOutput(filename, density, error, microscopeImage.thresholds, 
 										dotSize, blobSize, microscopeImage.polygon)
 	
-	with open(targetPath, "a") as file:
-		file.write(output)
-	
 	if not skipped and saveFigures:
 		saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords)
+	
+	with open(targetPath, "a") as file:
+		file.write(output)
 
 def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords):
 	dotSize = userSettings.dotSize
 	program = userSettings.program
 	
 	data = microscopeImage.data
-	# dotCoords = microscopeImage.dotCoords
 	polygon = microscopeImage.polygon
 	
 	figure, axes = pl.subplots()
 	axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-					vmax=userSettings.upperContrast * np.std(data))
+					vmax=userSettings.upperContrast * np.std(data), zorder=0)
 	dotScatter = axes.scatter([None], [None], s=5 * dotSize, facecolors="none", 
-								edgecolors=cfg.DOT_COLOR, linewidths=0.25)
-	dp.setScatterOffset(dotCoords, dotScatter)
+								edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
+	dotScatter.set_offsets(dotCoords)
 	
 	if cfg.PLOT_BLOBS:
 		blobSize = userSettings.blobSize
-		# blobCoords = microscopeImage.blobCoords
 		blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
-									edgecolors=cfg.BLOB_COLOR, linewidths=0.5)
-		dp.setScatterOffset(blobCoords, blobScatter)
+									edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, 
+									zorder=3)
+		blobScatter.set_offsets(blobCoords)
 	
 	if cfg.PLOT_POLYGON:
 		polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
-		underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75)
+		underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
+								zorder=1)
 		line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
-							linewidth=cfg.POLYGON_THICKNESS)
+							linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 	
 	targetPath = files.getTargetPath(directory, program)
 	
