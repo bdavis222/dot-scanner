@@ -32,7 +32,7 @@ class TestDensity(unittest.TestCase):
         self.assertNotIn((7, 3), coordTuples)
         self.assertNotIn((0, 0), coordTuples)
     
-    def test_getCoordTotals(self):
+    def test_getTotalsAndCoords(self):
         dotCoords = {
             0: {0, 3},
             3: {2, 5},
@@ -42,8 +42,8 @@ class TestDensity(unittest.TestCase):
             8: {8}
         }
         
-        dotTotal, blobTotal = density.getCoordTotals(self.coordsInPolygon, dotCoords, blobCoords, 
-                                                        blobSize=5)
+        dotTotal, blobTotal, _, _ = density.getTotalsAndCoords(self.coordsInPolygon, dotCoords, 
+                                                                blobCoords, blobSize=5)
         self.assertEqual(dotTotal, 1)
         self.assertEqual(blobTotal, 4)
         
@@ -56,8 +56,8 @@ class TestDensity(unittest.TestCase):
             0: {8}
         }
         
-        dotTotal, blobTotal = density.getCoordTotals(self.coordsInPolygon, dotCoords, blobCoords, 
-                                                        blobSize=5)
+        dotTotal, blobTotal, _, _ = density.getTotalsAndCoords(self.coordsInPolygon, dotCoords, 
+                                                                blobCoords, blobSize=5)
         self.assertEqual(dotTotal, 2)
         self.assertEqual(blobTotal, 5)
 
