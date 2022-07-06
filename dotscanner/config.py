@@ -6,17 +6,24 @@ FILEPATH = ""
 PROGRAM = "density"
 # Whether a "density" program or "lifetime" program should be run
 
+SCALE = None
+# Scale of the image (in nanometers per pixel). If unknown, leave as None.
+
+############################################
+############ THRESHOLD SETTINGS ############
+############################################
+
 LOWER_DOT_THRESH_SCALE = 1.5
 # Scaling for the lower threshold defining the brightness of the dots. The default is 1.5,
 # which corresponds to 1.5 standard deviations above the mean.
 # Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
 
-UPPER_DOT_THRESH_SCALE = 5
+UPPER_DOT_THRESH_SCALE = 5.0
 # Scaling for the upper threshold defining the brightness of the dots. The default is 5,
 # which corresponds to 5 standard deviations above the mean.
 # Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
 
-LOWER_BLOB_THRESH_SCALE = 2
+LOWER_BLOB_THRESH_SCALE = 2.0
 # Scaling for the lower threshold defining the brightness of the blobs. The default is 2,
 # which corresponds to 2 times the value of UPPER_DOT_THRESH_SCALE.
 # Lower this value to increase the number of blobs detected, or raise it to reduce the number.
@@ -24,6 +31,10 @@ LOWER_BLOB_THRESH_SCALE = 2
 THRESHOLD_DELTA = 0.1
 # Amount by which a threshold will change when clicking the up and down arrows in the plotting UI.
 # The default value is 0.1, and will be rounded to the nearest 0.1.
+
+#################################################
+############ IMAGE CONTRAST SETTINGS ############
+#################################################
 
 LOWER_CONTRAST = 0.0
 # The lower bound of the plotting range for the data. The default value is 0.0, or 0 standard
@@ -37,14 +48,9 @@ CONTRAST_DELTA = 0.5
 # Amount by which the contrast will change when clicking the up and down arrows in the plotting UI.
 # The default value is 0.5, and will be rounded to the nearest 0.1.
 
-BLOB_SIZE = 5
-# Radius of exclusion around blobs (in pixels)
-
-DOT_SIZE = 2
-# Radius of exclusion between other dots (in pixels)
-
-SCALE = None
-# Scale of the image (in nanometers per pixel). If unknown, leave as None.
+###########################################
+############ LIFETIME SETTINGS ############
+###########################################
 
 SKIPS_ALLOWED = 1
 # The number of consecutive images that are allowed to be skipped in a lifetime calculation
@@ -52,19 +58,40 @@ SKIPS_ALLOWED = 1
 REMOVE_EDGE_FRAMES = True
 # Whether edge frames should be removed from a lifetime calculation
 
-SAVE_FIGURES = False
-# Whether the displayed figures should be saved in a "figures" directory. Default is False.
+######################################
+############ DOT SETTINGS ############
+######################################
 
-PLOT_BLOBS = False
-# Whether to plot markers on the blobs in outputted figures. Default is False.
+DOT_SIZE = 2
+# Radius of exclusion between other dots (in pixels)
 
 DOT_COLOR = "lime"
 # The color used for dot markers in output plots. 
 # Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
 
+DOT_THICKNESS = 0.5
+# The line thickness used for dots in output plots. Default is 0.5.
+
+#######################################
+############ BLOB SETTINGS ############
+#######################################
+
+BLOB_SIZE = 5
+# Radius of exclusion around blobs (in pixels)
+
+PLOT_BLOBS = False
+# Whether to plot markers on the blobs in outputted figures. Default is False.
+
 BLOB_COLOR = "red"
 # The color used for blob markers in output plots. 
 # Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
+
+BLOB_THICKNESS = 0.5
+# The line thickness used for blobs in output plots. Default is 0.5.
+
+##########################################
+############ POLYGON SETTINGS ############
+##########################################
 
 PLOT_POLYGON = True
 # Whether to plot the polygon in outputted figures. Default is True.
@@ -76,6 +103,10 @@ POLYGON_COLOR = "C1"
 POLYGON_THICKNESS = 0.5
 # The line thickness used for the polygon in output plots. Default is 0.5.
 
+#########################################
+############ WINDOW SETTINGS ############
+#########################################
+
 WINDOW_WIDTH = 700
 WINDOW_HEIGHT = 700
 # Dimensions of “threshold adjustment” and “region selection” windows in pixels
@@ -83,6 +114,13 @@ WINDOW_HEIGHT = 700
 WINDOW_X = 10
 WINDOW_Y = 30
 # Starting position of the upper left corner of all GUI windows in pixels
+
+#########################################
+############ OUTPUT SETTINGS ############
+#########################################
+
+SAVE_FIGURES = False
+# Whether the displayed figures should be saved in a "figures" directory. Default is False.
 
 DENSITY_OUTPUT_FILENAME = "densities.txt"
 # The filename to be saved in the directory containing the images used for density measurement.
