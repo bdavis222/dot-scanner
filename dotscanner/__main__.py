@@ -14,7 +14,7 @@ def main():
 			getLifetimeData(directory, filenames, userSettings)
 		else:
 			raise Exception(strings.programNameException)
-
+	
 def getDensityData(directory, filenames, userSettings):
 	density.checkUnitsConsistent(directory)
 	alreadyMeasured = density.getAlreadyMeasured(directory)
@@ -29,12 +29,12 @@ def getDensityData(directory, filenames, userSettings):
 		if microscopeImage.skipped:
 			density.skipFile(directory, filename, userSettings)
 			continue
-			
+		
 		RegionSelector(microscopeImage, userSettings)
 		if microscopeImage.skipped:
 			density.skipFile(directory, filename, userSettings)
 			continue
-			
+		
 		density.measureDensity(directory, filename, microscopeImage, userSettings)
 
 def getLifetimeData(directory, filenames, userSettings):
