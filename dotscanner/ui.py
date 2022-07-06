@@ -3,7 +3,7 @@ import dotscanner.dataprocessing as dp
 import dotscanner.files as files
 import dotscanner.strings as strings
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as pl
 import matplotlib.widgets as wdgts
 import numpy as np
@@ -122,17 +122,17 @@ class RegionSelector:
 		self.data = image.data
 		
 		self.figure, self.axes = pl.subplots()
-		manager = pl.get_current_fig_manager()
+		self.window = pl.get_current_fig_manager().window
 		geometry = f"{cfg.WINDOW_WIDTH}x{cfg.WINDOW_HEIGHT}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
-		manager.window.geometry(geometry)
-		manager.window.title(f"Dot Scanner - Region Selection")
+		self.window.geometry(geometry)
+		self.window.title(f"Dot Scanner - Region Selection")
 		
 		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
 							vmax=userSettings.upperContrast * np.std(self.data))
 		self.dotScatter = self.axes.scatter([None], [None], s=5 * self.dotSize, facecolors="none", 
-												edgecolors=cfg.DOT_COLOR, linewidths=1)
+											edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
 		self.blobScatter = self.axes.scatter([None], [None], s=2 * self.blobSize, facecolors="none",
-												edgecolor=cfg.BLOB_COLOR, linewidths=1)
+											edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
 		
 		self.clickMarkerBackdrop = self.axes.scatter([None], [None], s=100, marker='x', color="k", 
 														linewidth=4)
@@ -191,7 +191,6 @@ class RegionSelector:
 		self.line.figure.canvas.draw_idle()
 	
 	def finish(self, _event):
-		pl.close("all")
 		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
 			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
 			self.yList.append(self.yList[0])
@@ -200,6 +199,9 @@ class RegionSelector:
 		
 		else: # An invalid polygon was drawn
 			print(strings.invalidPolygonWarning)
+		
+		pl.close("all")
+		self.window.quit()
 	
 	def quit(self, event):
 		quit()
@@ -253,18 +255,18 @@ class ThresholdAdjuster:
 		]
 		
 		self.figure, self.axes = pl.subplots()
-		manager = pl.get_current_fig_manager()
+		self.window = pl.get_current_fig_manager().window
 		geometry = f"{cfg.WINDOW_WIDTH}x{cfg.WINDOW_HEIGHT}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
-		manager.window.geometry(geometry)
-		manager.window.title(f"Dot Scanner - Threshold Adjustment")
+		self.window.geometry(geometry)
+		self.window.title(f"Dot Scanner - Threshold Adjustment")
 		
 		self.dataPlot = self.axes.imshow(self.data, origin="lower", cmap="gray", 
 											vmin=userSettings.lowerContrast, 
 											vmax=userSettings.upperContrast * np.std(self.data))
 		self.dotScatter = self.axes.scatter([None], [None], s=50 * self.dotSize, facecolors="none", 
-												edgecolors=cfg.DOT_COLOR, linewidths=1)
+											edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
 		self.blobScatter = self.axes.scatter([None], [None], s=2 * self.blobSize, facecolors="none",
-												edgecolor=cfg.BLOB_COLOR, linewidths=1)
+											edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
 
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
@@ -361,6 +363,7 @@ class ThresholdAdjuster:
 	
 	def finish(self, event):
 		pl.close("all")
+		self.window.quit()
 	
 	def lowerDotThresholdScaleDown(self, event):
 		self.image.decreaseLowerDotThreshScale()
@@ -494,7 +497,7 @@ class UserSettings:
 		self.labelProgram = tk.Label(self.window, text="Program:")
 
 		self.menuProgramSelectVar = tk.StringVar(self.window)
-		self.menuProgramSelectVar.set("Density") # default value
+		self.menuProgramSelectVar.set(self.program.capitalize()) # default value
 		self.menuProgramSelect = tk.OptionMenu(self.window, self.menuProgramSelectVar, "Density", 
 												"Lifetime", command=self.show)
 		
@@ -572,11 +575,13 @@ class UserSettings:
 		self.labelStartImageWarning = tk.Label(self.window, 
 												text=f"WARNING: {strings.fileNumberingException}", 
 												fg="red")
-
+		
+		self.show(click=self.program.capitalize())
 		self.window.mainloop()
 
 	def browseFiles(self):
-		chosenFile = filedialog.askopenfilename(title="Select a file to analyze")
+		chosenFile = filedialog.askopenfilename(initialdir=self.filepath, 
+												title="Select a file to analyze")
 		if chosenFile != "":
 			self.filepath = chosenFile
 			displayedFilename = chosenFile
@@ -585,7 +590,8 @@ class UserSettings:
 			self.labelSelectedPath.configure(text=displayedFilename, bg="white", fg="black")
 
 	def browseFolders(self):
-		chosenFolder = filedialog.askdirectory(title="Select a folder with images to analyze")
+		chosenFolder = filedialog.askdirectory(initialdir=self.filepath, 
+												title="Select a folder with images to analyze")
 		if chosenFolder != "":
 			self.filepath = chosenFolder
 			displayedFolder = chosenFolder
@@ -613,6 +619,17 @@ class UserSettings:
 				self.buttonSelectStartingImage.config(text="Browse...", fg="black")
 				self.startImage = ""
 				self.labelStartImageWarning.pack()
+	
+	def done(self):        
+		self.dotSize = int(self.entryDotSize.get())
+		self.blobSize = int(self.entryBlobSize.get())
+		self.lowerDotThresh = round(float(self.entryThreshold1.get()), 1)
+		self.upperDotThresh = round(float(self.entryThreshold2.get()), 1)
+		self.lowerBlobThresh = round(float(self.entryThreshold3.get()), 1)
+		self.skipsAllowed = int(self.entrySkipsAllowed.get())
+		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
+		self.completed = True
+		self.window.quit()
 
 	def setRemoveEdge(self):
 		if self.checkboxRemoveEdgeVar.get():
@@ -637,17 +654,6 @@ class UserSettings:
 			self.lifetimeOptions.pack_forget()
 			self.buttonDone.pack_forget()
 			self.buttonDone.pack()
-
-	def done(self):        
-		self.dotSize = int(self.entryDotSize.get())
-		self.blobSize = int(self.entryBlobSize.get())
-		self.lowerDotThresh = round(float(self.entryThreshold1.get()), 1)
-		self.upperDotThresh = round(float(self.entryThreshold2.get()), 1)
-		self.lowerBlobThresh = round(float(self.entryThreshold3.get()), 1)
-		self.skipsAllowed = int(self.entrySkipsAllowed.get())
-		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
-		self.completed = True
-		self.window.destroy()
 
 def createButton(name, position, action, color="whitesmoke", clickedColor="darkgray"):
 	buttonWidth = 40 / 500
