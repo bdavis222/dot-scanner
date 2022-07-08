@@ -206,7 +206,7 @@ class RegionSelector:
 		
 		self.line.figure.canvas.mpl_disconnect(self.connectId)
 		self.window.destroy()
-		self.window.quit()
+		self.window.after(100, self.window.quit)
 	
 	def finishWithReturnKey(self, event):
 		self.finish()
@@ -704,6 +704,7 @@ class UserSettings:
 		self.skipsAllowed = int(self.entrySkipsAllowed.get())
 		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
 		self.window.destroy()
+		self.window.quit()
 	
 	def doneWithReturnKey(self, event):        
 		self.done()
