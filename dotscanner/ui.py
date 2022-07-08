@@ -148,7 +148,8 @@ class RegionSelector:
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 		
 		if skipButton:
-			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip)
+			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
+										fg="darkgoldenrod")
 			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
 			
 			self.firstSpacer = tk.Label(self.window, text="                       ")
@@ -286,7 +287,9 @@ class ThresholdAdjuster:
 		self.thresholdEditItem = tk.Frame(self.window)
 		
 		if skipButton:
-			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip)
+			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
+										fg="darkgoldenrod")
+			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
 		
 		self.viewLabel = tk.Label(self.window, text="View: ")
 		self.viewTopLeftButton = tk.Button(self.window, text="⌜", command=self.showTopLeftRegion)
@@ -446,7 +449,7 @@ class ThresholdAdjuster:
 	
 	def skip(self):
 		self.image.skipped = True
-		self.window.destroy()
+		self.finish()
 
 	def resetThreshScalesToDefaultValues(self):
 		self.image.setThresholds(self.defaultThresholds)
