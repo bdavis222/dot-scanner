@@ -102,18 +102,18 @@ def getData(directory, filename):
 def getFullDataSquareSum(data):
 	sums = np.zeros_like(data)
 
-	sums[:len(sums)-1, :len(sums[0]) - 1] += data[1:,                1:               ]
-	sums[:len(sums)-1, :                ] += data[1:,                :                ]
-	sums[:len(sums)-1, 1:               ] += data[1:,                :len(data[0]) - 1]
+	sums[:len(data)-1, :len(data[0]) - 1] += data[1:,             1:               ]
+	sums[:len(data)-1, :                ] += data[1:,             :                ]
+	sums[:len(data)-1, 1:               ] += data[1:,             :len(data[0]) - 1]
 
-	sums[:,            :len(sums[0]) - 1] += data[:,                 1:               ]
+	sums[:,            :len(data[0]) - 1] += data[:,              1:               ]
 	sums                                  += data
-	sums[:,            1:               ] += data[:,                 :len(data[0]) - 1]
+	sums[:,            1:               ] += data[:,              :len(data[0]) - 1]
 
-	sums[1:,           :len(sums[0]) - 1] += data[:len(data[0]) - 1, 1:               ]
-	sums[1:,           :                ] += data[:len(data[0]) - 1, :                ]
-	sums[1:,           1:               ] += data[:len(data[0]) - 1, :len(data[0]) - 1]
-
+	sums[1:,           :len(data[0]) - 1] += data[:len(data) - 1, 1:               ]
+	sums[1:,           :                ] += data[:len(data) - 1, :                ]
+	sums[1:,           1:               ] += data[:len(data) - 1, :len(data[0]) - 1]
+	
 	return sums
 
 def getInPolygonCoordMap(microscopeImage):
