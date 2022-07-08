@@ -671,6 +671,7 @@ class UserSettings:
 			if len(chosenFile) > 50:
 				displayedFilename = "..." + chosenFile[-50:]
 			self.labelSelectedPath.configure(text=displayedFilename, bg="white", fg="black")
+		self.window.focus_force()
 
 	def browseFolders(self):
 		chosenFolder = filedialog.askdirectory(initialdir=self.filepath, 
@@ -681,6 +682,7 @@ class UserSettings:
 			if len(chosenFolder) > 50:
 				displayedFolder = "..." + chosenFolder[-50:]
 			self.labelSelectedPath.configure(text=displayedFolder, bg="white", fg="black")
+		self.window.focus_force()
 
 	def browseStartingImage(self):
 		chosenFilepath = filedialog.askopenfilename(initialdir=self.filepath, 
@@ -702,6 +704,7 @@ class UserSettings:
 				self.buttonSelectStartingImage.config(text="Browse...", fg="black")
 				self.startImage = ""
 				self.labelStartImageWarning.pack()
+		self.window.focus_force()
 	
 	def done(self):        
 		self.dotSize = int(self.entryDotSize.get())
