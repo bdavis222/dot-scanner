@@ -4,6 +4,7 @@ import dotscanner.files as files
 import dotscanner.strings as strings
 import matplotlib
 matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as pl
 import matplotlib.widgets as wdgts
 import numpy as np
@@ -14,7 +15,7 @@ from tkinter import filedialog
 matplotlib.rcParams["toolbar"] = "None"
 matplotlib.rcParams["figure.facecolor"] = "gray"
 matplotlib.rcParams["figure.subplot.left"] = 0.01
-matplotlib.rcParams["figure.subplot.bottom"] = 0.07
+matplotlib.rcParams["figure.subplot.bottom"] = 0.01
 matplotlib.rcParams["figure.subplot.right"] = 0.99
 matplotlib.rcParams["figure.subplot.top"] = 0.99
 matplotlib.rcParams["xtick.bottom"] = False
@@ -121,18 +122,10 @@ class RegionSelector:
 		self.blobSize = userSettings.blobSize
 		self.data = image.data
 		
-		self.figure, self.axes = pl.subplots()
-		self.window = pl.get_current_fig_manager().window
-		geometry = f"{cfg.WINDOW_WIDTH}x{cfg.WINDOW_HEIGHT}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
-		self.window.geometry(geometry)
-		self.window.title(f"Dot Scanner - Region Selection")
+		self.window = createWindow("Dot Scanner - Region Selection (click the plot to add polygon vertices)")
 		
-		self.axes.imshow(self.data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-							vmax=userSettings.upperContrast * np.std(self.data))
-		self.dotScatter = self.axes.scatter([None], [None], s=5 * self.dotSize, facecolors="none", 
-											edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
-		self.blobScatter = self.axes.scatter([None], [None], s=2 * self.blobSize, facecolors="none",
-											edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
+		self.figure, self.axes, _, self.dotScatter, self.blobScatter = createPlots(self.data, 
+																					userSettings)
 		
 		self.clickMarkerBackdrop = self.axes.scatter([None], [None], s=100, marker='x', color="k", 
 														linewidth=4)
@@ -142,29 +135,37 @@ class RegionSelector:
 		self.clickMarker = self.axes.scatter([None], [None], s=100, marker='x', color="C1", 
 												linewidth=1.5)
 		
-		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		
 		self.cid = self.line.figure.canvas.mpl_connect("button_press_event", self)
 		
-		quitButton = createButton(name="Quit", position=0, action=self.quit, 
-									color="orangered")
+		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
+							self.blobScatter)
+		
+		self.canvas = FigureCanvasTkAgg(self.figure, master=self.window)
+		self.canvas.draw()
+		
+		self.buttonBar = tk.Frame(self.window)
+		self.buttonBar.pack(side=tk.LEFT)
+		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 		
 		if skipButton:
-			skipButton = createButton(name="Skip", position=0.095, action=self.skip, 
-										color="gold")
+			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip)
+			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
+			
+			self.firstSpacer = tk.Label(self.window, text="                       ")
+			self.firstSpacer.pack(in_=self.buttonBar, side=tk.TOP)
 		
-		instructionsTextBox = createInactiveTextBox("Click the plot to add polygon vertices", 
-													position=0.69)
-
-		resetButton = createButton(name="Reset", position=0.735, action=self.reset, 
-									color="lightgray")
-
-		doneButton = createButton(name="Done", position=0.83, action=self.finish, 
-									color="cornflowerblue")
+		self.resetButton = tk.Button(self.window, text="Reset", command=self.reset, fg="red")
+		self.resetButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
-		pl.show()
+		self.secondSpacer = tk.Label(self.window, text="                       ")
+		self.secondSpacer.pack(in_=self.buttonBar, side=tk.TOP)
+		
+		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue")
+		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
+		
+		self.window.protocol("WM_DELETE_WINDOW", quit)
+		
+		self.window.mainloop()
 
 	def __call__(self, event):
 		if event.inaxes != self.line.axes:
@@ -190,7 +191,7 @@ class RegionSelector:
 		self.underLine.figure.canvas.draw_idle()
 		self.line.figure.canvas.draw_idle()
 	
-	def finish(self, _event):
+	def finish(self):
 		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
 			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
 			self.yList.append(self.yList[0])
@@ -200,13 +201,10 @@ class RegionSelector:
 		else: # An invalid polygon was drawn
 			print(strings.invalidPolygonWarning)
 		
-		pl.close("all")
+		self.window.destroy()
 		self.window.quit()
-	
-	def quit(self, event):
-		quit()
-	
-	def reset(self, _event):
+		
+	def reset(self):
 		self.xList = []
 		self.yList = []
 		self.line.set_data(self.xList, self.yList)
@@ -222,9 +220,9 @@ class RegionSelector:
 		self.clickMarkerBackdrop.figure.canvas.draw_idle()
 		self.clickMarker.figure.canvas.draw_idle()
 	
-	def skip(self, event):
+	def skip(self):
 		self.image.skipped = True
-		pl.close("all")
+		self.window.quit()
 
 class ThresholdAdjuster:
 	def __init__(self, image, userSettings, skipButton=True):
@@ -239,90 +237,134 @@ class ThresholdAdjuster:
 		self.data = image.data
 		
 		self.xBounds = [
-			(0,                     len(self.data[0])    ),
+			(0,                     len(self.data[0]) - 1),
 			(0,                     len(self.data[0]) / 2),
-			(len(self.data[0]) / 2, len(self.data[0])    ),
+			(len(self.data[0]) / 2, len(self.data[0]) - 1),
 			(0,                     len(self.data[0]) / 2),
-			(len(self.data[0]) / 2, len(self.data[0])),
+			(len(self.data[0]) / 2, len(self.data[0]) - 1),
 		]
 
 		self.yBounds = [
-			(0,                     len(self.data)),
-			(len(self.data) / 2,    len(self.data)),
-			(len(self.data) / 2,    len(self.data)),
+			(0,                     len(self.data) - 1),
+			(len(self.data) / 2,    len(self.data) - 1),
+			(len(self.data) / 2,    len(self.data) - 1),
 			(0,                     len(self.data) / 2),
 			(0,                     len(self.data) / 2),
 		]
 		
-		self.figure, self.axes = pl.subplots()
-		self.window = pl.get_current_fig_manager().window
-		geometry = f"{cfg.WINDOW_WIDTH}x{cfg.WINDOW_HEIGHT}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
-		self.window.geometry(geometry)
-		self.window.title(f"Dot Scanner - Threshold Adjustment")
+		self.window = createWindow("Dot Scanner - Threshold Adjustment")
 		
-		self.dataPlot = self.axes.imshow(self.data, origin="lower", cmap="gray", 
-											vmin=userSettings.lowerContrast, 
-											vmax=userSettings.upperContrast * np.std(self.data))
-		self.dotScatter = self.axes.scatter([None], [None], s=50 * self.dotSize, facecolors="none", 
-											edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
-		self.blobScatter = self.axes.scatter([None], [None], s=2 * self.blobSize, facecolors="none",
-											edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
+		self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = createPlots(
+																					self.data, 
+																					userSettings)
 
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
+		
 		self.displayCorrectMarkerSize(self.index)
-		self.figure.canvas.draw_idle()
-
-		quitButton = createButton(name="Quit", position=0, action=self.quit, 
-									color="orangered")
+		
+		self.canvas = FigureCanvasTkAgg(self.figure, master=self.window)
+		self.canvas.draw()
+		
+		self.buttonBar = tk.Frame(self.window)
+		
+		self.viewItem = tk.Frame(self.window)
+		self.viewButtons = tk.Frame(self.window)
+		self.leftViewButtons = tk.Frame(self.window)
+		self.rightViewButtons = tk.Frame(self.window)
+		self.fourViewButtons = tk.Frame(self.window)
+		
+		self.contrastItem = tk.Frame(self.window)
+		self.contrastButtons = tk.Frame(self.window)
+		
+		self.dotsItem = tk.Frame(self.window)
+		self.dotsButtons = tk.Frame(self.window)
+		
+		self.blobsItem = tk.Frame(self.window)
+		self.blobsButtons = tk.Frame(self.window)
+		
+		self.thresholdEditItem = tk.Frame(self.window)
 		
 		if skipButton:
-			skipButton = createButton(name="Skip", position=0.085, action=self.skip, 
-										color="gold")
-
-		viewTextBox = createInactiveTextBox("View: ", position=0.222)
-		topLeftButton, bottomLeftButton = createSmallStackedButtons(topText="", 
-															bottomText="", position=0.232, 
-															topAction=self.showTopLeftRegion, 
-															bottomAction=self.showBottomLeftRegion, 
-															color="lightgray")
-		topRightButton, bottomRightButton = createSmallStackedButtons(topText="", 
-															bottomText="", position=0.262, 
-															topAction=self.showTopRightRegion, 
-															bottomAction=self.showBottomRightRegion,
-															color="lightgray")
-		fullButton = createFullViewButton(name="", position=0.292, action=self.showWholeImage, 
-											color="lightgray")
+			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip)
 		
-		contrastTextBox = createInactiveTextBox("Contrast: ", position=0.442)
-		contrastUpButton, contrastDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
-														position=0.452, 
-														topAction=self.upperContrastDown, 
-														bottomAction=self.upperContrastUp, 
-														color="lightgray")
-
-		dotsTextBox = createInactiveTextBox("Dots: ", position=0.533)
-		dotsUpButton, dotsDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
-														position=0.542, 
-														topAction=self.lowerDotThresholdScaleDown, 
-														bottomAction=self.lowerDotThresholdScaleUp, 
-														color="lightgray")
-		blobsTextBox = createInactiveTextBox("Blobs: ", position=0.63)
-		blobsUpButton, blobsDownButton = createSmallStackedButtons(topText="ʌ", bottomText="v", 
-														position=0.64, 
-														topAction=self.upperDotThresholdScaleDown, 
-														bottomAction=self.upperDotThresholdScaleUp, 
-														color="lightgray")
-
-		editButton = createButton(name="Edit", position=0.67, action=self.edit, 
-									color="lightgray")
-		resetButton = createButton(name="Reset", position=0.755, 
-									action=self.resetThreshScalesToDefaultValues, color="lightgray")
-
-		nextButton = createButton(name="Next", position=0.84, action=self.finish, 
-									color="cornflowerblue")
-
-		pl.show()
+		self.viewLabel = tk.Label(self.window, text="View: ")
+		self.viewTopLeftButton = tk.Button(self.window, text="⌜", command=self.showTopLeftRegion)
+		self.viewBottomLeftButton = tk.Button(self.window, text="⌞", 
+												command=self.showBottomLeftRegion)
+		self.viewTopRightButton = tk.Button(self.window, text="⌝", command=self.showTopRightRegion)
+		self.viewBottomRightButton = tk.Button(self.window, text="⌟", 
+												command=self.showBottomRightRegion)
+		self.viewFullButton = tk.Button(self.window, text="Full", command=self.showWholeImage)
+		
+		self.contrastLabel = tk.Label(self.window, text="Contrast: ")
+		self.contrastUpButton = tk.Button(self.window, text="ʌ", command=self.upperContrastDown)
+		self.contrastDownButton = tk.Button(self.window, text="v", command=self.upperContrastUp)
+		
+		self.dotsLabel = tk.Label(self.window, text="Dots: ")
+		self.dotsUpButton = tk.Button(self.window, text="ʌ", command=self.lowerDotThresholdScaleDown)
+		self.dotsDownButton = tk.Button(self.window, text="v", command=self.lowerDotThresholdScaleUp)
+		
+		self.blobsLabel = tk.Label(self.window, text="Blobs: ")
+		self.blobsUpButton = tk.Button(self.window, text="ʌ", command=self.upperDotThresholdScaleDown)
+		self.blobsDownButton = tk.Button(self.window, text="v", command=self.upperDotThresholdScaleUp)
+		
+		self.thresholdsLabel = tk.Label(self.window, text="Thresholds: ")
+		
+		self.editButton = tk.Button(self.window, text="Edit", command=self.edit)
+		
+		self.resetButton = tk.Button(self.window, text="Reset", 
+										command=self.resetThreshScalesToDefaultValues)
+		
+		self.nextButton = tk.Button(self.window, text="Next", command=self.finish, fg="blue")
+		
+		self.buttonBar.pack(side=tk.LEFT)
+		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+		
+		self.viewItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		self.contrastItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		self.blobsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		self.nextButton.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		
+		self.viewTopLeftButton.pack(in_=self.leftViewButtons, side=tk.TOP)
+		self.viewBottomLeftButton.pack(in_=self.leftViewButtons, side=tk.TOP)
+		self.viewTopRightButton.pack(in_=self.rightViewButtons, side=tk.TOP)
+		self.viewBottomRightButton.pack(in_=self.rightViewButtons, side=tk.TOP)
+		
+		self.leftViewButtons.pack(in_=self.fourViewButtons, side=tk.LEFT)
+		self.rightViewButtons.pack(in_=self.fourViewButtons, side=tk.LEFT)
+		
+		self.viewLabel.pack(in_=self.viewItem, side=tk.TOP)
+		self.fourViewButtons.pack(in_=self.viewItem, side=tk.TOP)
+		self.viewFullButton.pack(in_=self.viewItem, side=tk.TOP)
+		
+		self.contrastUpButton.pack(in_=self.contrastButtons, side=tk.TOP)
+		self.contrastDownButton.pack(in_=self.contrastButtons, side=tk.TOP)
+		
+		self.contrastLabel.pack(in_=self.contrastItem, side=tk.TOP)
+		self.contrastButtons.pack(in_=self.contrastItem, side=tk.TOP)
+		
+		self.dotsUpButton.pack(in_=self.dotsButtons, side=tk.TOP)
+		self.dotsDownButton.pack(in_=self.dotsButtons, side=tk.TOP)
+		
+		self.dotsLabel.pack(in_=self.dotsItem, side=tk.TOP)
+		self.dotsButtons.pack(in_=self.dotsItem, side=tk.TOP)
+		
+		self.blobsUpButton.pack(in_=self.blobsButtons, side=tk.TOP)
+		self.blobsDownButton.pack(in_=self.blobsButtons, side=tk.TOP)
+		
+		self.blobsLabel.pack(in_=self.blobsItem, side=tk.TOP)
+		self.blobsButtons.pack(in_=self.blobsItem, side=tk.TOP)
+		
+		self.thresholdsLabel.pack(in_=self.thresholdEditItem, side=tk.TOP)
+		self.editButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
+		self.resetButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
+		
+		self.window.protocol("WM_DELETE_WINDOW", quit)
+		
+		self.window.mainloop()
 	
 	def displayCorrectMarkerSize(self, index):
 		if self.index == 0:
@@ -330,7 +372,7 @@ class ThresholdAdjuster:
 		else:
 			self.dotScatter.set_sizes([50 * self.dotSize])
 	
-	def edit(self, event):
+	def edit(self):
 		if self.editingThresholds:
 			return
 			
@@ -358,106 +400,95 @@ class ThresholdAdjuster:
 		self.image.dotCoords, self.image.blobCoords = self.image.getCoords()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 	
-	def finish(self, event):
-		pl.close("all")
+	def finish(self):
+		self.window.destroy()
 		self.window.quit()
 	
-	def lowerDotThresholdScaleDown(self, event):
+	def lowerDotThresholdScaleDown(self):
 		self.image.decreaseLowerDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 
-	def lowerDotThresholdScaleUp(self, event):
+	def lowerDotThresholdScaleUp(self):
 		self.image.increaseLowerDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
-
-	def quit(self, event):
-		quit()
+		self.canvas.draw()
 	
 	def showCorrectImage(self, index):
 		self.displayCorrectMarkerSize(index)
 		self.axes.set_xbound(self.xBounds[index])
 		self.axes.set_ybound(self.yBounds[index])
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 
-	def showWholeImage(self, event):
+	def showWholeImage(self):
 		self.index = 0
 		self.showCorrectImage(self.index)
 
-	def showTopLeftRegion(self, event):
+	def showTopLeftRegion(self):
 		self.index = 1
 		self.showCorrectImage(self.index)
 
-	def showTopRightRegion(self, event):
+	def showTopRightRegion(self):
 		self.index = 2
 		self.showCorrectImage(self.index)
 
-	def showBottomLeftRegion(self, event):
+	def showBottomLeftRegion(self):
 		self.index = 3
 		self.showCorrectImage(self.index)
 
-	def showBottomRightRegion(self, event):
+	def showBottomRightRegion(self):
 		self.index = 4
 		self.showCorrectImage(self.index)
 	
-	def skip(self, event):
+	def skip(self):
 		self.image.skipped = True
-		pl.close("all")
+		self.window.destroy()
 
-	def resetThreshScalesToDefaultValues(self, event):
+	def resetThreshScalesToDefaultValues(self):
 		self.image.setThresholds(self.defaultThresholds)
 		self.image.dotCoords, self.image.blobCoords = self.image.getCoords()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 	
-	def upperContrastDown(self, event):
+	def upperContrastDown(self):
 		value = self.userSettings.upperContrast - cfg.CONTRAST_DELTA
 		value = round(value, 1)
 		self.userSettings.upperContrast = value
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
 								self.userSettings.upperContrast * np.std(self.data))
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 	
-	def upperContrastUp(self, event):
+	def upperContrastUp(self):
 		value = self.userSettings.upperContrast + cfg.CONTRAST_DELTA
 		value = round(value, 1)
 		self.userSettings.upperContrast = value
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
 								self.userSettings.upperContrast * np.std(self.data))
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 	
-	def upperDotThresholdScaleDown(self, event):
+	def upperDotThresholdScaleDown(self):
 		self.image.decreaseUpperDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 
-	def upperDotThresholdScaleUp(self, event):
+	def upperDotThresholdScaleUp(self):
 		self.image.increaseUpperDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
-		self.figure.canvas.draw_idle()
-		pl.pause(0.01)
+		self.canvas.draw()
 
 class UserSettings:
 	def __init__(self):
 		self.window = tk.Tk()
 		self.window.title("Dot Scanner - Configurations")
-		self.window.geometry(f"{cfg.WINDOW_WIDTH}x170+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
+		windowWidth, _ = getWindowDimensions()
+		self.window.geometry(f"{windowWidth}x170+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
 
 		self.filepath = cfg.FILEPATH
 		if self.filepath in ["", " ", "/"]:
@@ -477,7 +508,6 @@ class UserSettings:
 		self.saveFigures = cfg.SAVE_FIGURES
 		self.removeEdgeFrames = cfg.REMOVE_EDGE_FRAMES
 		self.skipsAllowed = round(cfg.SKIPS_ALLOWED, 0)
-		self.completed = False
 		
 		self.labelSelectedPath = tk.Label(self.window, text="Select a file or folder for analysis", 
 											fg="red")
@@ -568,15 +598,17 @@ class UserSettings:
 		self.entrySkipsAllowed.pack(in_=self.lifetimeOptions, side=tk.LEFT)
 		self.checkboxRemoveEdge.pack(in_=self.lifetimeOptions, side=tk.LEFT)
 
-		self.buttonDone = tk.Button(self.window, text="Done", command=self.done, 
-									bg="cornflowerblue")
-		self.buttonDone.pack()
+		self.buttonNext = tk.Button(self.window, text="Next", command=self.done, fg="blue")
+		self.buttonNext.pack()
 		
 		self.labelStartImageWarning = tk.Label(self.window, 
 												text=f"WARNING: {strings.fileNumberingException}", 
 												fg="red")
 		
 		self.show(click=self.program.capitalize())
+		
+		self.window.protocol("WM_DELETE_WINDOW", quit)
+		
 		self.window.mainloop()
 
 	def browseFiles(self):
@@ -611,10 +643,10 @@ class UserSettings:
 				self.buttonSelectStartingImage.config(text=trailingNumberString, fg="darkgreen")
 				self.startImage = chosenImage
 				self.lifetimeOptions.pack_forget()
-				self.buttonDone.pack_forget()
+				self.buttonNext.pack_forget()
 				self.labelStartImageWarning.pack_forget()
 				self.lifetimeOptions.pack()
-				self.buttonDone.pack()
+				self.buttonNext.pack()
 			except:
 				self.buttonSelectStartingImage.config(text="Browse...", fg="black")
 				self.startImage = ""
@@ -628,8 +660,7 @@ class UserSettings:
 		self.lowerBlobThresh = round(float(self.entryThreshold3.get()), 1)
 		self.skipsAllowed = int(self.entrySkipsAllowed.get())
 		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
-		self.completed = True
-		self.window.quit()
+		self.window.destroy()
 
 	def setRemoveEdge(self):
 		if self.checkboxRemoveEdgeVar.get():
@@ -646,103 +677,44 @@ class UserSettings:
 	def show(self, click):
 		if click == "Lifetime":
 			self.program = "lifetime"
-			self.buttonDone.pack_forget()
+			self.buttonNext.pack_forget()
 			self.lifetimeOptions.pack()
-			self.buttonDone.pack()
+			self.buttonNext.pack()
 		else:
 			self.program = "density"
 			self.lifetimeOptions.pack_forget()
-			self.buttonDone.pack_forget()
-			self.buttonDone.pack()
+			self.buttonNext.pack_forget()
+			self.buttonNext.pack()
 
-def createButton(name, position, action, color="whitesmoke", clickedColor="darkgray"):
-	buttonWidth = 40 / 500
-	buttonHeight = 5 / 100
-	buttonSpacing = 5 / 1000
-	buttonXStart = 0.01 * 5 - (2 * buttonSpacing)
-	buttonYStart = 0.007 * 5 - buttonHeight / 2
+def createPlots(data, userSettings):
+	figure, axes = pl.subplots()
+	dataPlot = axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
+							vmax=userSettings.upperContrast * np.std(data))
+	dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
+								edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
+	blobScatter = axes.scatter([None], [None], s=2 * userSettings.blobSize, facecolors="none",
+								edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
+	return figure, axes, dataPlot, dotScatter, blobScatter
 
-	buttonAxes = pl.axes([
-		buttonXStart + position, 
-		buttonYStart, 
-		buttonWidth, 
-		buttonHeight])
+def createWindow(title):
+	window = tk.Tk()
+	window.title(title)
 	
-	fontSize = min(11, int(round(cfg.WINDOW_WIDTH * 0.01875, 0)))
-	
-	button = wdgts.Button(buttonAxes, name, color=color, hovercolor=color)
-	button.label.set_fontsize(fontSize)
-	# matplotlib lags a little with hovercolor, so leaving it the same to not confuse users
-	button.on_clicked(action)
-	
-	return button
+	width, height = getWindowDimensions()
+	geometry = f"{width}x{height}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
+	window.geometry(geometry)
+	return window
 
-def createFullViewButton(name, position, action, color="whitesmoke", clickedColor="darkgray"):
-	buttonHeight = 5 / 100
-	buttonSpacing = 5 / 1000
-	buttonWidth = 5 / 100 + buttonSpacing
-	buttonXStart = 0.01 * 5 - (2 * buttonSpacing)
-	buttonYStart = 0.007 * 5 - buttonHeight / 2
-
-	buttonAxes = pl.axes([
-		buttonXStart + position, 
-		buttonYStart, 
-		buttonWidth, 
-		buttonHeight])
-	button = wdgts.Button(buttonAxes, name, color=color, hovercolor=color)
-	# matplotlib lags a little with hovercolor, so leaving it the same to not confuse users
-	button.on_clicked(action)
-	
-	return button
-
-def createInactiveTextBox(text, position):
-	textBoxWidth = 0.0
-	textBoxHeight = 0.0
-	textBoxSpacing = 0.0
-	textBoxXStart = 0.05
-	textBoxYStart = 0.035
-
-	textBoxAxes = pl.axes([
-		textBoxXStart + position, 
-		textBoxYStart, 
-		textBoxWidth, 
-		textBoxHeight])
-	
-	fontSize = min(13, int(round(cfg.WINDOW_WIDTH * 0.015, 0)))
-	
-	textBox = wdgts.TextBox(textBoxAxes, text, initial="")
-	textBox.label.set_fontsize(fontSize)
-	return textBox
-
-def createSmallStackedButtons(topText, bottomText, position, topAction, bottomAction, 
-								color="whitesmoke", clickedColor="darkgray"):
-	buttonWidth = 5 / 200
-	buttonSpacing = 5 / 1000
-	buttonHeight = 5 / 200 - (buttonSpacing / 2)
-	buttonXStart = 0.01 * 5 - (2 * buttonSpacing)
-	buttonYStart = 0.007 * 5 - 5 / 200
-
-	topAxes = pl.axes([
-		buttonXStart + position, 
-		buttonYStart + buttonHeight + buttonSpacing, 
-		buttonWidth, 
-		buttonHeight])
-	bottomAxes = pl.axes([
-		buttonXStart + position, 
-		buttonYStart, 
-		buttonWidth, 
-		buttonHeight])
-	
-	fontSize = min(13, int(round(cfg.WINDOW_WIDTH * 0.015, 0)))
-	
-	topButton = wdgts.Button(topAxes, topText, color=color, hovercolor=color)
-	topButton.label.set_fontsize(fontSize)
-	topButton.on_clicked(topAction)
-	bottomButton = wdgts.Button(bottomAxes, bottomText, color=color, hovercolor=color)
-	bottomButton.label.set_fontsize(fontSize)
-	bottomButton.on_clicked(bottomAction)
-	
-	return topButton, bottomButton
+def getWindowDimensions():
+	if cfg.DYNAMIC_WINDOW:
+		window = tk.Tk()
+		height = window.winfo_screenheight() - 180
+		width = height + 100
+		window.destroy()
+	else:
+		height = cfg.WINDOW_HEIGHT
+		width = cfg.WINDOW_WIDTH
+	return width, height
 
 def printProgressBar (iteration, total, prefix = "", suffix = "", decimals = 1, 
 						barLength = 50, fill = "█", printEnd = "\r"):
