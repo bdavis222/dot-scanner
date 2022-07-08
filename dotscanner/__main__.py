@@ -5,15 +5,14 @@ import dotscanner.strings as strings
 from dotscanner.ui import MicroscopeImage, RegionSelector, ThresholdAdjuster, UserSettings
 
 def main():
-	userSettings = UserSettings()
-	if userSettings.completed:		
-		directory, filenames = files.getDirectoryAndFilenames(userSettings)
-		if userSettings.program == "density":
-			getDensityData(directory, filenames, userSettings)
-		elif userSettings.program == "lifetime":
-			getLifetimeData(directory, filenames, userSettings)
-		else:
-			raise Exception(strings.programNameException)
+	userSettings = UserSettings()	
+	directory, filenames = files.getDirectoryAndFilenames(userSettings)
+	if userSettings.program == "density":
+		getDensityData(directory, filenames, userSettings)
+	elif userSettings.program == "lifetime":
+		getLifetimeData(directory, filenames, userSettings)
+	else:
+		raise Exception(strings.programNameException)
 	
 def getDensityData(directory, filenames, userSettings):
 	density.checkUnitsConsistent(directory)
@@ -44,12 +43,7 @@ def getLifetimeData(directory, filenames, userSettings):
 	middleMicroscopeImage = MicroscopeImage(directory, filenames[middleIndex], userSettings)
 	
 	ThresholdAdjuster(middleMicroscopeImage, userSettings, skipButton=False)
-	if middleMicroscopeImage.skipped:
-		quit()
-	
 	RegionSelector(middleMicroscopeImage, userSettings, skipButton=False)
-	if middleMicroscopeImage.skipped:
-		quit()
 	
 	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings)
 
