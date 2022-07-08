@@ -87,7 +87,7 @@ def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerB
 						if sums[y][x] < upperDotThresh:
 							addCoordinate(y, x, dotCoords)
 						else:
-							if squareSum(data, y, x, dotSize + 1) > lowerBlobThresh:
+							if squareSum(data, y, x, 3) > lowerBlobThresh:
 								addCoordinate(y, x, blobCoords)
 							else:
 								addCoordinate(y, x, dotCoords)
