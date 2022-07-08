@@ -706,14 +706,7 @@ class UserSettings:
 		self.window.destroy()
 	
 	def doneWithReturnKey(self, event):        
-		self.dotSize = int(self.entryDotSize.get())
-		self.blobSize = int(self.entryBlobSize.get())
-		self.lowerDotThresh = round(float(self.entryThreshold1.get()), 1)
-		self.upperDotThresh = round(float(self.entryThreshold2.get()), 1)
-		self.lowerBlobThresh = round(float(self.entryThreshold3.get()), 1)
-		self.skipsAllowed = int(self.entrySkipsAllowed.get())
-		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
-		self.window.destroy()
+		self.done()
 
 	def setRemoveEdge(self):
 		if self.checkboxRemoveEdgeVar.get():
