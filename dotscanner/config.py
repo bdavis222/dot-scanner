@@ -107,9 +107,13 @@ POLYGON_THICKNESS = 0.5
 ############ WINDOW SETTINGS ############
 #########################################
 
+DYNAMIC_WINDOW = True
+# Whether the window dynamically scales to the detected screen size.
+
+WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 700
-WINDOW_HEIGHT = 700
-# Dimensions of “threshold adjustment” and “region selection” windows in pixels
+# Dimensions of “threshold adjustment” and “region selection” windows in pixels.
+# DYNAMIC_WINDOW must be set to False to set these values manually.
 
 WINDOW_X = 10
 WINDOW_Y = 30
