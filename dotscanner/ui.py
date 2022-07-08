@@ -135,7 +135,7 @@ class RegionSelector:
 		self.clickMarker = self.axes.scatter([None], [None], s=100, marker='x', color="C1", 
 												linewidth=1.5)
 		
-		self.cid = self.line.figure.canvas.mpl_connect("button_press_event", self)
+		self.connectId = self.line.figure.canvas.mpl_connect("button_press_event", self)
 		
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
@@ -204,21 +204,12 @@ class RegionSelector:
 		else: # An invalid polygon was drawn
 			print(strings.invalidPolygonWarning)
 		
+		self.line.figure.canvas.mpl_disconnect(self.connectId)
 		self.window.destroy()
 		self.window.quit()
 	
 	def finishWithReturnKey(self, event):
-		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
-			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
-			self.yList.append(self.yList[0])
-			for y, x in zip(self.yList, self.xList):
-				self.image.polygon.append([int(round(y, 0)), int(round(x, 0))])
-		
-		else: # An invalid polygon was drawn
-			print(strings.invalidPolygonWarning)
-		
-		self.window.destroy()
-		self.window.quit()
+		self.finish()
 		
 	def reset(self):
 		self.xList = []
@@ -231,14 +222,7 @@ class RegionSelector:
 		self.restartclickMarker()
 	
 	def resetWithDeleteKey(self, event):
-		self.xList = []
-		self.yList = []
-		self.line.set_data(self.xList, self.yList)
-		self.underLine.set_data(self.xList, self.yList)
-		self.dottedLine.set_data(self.xList, self.yList)
-		self.underLine.figure.canvas.draw_idle()
-		self.line.figure.canvas.draw_idle()
-		self.restartclickMarker()
+		self.reset()
 	
 	def restartclickMarker(self):
 		self.clickMarkerBackdrop.set_offsets([float("nan"), float("nan")])
@@ -248,6 +232,7 @@ class RegionSelector:
 	
 	def skip(self):
 		self.image.skipped = True
+		self.window.destroy()
 		self.window.quit()
 
 class ThresholdAdjuster:
@@ -446,8 +431,7 @@ class ThresholdAdjuster:
 		self.window.quit()
 	
 	def finishWithReturnKey(self, event):
-		self.window.destroy()
-		self.window.quit()
+		self.finish()
 	
 	def lowerDotThresholdScaleDown(self):
 		self.image.decreaseLowerDotThreshScale()
@@ -456,10 +440,7 @@ class ThresholdAdjuster:
 		self.canvas.draw()
 	
 	def lowerDotThresholdScaleDownWithUpKey(self, event):
-		self.image.decreaseLowerDotThreshScale()
-		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
-		self.canvas.draw()
+		self.lowerDotThresholdScaleDown()
 
 	def lowerDotThresholdScaleUp(self):
 		self.image.increaseLowerDotThreshScale()
@@ -468,10 +449,7 @@ class ThresholdAdjuster:
 		self.canvas.draw()
 	
 	def lowerDotThresholdScaleUpWithDownKey(self, event):
-		self.image.increaseLowerDotThreshScale()
-		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
-		self.canvas.draw()
+		self.lowerDotThresholdScaleUp()
 	
 	def showCorrectImage(self, index):
 		self.displayCorrectMarkerSize(index)
@@ -533,10 +511,7 @@ class ThresholdAdjuster:
 		self.canvas.draw()
 	
 	def upperDotThresholdScaleDownWithRightKey(self, event):
-		self.image.decreaseUpperDotThreshScale()
-		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
-		self.canvas.draw()
+		self.upperDotThresholdScaleDown()
 
 	def upperDotThresholdScaleUp(self):
 		self.image.increaseUpperDotThreshScale()
@@ -545,10 +520,7 @@ class ThresholdAdjuster:
 		self.canvas.draw()
 	
 	def upperDotThresholdScaleUpWithLeftKey(self, event):
-		self.image.increaseUpperDotThreshScale()
-		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
-		self.canvas.draw()
+		self.upperDotThresholdScaleUp()
 
 class UserSettings:
 	def __init__(self):
