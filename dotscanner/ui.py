@@ -166,6 +166,7 @@ class RegionSelector:
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
 		self.window.bind("<Return>", self.finishWithReturnKey)
+		self.window.bind("<BackSpace>", self.resetWithDeleteKey)
 		
 		self.window.mainloop()
 
@@ -220,6 +221,16 @@ class RegionSelector:
 		self.window.quit()
 		
 	def reset(self):
+		self.xList = []
+		self.yList = []
+		self.line.set_data(self.xList, self.yList)
+		self.underLine.set_data(self.xList, self.yList)
+		self.dottedLine.set_data(self.xList, self.yList)
+		self.underLine.figure.canvas.draw_idle()
+		self.line.figure.canvas.draw_idle()
+		self.restartclickMarker()
+	
+	def resetWithDeleteKey(self, event):
 		self.xList = []
 		self.yList = []
 		self.line.set_data(self.xList, self.yList)
@@ -381,12 +392,18 @@ class ThresholdAdjuster:
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
 		self.window.bind("<Return>", self.finishWithReturnKey)
+		self.window.bind("<space>", self.cycleViews)
 		self.window.bind("<Up>", self.lowerDotThresholdScaleDownWithUpKey)
 		self.window.bind("<Down>", self.lowerDotThresholdScaleUpWithDownKey)
 		self.window.bind("<Left>", self.upperDotThresholdScaleUpWithLeftKey)
 		self.window.bind("<Right>", self.upperDotThresholdScaleDownWithRightKey)
 		
 		self.window.mainloop()
+	
+	def cycleViews(self, event):
+		self.index += 1
+		self.index %= 5
+		self.showCorrectImage(self.index)
 	
 	def displayCorrectMarkerSize(self, index):
 		if self.index == 0:
