@@ -165,6 +165,7 @@ class RegionSelector:
 		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
+		self.window.bind("<Return>", self.finishWithReturnKey)
 		
 		self.window.mainloop()
 
@@ -193,6 +194,19 @@ class RegionSelector:
 		self.line.figure.canvas.draw_idle()
 	
 	def finish(self):
+		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
+			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
+			self.yList.append(self.yList[0])
+			for y, x in zip(self.yList, self.xList):
+				self.image.polygon.append([int(round(y, 0)), int(round(x, 0))])
+		
+		else: # An invalid polygon was drawn
+			print(strings.invalidPolygonWarning)
+		
+		self.window.destroy()
+		self.window.quit()
+	
+	def finishWithReturnKey(self, event):
 		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
 			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
 			self.yList.append(self.yList[0])
@@ -366,6 +380,11 @@ class ThresholdAdjuster:
 		self.resetButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
+		self.window.bind("<Return>", self.finishWithReturnKey)
+		self.window.bind("<Up>", self.lowerDotThresholdScaleDownWithUpKey)
+		self.window.bind("<Down>", self.lowerDotThresholdScaleUpWithDownKey)
+		self.window.bind("<Left>", self.upperDotThresholdScaleUpWithLeftKey)
+		self.window.bind("<Right>", self.upperDotThresholdScaleDownWithRightKey)
 		
 		self.window.mainloop()
 	
@@ -409,13 +428,29 @@ class ThresholdAdjuster:
 		self.window.destroy()
 		self.window.quit()
 	
+	def finishWithReturnKey(self, event):
+		self.window.destroy()
+		self.window.quit()
+	
 	def lowerDotThresholdScaleDown(self):
+		self.image.decreaseLowerDotThreshScale()
+		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
+							self.blobScatter)
+		self.canvas.draw()
+	
+	def lowerDotThresholdScaleDownWithUpKey(self, event):
 		self.image.decreaseLowerDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
 
 	def lowerDotThresholdScaleUp(self):
+		self.image.increaseLowerDotThreshScale()
+		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
+							self.blobScatter)
+		self.canvas.draw()
+	
+	def lowerDotThresholdScaleUpWithDownKey(self, event):
 		self.image.increaseLowerDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
@@ -479,8 +514,20 @@ class ThresholdAdjuster:
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
+	
+	def upperDotThresholdScaleDownWithRightKey(self, event):
+		self.image.decreaseUpperDotThreshScale()
+		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
+							self.blobScatter)
+		self.canvas.draw()
 
 	def upperDotThresholdScaleUp(self):
+		self.image.increaseUpperDotThreshScale()
+		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
+							self.blobScatter)
+		self.canvas.draw()
+	
+	def upperDotThresholdScaleUpWithLeftKey(self, event):
 		self.image.increaseUpperDotThreshScale()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
@@ -611,6 +658,7 @@ class UserSettings:
 		self.show(click=self.program.capitalize())
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
+		self.window.bind("<Return>", self.doneWithReturnKey)
 		
 		self.window.mainloop()
 
@@ -656,6 +704,16 @@ class UserSettings:
 				self.labelStartImageWarning.pack()
 	
 	def done(self):        
+		self.dotSize = int(self.entryDotSize.get())
+		self.blobSize = int(self.entryBlobSize.get())
+		self.lowerDotThresh = round(float(self.entryThreshold1.get()), 1)
+		self.upperDotThresh = round(float(self.entryThreshold2.get()), 1)
+		self.lowerBlobThresh = round(float(self.entryThreshold3.get()), 1)
+		self.skipsAllowed = int(self.entrySkipsAllowed.get())
+		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
+		self.window.destroy()
+	
+	def doneWithReturnKey(self, event):        
 		self.dotSize = int(self.entryDotSize.get())
 		self.blobSize = int(self.entryBlobSize.get())
 		self.lowerDotThresh = round(float(self.entryThreshold1.get()), 1)
