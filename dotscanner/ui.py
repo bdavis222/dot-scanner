@@ -23,6 +23,10 @@ matplotlib.rcParams["xtick.labelbottom"] = False
 matplotlib.rcParams["ytick.left"] = False
 matplotlib.rcParams["ytick.labelleft"] = False
 
+if not cfg.DYNAMIC_WINDOW:
+	if cfg.WINDOW_HEIGHT < 550:
+		print(strings.windowSizeWarning)
+
 class MicroscopeImage:
 	def __init__(self, directory, filename, userSettings):
 		self.memoizedCoords = {}
@@ -786,12 +790,10 @@ def getWindowDimensions():
 			width = detectedWidth
 		
 		window.destroy()
+	
 	else:
 		height = cfg.WINDOW_HEIGHT
 		width = cfg.WINDOW_WIDTH
-	
-	if height < 550:
-		print(strings.windowSizeWarning)
 	
 	return width, height
 
