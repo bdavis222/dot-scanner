@@ -37,6 +37,10 @@ measurements."
 upperDotThreshScaleWarning = "WARNING: upper dot threshold scale set below lower dot threshold \
 scale. Setting to the value of lower dot threshold scale."
 
+windowSizeWarning = "WARNING: the current window height is smaller than 550 pixels, potentially \
+resulting in some buttons not being visible. However, the Return key will still allow confirmation \
+in each window, and the Escape key will allow for skipping files, when the option is available."
+
 def densityOutput(filename, density, error, thresholds, dotSize, blobSize, polygon):
 	verticesStringList = []
 	for vertex in polygon[:-1]:
