@@ -12,7 +12,7 @@ lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | do
 polygon vertices (x, y)\n"
 
 fileNumberingException = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
-lifetimes"
+lifetimes."
 
 filepathException = "Filepath must point to a file or directory."
 
