@@ -23,7 +23,7 @@ def getDensityData(directory, filenames, userSettings):
 			print(strings.alreadyMeasuredNotification(filename))
 			continue
 		
-		print(filename)
+		print(f"\n----------\nDisplaying {filename}\n----------")
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
 		ThresholdAdjuster(microscopeImage, userSettings)
