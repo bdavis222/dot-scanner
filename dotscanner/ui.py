@@ -147,20 +147,20 @@ class RegionSelector:
 		self.buttonBar.pack(side=tk.LEFT)
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 		
+		self.polygonLabel = tk.Label(self.window, text="Polygon:")
+		self.polygonLabel.pack(in_=self.buttonBar, side=tk.TOP)
+		
+		self.resetButton = tk.Button(self.window, text="Reset", command=self.reset, fg="red")
+		self.resetButton.pack(in_=self.buttonBar, side=tk.TOP)
+		
+		self.spacer = tk.Label(self.window, text="    ---------    ", fg="lightgray")
+		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
+		
 		if skipButton:
 			self.window.bind("<Escape>", self.skipWithEscapeKey)
 			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
 										fg="darkgoldenrod")
 			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
-			
-			self.firstSpacer = tk.Label(self.window, text="                       ")
-			self.firstSpacer.pack(in_=self.buttonBar, side=tk.TOP)
-		
-		self.resetButton = tk.Button(self.window, text="Reset", command=self.reset, fg="red")
-		self.resetButton.pack(in_=self.buttonBar, side=tk.TOP)
-		
-		self.secondSpacer = tk.Label(self.window, text="                       ")
-		self.secondSpacer.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue", 
 									font=tk.font.Font(weight="bold"))
@@ -301,7 +301,7 @@ class ThresholdAdjuster:
 		
 		self.thresholdEditItem = tk.Frame(self.window)
 		
-		self.viewLabel = tk.Label(self.window, text="View: ")
+		self.viewLabel = tk.Label(self.window, text="View:")
 		self.viewTopLeftButton = tk.Button(self.window, text="⌜", command=self.showTopLeftRegion)
 		self.viewBottomLeftButton = tk.Button(self.window, text="⌞", 
 												command=self.showBottomLeftRegion)
@@ -310,19 +310,19 @@ class ThresholdAdjuster:
 												command=self.showBottomRightRegion)
 		self.viewFullButton = tk.Button(self.window, text="Full", command=self.showWholeImage)
 		
-		self.contrastLabel = tk.Label(self.window, text="Contrast: ")
+		self.contrastLabel = tk.Label(self.window, text="Contrast:")
 		self.contrastUpButton = tk.Button(self.window, text="ʌ", command=self.upperContrastDown)
 		self.contrastDownButton = tk.Button(self.window, text="v", command=self.upperContrastUp)
 		
-		self.dotsLabel = tk.Label(self.window, text="Dots: ")
+		self.dotsLabel = tk.Label(self.window, text="Dots:")
 		self.dotsUpButton = tk.Button(self.window, text="ʌ", command=self.lowerDotThresholdScaleDown)
 		self.dotsDownButton = tk.Button(self.window, text="v", command=self.lowerDotThresholdScaleUp)
 		
-		self.blobsLabel = tk.Label(self.window, text="Blobs: ")
+		self.blobsLabel = tk.Label(self.window, text="Blobs:")
 		self.blobsUpButton = tk.Button(self.window, text="ʌ", command=self.upperDotThresholdScaleDown)
 		self.blobsDownButton = tk.Button(self.window, text="v", command=self.upperDotThresholdScaleUp)
 		
-		self.thresholdsLabel = tk.Label(self.window, text="Thresholds: ")
+		self.thresholdsLabel = tk.Label(self.window, text="Thresholds:")
 		
 		self.editButton = tk.Button(self.window, text="Edit", command=self.edit)
 		
@@ -340,7 +340,7 @@ class ThresholdAdjuster:
 		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.blobsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP, pady=(5, 0))
-		self.spacer = tk.Label(self.window, text="---------", fg="lightgray", pady=0)
+		self.spacer = tk.Label(self.window, text="---------", fg="lightgray")
 		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
 		if skipButton:
 			self.window.bind("<Escape>", self.skipWithEscapeKey)
