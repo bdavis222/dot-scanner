@@ -11,7 +11,7 @@ densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
 lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
 polygon vertices (x, y)\n"
 
-fileNumberingException = "Filenames must contain sequentially-ordered numbers to calculate \
+fileNumberingException = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes"
 
 filepathException = "Filepath must point to a file or directory."
@@ -28,7 +28,11 @@ configurations file."
 
 programNameException = "Invalid program name selected in configurations file."
 
-regionSelectorWindowTitle = "\nDot Scanner - Region Selection (click the plot to add polygon vertices)"
+regionSelectorWindowTitle = "\nDot Scanner - Region Selection (click the plot to add polygon \
+vertices)"
+
+startImageDirectoryException = "WARNING: Start image must be in the same directory as the other \
+lifetime files."
 
 thresholdAdjusterWindowTitle = "Dot Scanner - Threshold Adjustment"
 
