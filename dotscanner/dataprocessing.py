@@ -236,7 +236,8 @@ def setScatterData(dotCoords, blobCoords, dotScatter, blobScatter):
 
 def setScatterOffset(coordMap, scatterPlot):
 	coordList = getCoordPairsFromCoordMap(coordMap)
-	scatterPlot.set_offsets(coordList)
+	if len(coordList):
+		scatterPlot.set_offsets(coordList)
 
 def squareSum(data, y, x, pixelRadius):
 	total = 0 
