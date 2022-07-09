@@ -510,6 +510,7 @@ class ThresholdAdjuster:
 	
 	def lowerDotThresholdScaleDown(self):
 		self.image.decreaseLowerDotThreshScale()
+		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
@@ -519,6 +520,7 @@ class ThresholdAdjuster:
 
 	def lowerDotThresholdScaleUp(self):
 		self.image.increaseLowerDotThreshScale()
+		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
@@ -595,6 +597,7 @@ class ThresholdAdjuster:
 	
 	def upperDotThresholdScaleDown(self):
 		self.image.decreaseUpperDotThreshScale()
+		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
@@ -604,6 +607,7 @@ class ThresholdAdjuster:
 
 	def upperDotThresholdScaleUp(self):
 		self.image.increaseUpperDotThreshScale()
+		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
