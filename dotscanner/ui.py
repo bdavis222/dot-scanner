@@ -94,21 +94,21 @@ class MicroscopeImage:
 		self.dotCoords, self.blobCoords = self.getCoords()
 	
 	def setThresholds(self, newThresholds):
-		self.lowerDotThreshScale = round(newThresholds[0], 1)
-		self.upperDotThreshScale = round(newThresholds[1], 1)
-		self.lowerBlobThreshScale = round(newThresholds[2], 1)
+		newLowerDotThreshScale = round(newThresholds[0], 1)
+		newUpperDotThreshScale = round(newThresholds[1], 1)
+		newLowerBlobThreshScale = round(newThresholds[2], 1)
 		
-		if self.lowerDotThreshScale < 0:
-			print(strings.lowerDotThreshScaleWarning)
-			self.lowerDotThreshScale = 0
-		
-		if self.upperDotThreshScale < self.lowerDotThreshScale:
+		if newUpperDotThreshScale < newLowerDotThreshScale:
 			print(strings.upperDotThreshScaleWarning)
-			self.upperDotThreshScale = self.lowerDotThreshScale
+			return
 		
-		if self.lowerBlobThreshScale < 1:
+		if newLowerBlobThreshScale < 1:
 			print(strings.lowerBlobThreshScaleWarning)
-			self.lowerBlobThreshScale = 1
+			newLowerBlobThreshScale = 1.0
+		
+		self.lowerDotThreshScale = newLowerDotThreshScale
+		self.upperDotThreshScale = newUpperDotThreshScale
+		self.lowerBlobThreshScale = newLowerBlobThreshScale
 		
 		self.updateThresholds()
 	
@@ -126,8 +126,7 @@ class RegionSelector:
 		self.blobSize = userSettings.blobSize
 		self.data = image.data
 		
-		self.window = createPlotWindow("Dot Scanner - Region Selection (click the plot to add \
-polygon vertices)")
+		self.window = createPlotWindow(strings.regionSelectorWindowTitle)
 		
 		self.figure, self.axes, _, self.dotScatter, self.blobScatter = createPlots(self.data, 
 																					userSettings)
@@ -232,8 +231,8 @@ polygon vertices)")
 		self.reset()
 	
 	def restartclickMarker(self):
-		self.clickMarkerBackdrop.set_offsets([float("nan"), float("nan")])
-		self.clickMarker.set_offsets([float("nan"), float("nan")])
+		self.clickMarkerBackdrop.set_offsets([None, None])
+		self.clickMarker.set_offsets([None, None])
 		self.clickMarkerBackdrop.figure.canvas.draw_idle()
 		self.clickMarker.figure.canvas.draw_idle()
 	
@@ -248,7 +247,8 @@ polygon vertices)")
 class ThresholdAdjuster:
 	def __init__(self, image, userSettings, skipButton=True):
 		self.index = 0
-		self.editingThresholds = False
+		self.skipButtonExists = skipButton
+		
 		
 		self.image = image
 		self.dotSize = userSettings.dotSize
@@ -273,7 +273,7 @@ class ThresholdAdjuster:
 			(0,                     len(self.data) / 2),
 		]
 		
-		self.window = createPlotWindow("Dot Scanner - Threshold Adjustment")
+		self.window = createPlotWindow(strings.thresholdAdjusterWindowTitle)
 		self.windowScaling = getWindowScaling()
 		
 		self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = createPlots(
@@ -348,7 +348,7 @@ class ThresholdAdjuster:
 		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP, pady=(5, 0))
 		self.spacer = tk.Label(self.window, text="---------", fg="lightgray")
 		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
-		if skipButton:
+		if self.skipButtonExists:
 			self.window.bind("<Escape>", self.skipWithEscapeKey)
 			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
 										fg="darkgoldenrod")
@@ -389,6 +389,23 @@ class ThresholdAdjuster:
 		self.editButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
 		self.resetButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
 		
+		self.editSpacer = tk.Label(self.window, text="---------", fg="lightgray")
+		
+		self.entryThresholdLabel1 = tk.Label(self.window, text="Dot lower:")
+		self.entryThreshold1 = tk.Entry(self.window, width=5)
+		self.entryThreshold1.insert(0, userSettings.lowerDotThresh)
+		
+		self.entryThresholdLabel2 = tk.Label(self.window, text="Dot upper:")
+		self.entryThreshold2 = tk.Entry(self.window, width=5)
+		self.entryThreshold2.insert(0, userSettings.upperDotThresh)
+		
+		self.entryThresholdLabel3 = tk.Label(self.window, text="Blob lower:")
+		self.entryThreshold3 = tk.Entry(self.window, width=5)
+		self.entryThreshold3.insert(0, userSettings.lowerBlobThresh)
+		
+		self.editDoneButton = tk.Button(self.window, text="Done", command=self.editFinish, 
+										fg="blue", font=tk.font.Font(weight="bold"))
+		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
 		self.window.bind("<Return>", self.finishWithReturnKey)
 		self.window.bind("<space>", self.cycleViews)
@@ -411,34 +428,78 @@ class ThresholdAdjuster:
 			self.dotScatter.set_sizes([50 * self.dotSize * self.windowScaling])
 	
 	def edit(self):
-		if self.editingThresholds:
-			return
-			
-		self.editingThresholds = True
-		userInput = "empty"
-		while len(userInput.split()) != 3:
-			inputString = strings.editThresholds(self.image.thresholds)
-			userInput = input(inputString)
-			if userInput == "":
-				print(f"Edit canceled")
-				break
-			else:
-				try:
-					numberIn1 = round(float(userInput.split()[0]), 1)
-					numberIn2 = round(float(userInput.split()[1]), 1)
-					numberIn3 = round(float(userInput.split()[2]), 1)
-					newThresholds = (round(numberIn1, 2), round(numberIn2, 2), 
-										round(numberIn3, 2))
-					self.image.setThresholds(newThresholds)
-				except:
-					print("\nInvalid input.")
-					userInput = "empty"
+		self.window.unbind("<Up>")
+		self.window.unbind("<Down>")
+		self.window.unbind("<Left>")
+		self.window.unbind("<Right>")
+		self.window.unbind("<Return>")
+		self.window.bind("<Return>", self.editFinishWithReturnKey)
 		
-		self.editingThresholds = False
+		self.dotsItem.pack_forget()
+		self.blobsItem.pack_forget()
+		self.thresholdEditItem.pack_forget()
+		self.spacer.pack_forget()
+		if self.skipButtonExists:
+			self.skipButton.pack_forget()
+		self.doneButton.pack_forget()
+		
+		self.editSpacer.pack(in_=self.buttonBar, side=tk.TOP)
+		self.entryThresholdLabel1.pack(in_=self.buttonBar, side=tk.TOP, pady=(0, 5))
+		self.entryThreshold1.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryThresholdLabel2.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryThreshold2.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryThresholdLabel3.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryThreshold3.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.editDoneButton.pack(in_=self.buttonBar, side=tk.TOP, pady=(5, 0))
+		
+		self.window.update()
+	
+	def editFinish(self):
+		self.window.unbind("<Return>")
+		self.window.bind("<Up>", self.lowerDotThresholdScaleDownWithUpKey)
+		self.window.bind("<Down>", self.lowerDotThresholdScaleUpWithDownKey)
+		self.window.bind("<Left>", self.upperDotThresholdScaleUpWithLeftKey)
+		self.window.bind("<Right>", self.upperDotThresholdScaleDownWithRightKey)
+		self.window.bind("<Return>", self.finishWithReturnKey)
+		
+		self.editSpacer.pack_forget()
+		self.entryThresholdLabel1.pack_forget()
+		self.entryThreshold1.pack_forget()
+		self.entryThresholdLabel2.pack_forget()
+		self.entryThreshold2.pack_forget()
+		self.entryThresholdLabel3.pack_forget()
+		self.entryThreshold3.pack_forget()
+		self.editDoneButton.pack_forget()
+		
+		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.blobsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP, pady=(5, 0))
+		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
+		if self.skipButtonExists:
+			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
+		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
+		
+		try:
+			numberIn1 = round(float(self.entryThreshold1.get()), 1)
+			numberIn2 = round(float(self.entryThreshold2.get()), 1)
+			numberIn3 = round(float(self.entryThreshold3.get()), 1)
+			newThresholds = (numberIn1, numberIn2, numberIn3)
+		
+		except:
+			self.setThresholdEntries(self.image.thresholds)
+			print(strings.invalidThresholdEdit)
+			return
+		
+		self.image.setThresholds(newThresholds)
+		self.setThresholdEntries(self.image.thresholds)
+		
 		self.image.dotCoords, self.image.blobCoords = self.image.getCoords()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
 		self.canvas.draw()
+	
+	def editFinishWithReturnKey(self, event):
+		self.editFinish()
 	
 	def finish(self):
 		self.window.destroy()
@@ -464,6 +525,15 @@ class ThresholdAdjuster:
 	
 	def lowerDotThresholdScaleUpWithDownKey(self, event):
 		self.lowerDotThresholdScaleUp()
+	
+	def setThresholdEntries(self, thresholds):
+		thresh1, thresh2, thresh3 = thresholds
+		self.entryThreshold1.delete(0, tk.END)
+		self.entryThreshold2.delete(0, tk.END)
+		self.entryThreshold3.delete(0, tk.END)
+		self.entryThreshold1.insert(0, thresh1)
+		self.entryThreshold2.insert(0, thresh2)
+		self.entryThreshold3.insert(0, thresh3)
 	
 	def showCorrectImage(self, index):
 		self.displayCorrectMarkerSize(index)
@@ -500,6 +570,8 @@ class ThresholdAdjuster:
 
 	def resetThreshScalesToDefaultValues(self):
 		self.image.setThresholds(self.defaultThresholds)
+		self.setThresholdEntries(self.defaultThresholds)
+		
 		self.image.dotCoords, self.image.blobCoords = self.image.getCoords()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 							self.blobScatter)
@@ -541,7 +613,7 @@ class ThresholdAdjuster:
 
 class UserSettings:
 	def __init__(self):
-		self.window = createConfigurationsWindow("Dot Scanner - Configurations")
+		self.window = createConfigurationsWindow(strings.configurationsWindowTitle)
 
 		self.filepath = cfg.FILEPATH
 		if self.filepath in ["", " ", "/"]:
