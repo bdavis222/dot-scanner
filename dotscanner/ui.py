@@ -787,13 +787,14 @@ class UserSettings:
 					self.startImage = chosenImage
 					self.labelStartImageDirectoryWarning.pack_forget()
 					self.labelStartImageWarning.pack_forget()
-					self.window.update()
 				
 				except:
 					self.buttonSelectStartingImage.config(text="Browse...", fg="black")
 					self.startImage = ""
+					self.labelStartImageDirectoryWarning.pack_forget()
 					self.labelStartImageWarning.pack()
-			
+		
+		self.window.update()
 		self.window.focus_force()
 	
 	def done(self):        
