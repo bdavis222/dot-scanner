@@ -62,6 +62,9 @@ def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
 	return set(list(firstFrames) + list(lastFrames))
 
 def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
+	if len(middleMicroscopeImage.polygon) < 3:
+		return
+	
 	blobSize = userSettings.blobSize
 	dotSize = userSettings.dotSize
 	skipsAllowed = userSettings.skipsAllowed
