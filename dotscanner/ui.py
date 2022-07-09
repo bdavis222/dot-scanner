@@ -731,9 +731,12 @@ class UserSettings:
 									font=tk.font.Font(weight="bold"))
 		self.buttonNext.pack()
 		
-		self.labelStartImageWarning = tk.Label(self.window, 
-												text=f"WARNING: {strings.fileNumberingException}", 
+		self.labelStartImageWarning = tk.Label(self.window, text=strings.fileNumberingException, 
 												fg="red")
+		
+		self.labelStartImageDirectoryWarning = tk.Label(self.window, 
+														text=strings.startImageDirectoryException, 
+														fg="red")
 		
 		self.show(click=self.program.capitalize())
 		
@@ -769,21 +772,28 @@ class UserSettings:
 									title="Select the starting image for the lifetime measurement")
 		chosenImage = os.path.basename(chosenFilepath)
 		if chosenImage != "":
-			try:
-				trailingNumberString = str(files.getTrailingNumber(chosenImage))
-				if len(trailingNumberString) > 10:
-					trailingNumberString = "..." + trailingNumberString[-10:]
-				self.buttonSelectStartingImage.config(text=trailingNumberString, fg="darkgreen")
-				self.startImage = chosenImage
-				self.lifetimeOptions.pack_forget()
-				self.buttonNext.pack_forget()
-				self.labelStartImageWarning.pack_forget()
-				self.lifetimeOptions.pack()
-				self.buttonNext.pack()
-			except:
+			if os.path.dirname(chosenFilepath) != self.filepath:
 				self.buttonSelectStartingImage.config(text="Browse...", fg="black")
 				self.startImage = ""
-				self.labelStartImageWarning.pack()
+				self.labelStartImageWarning.pack_forget()
+				self.labelStartImageDirectoryWarning.pack()
+			
+			else:
+				try:
+					trailingNumberString = str(files.getTrailingNumber(chosenImage))
+					if len(trailingNumberString) > 10:
+						trailingNumberString = "..." + trailingNumberString[-10:]
+					self.buttonSelectStartingImage.config(text=trailingNumberString, fg="darkgreen")
+					self.startImage = chosenImage
+					self.labelStartImageDirectoryWarning.pack_forget()
+					self.labelStartImageWarning.pack_forget()
+					self.window.update()
+				
+				except:
+					self.buttonSelectStartingImage.config(text="Browse...", fg="black")
+					self.startImage = ""
+					self.labelStartImageWarning.pack()
+			
 		self.window.focus_force()
 	
 	def done(self):        
