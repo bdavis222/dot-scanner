@@ -145,7 +145,7 @@ class RegionSelector:
 		
 		self.buttonBar = tk.Frame(self.window)
 		self.buttonBar.pack(side=tk.LEFT)
-		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 		
 		if skipButton:
 			self.window.bind("<Escape>", self.skipWithEscapeKey)
@@ -333,13 +333,13 @@ class ThresholdAdjuster:
 									font=tk.font.Font(weight="bold"))
 		
 		self.buttonBar.pack(side=tk.LEFT)
-		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 		
-		self.viewItem.pack(in_=self.buttonBar, side=tk.TOP)
+		self.viewItem.pack(in_=self.buttonBar, side=tk.TOP, pady=(0, 5))
 		self.contrastItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.blobsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
-		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP)
+		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP, pady=(5, 0))
 		self.spacer = tk.Label(self.window, text="---------", fg="lightgray", pady=0)
 		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
 		if skipButton:
