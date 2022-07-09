@@ -41,6 +41,9 @@ windowSizeWarning = "WARNING: the current window height is smaller than 550 pixe
 resulting in some buttons not being visible. However, the Return key will still allow confirmation \
 in each window, and the Escape key will allow for skipping files, when the option is available."
 
+def alreadyMeasuredNotification(filename):
+	return f"{filename} already measured in {cfg.DENSITY_OUTPUT_FILENAME} file."
+
 def densityOutput(filename, density, error, thresholds, dotSize, blobSize, polygon):
 	verticesStringList = []
 	for vertex in polygon[:-1]:
