@@ -161,7 +161,8 @@ class RegionSelector:
 		self.secondSpacer = tk.Label(self.window, text="                       ")
 		self.secondSpacer.pack(in_=self.buttonBar, side=tk.TOP)
 		
-		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue")
+		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue", 
+									font=tk.font.Font(weight="bold"))
 		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
@@ -296,11 +297,6 @@ class ThresholdAdjuster:
 		
 		self.thresholdEditItem = tk.Frame(self.window)
 		
-		if skipButton:
-			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
-										fg="darkgoldenrod")
-			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
-		
 		self.viewLabel = tk.Label(self.window, text="View: ")
 		self.viewTopLeftButton = tk.Button(self.window, text="⌜", command=self.showTopLeftRegion)
 		self.viewBottomLeftButton = tk.Button(self.window, text="⌞", 
@@ -329,17 +325,24 @@ class ThresholdAdjuster:
 		self.resetButton = tk.Button(self.window, text="Reset", 
 										command=self.resetThreshScalesToDefaultValues)
 		
-		self.nextButton = tk.Button(self.window, text="Next", command=self.finish, fg="blue")
+		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue", 
+									font=tk.font.Font(weight="bold"))
 		
 		self.buttonBar.pack(side=tk.LEFT)
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 		
-		self.viewItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
-		self.contrastItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
-		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
-		self.blobsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
-		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
-		self.nextButton.pack(in_=self.buttonBar, side=tk.TOP, pady=12)
+		self.viewItem.pack(in_=self.buttonBar, side=tk.TOP)
+		self.contrastItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.blobsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.thresholdEditItem.pack(in_=self.buttonBar, side=tk.TOP)
+		self.spacer = tk.Label(self.window, text="---------", fg="lightgray", pady=0)
+		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
+		if skipButton:
+			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
+										fg="darkgoldenrod")
+			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
+		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.viewTopLeftButton.pack(in_=self.leftViewButtons, side=tk.TOP)
 		self.viewBottomLeftButton.pack(in_=self.leftViewButtons, side=tk.TOP)
@@ -637,7 +640,8 @@ class UserSettings:
 		self.entrySkipsAllowed.pack(in_=self.lifetimeOptions, side=tk.LEFT)
 		self.checkboxRemoveEdge.pack(in_=self.lifetimeOptions, side=tk.LEFT)
 
-		self.buttonNext = tk.Button(self.window, text="Next", command=self.done, fg="blue")
+		self.buttonNext = tk.Button(self.window, text="Next", command=self.done, fg="blue", 
+									font=tk.font.Font(weight="bold"))
 		self.buttonNext.pack()
 		
 		self.labelStartImageWarning = tk.Label(self.window, 
@@ -761,6 +765,10 @@ def getWindowDimensions():
 	else:
 		height = cfg.WINDOW_HEIGHT
 		width = cfg.WINDOW_WIDTH
+	
+	if height < 550:
+		print(string.windowSizeWarning)
+	
 	return width, height
 
 def printProgressBar (iteration, total, prefix = "", suffix = "", decimals = 1, 
