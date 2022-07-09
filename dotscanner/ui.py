@@ -148,6 +148,7 @@ class RegionSelector:
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 		
 		if skipButton:
+			self.window.bind("<Escape>", self.skipWithEscapeKey)
 			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
 										fg="darkgoldenrod")
 			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
@@ -235,6 +236,9 @@ class RegionSelector:
 		self.image.skipped = True
 		self.window.destroy()
 		self.window.quit()
+	
+	def skipWithEscapeKey(self, event):
+		self.skip()
 
 class ThresholdAdjuster:
 	def __init__(self, image, userSettings, skipButton=True):
@@ -339,6 +343,7 @@ class ThresholdAdjuster:
 		self.spacer = tk.Label(self.window, text="---------", fg="lightgray", pady=0)
 		self.spacer.pack(in_=self.buttonBar, side=tk.TOP)
 		if skipButton:
+			self.window.bind("<Escape>", self.skipWithEscapeKey)
 			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
 										fg="darkgoldenrod")
 			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
@@ -483,6 +488,9 @@ class ThresholdAdjuster:
 	def skip(self):
 		self.image.skipped = True
 		self.finish()
+	
+	def skipWithEscapeKey(self, event):
+		self.skip()
 
 	def resetThreshScalesToDefaultValues(self):
 		self.image.setThresholds(self.defaultThresholds)
@@ -767,7 +775,7 @@ def getWindowDimensions():
 		width = cfg.WINDOW_WIDTH
 	
 	if height < 550:
-		print(string.windowSizeWarning)
+		print(strings.windowSizeWarning)
 	
 	return width, height
 
