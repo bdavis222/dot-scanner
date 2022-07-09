@@ -122,7 +122,8 @@ class RegionSelector:
 		self.blobSize = userSettings.blobSize
 		self.data = image.data
 		
-		self.window = createWindow("Dot Scanner - Region Selection (click the plot to add polygon vertices)")
+		self.window = createPlotWindow("Dot Scanner - Region Selection (click the plot to add \
+polygon vertices)")
 		
 		self.figure, self.axes, _, self.dotScatter, self.blobScatter = createPlots(self.data, 
 																					userSettings)
@@ -144,7 +145,7 @@ class RegionSelector:
 		self.canvas.draw()
 		
 		self.buttonBar = tk.Frame(self.window)
-		self.buttonBar.pack(side=tk.LEFT)
+		self.buttonBar.pack(side=tk.LEFT, expand=False)
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 		
 		self.polygonLabel = tk.Label(self.window, text="Polygon:")
@@ -268,7 +269,8 @@ class ThresholdAdjuster:
 			(0,                     len(self.data) / 2),
 		]
 		
-		self.window = createWindow("Dot Scanner - Threshold Adjustment")
+		self.window = createPlotWindow("Dot Scanner - Threshold Adjustment")
+		self.windowScaling = getWindowScaling()
 		
 		self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = createPlots(
 																					self.data, 
@@ -332,7 +334,7 @@ class ThresholdAdjuster:
 		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue", 
 									font=tk.font.Font(weight="bold"))
 		
-		self.buttonBar.pack(side=tk.LEFT)
+		self.buttonBar.pack(side=tk.LEFT, expand=False)
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 		
 		self.viewItem.pack(in_=self.buttonBar, side=tk.TOP, pady=(0, 5))
@@ -400,9 +402,9 @@ class ThresholdAdjuster:
 	
 	def displayCorrectMarkerSize(self, index):
 		if self.index == 0:
-			self.dotScatter.set_sizes([5 * self.dotSize])
+			self.dotScatter.set_sizes([5 * self.dotSize * self.windowScaling])
 		else:
-			self.dotScatter.set_sizes([50 * self.dotSize])
+			self.dotScatter.set_sizes([50 * self.dotSize * self.windowScaling])
 	
 	def edit(self):
 		if self.editingThresholds:
@@ -535,10 +537,7 @@ class ThresholdAdjuster:
 
 class UserSettings:
 	def __init__(self):
-		self.window = tk.Tk()
-		self.window.title("Dot Scanner - Configurations")
-		windowWidth, _ = getWindowDimensions()
-		self.window.geometry(f"{windowWidth}x170+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
+		self.window = createConfigurationsWindow("Dot Scanner - Configurations")
 
 		self.filepath = cfg.FILEPATH
 		if self.filepath in ["", " ", "/"]:
@@ -746,21 +745,32 @@ class UserSettings:
 			self.buttonNext.pack()
 
 def createPlots(data, userSettings):
+	windowScaling = getWindowScaling()
 	figure, axes = pl.subplots()
 	dataPlot = axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
 							vmax=userSettings.upperContrast * np.std(data))
-	dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
-								edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
-	blobScatter = axes.scatter([None], [None], s=2 * userSettings.blobSize, facecolors="none",
-								edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
+	dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize * windowScaling, 
+								facecolors="none", edgecolors=cfg.DOT_COLOR, 
+								linewidths=cfg.DOT_THICKNESS)
+	blobScatter = axes.scatter([None], [None], s=2 * userSettings.blobSize * windowScaling, 
+								facecolors="none", edgecolor=cfg.BLOB_COLOR, 
+								linewidths=cfg.BLOB_THICKNESS)
 	return figure, axes, dataPlot, dotScatter, blobScatter
 
-def createWindow(title):
+def createConfigurationsWindow(title):
 	window = tk.Tk()
 	window.title(title)
-	
+	width, _ = getWindowDimensions()
+	if width > 650:
+		width = 650
+	window.geometry(f"{width}x170+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
+	return window
+
+def createPlotWindow(title):
+	window = tk.Tk()
+	window.title(title)
 	width, height = getWindowDimensions()
-	geometry = f"{width}x{height}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}"
+	geometry = f"{height + 88}x{height}+{cfg.WINDOW_X}+{cfg.WINDOW_Y}" # buttonBar width = 88
 	window.geometry(geometry)
 	return window
 
@@ -768,7 +778,13 @@ def getWindowDimensions():
 	if cfg.DYNAMIC_WINDOW:
 		window = tk.Tk()
 		height = window.winfo_screenheight() - 180
-		width = height + 100
+		detectedWidth = window.winfo_screenwidth() - 180
+		
+		if height + 88 < detectedWidth: # buttonBar width = 88
+			width = height + 88
+		else:
+			width = detectedWidth
+		
 		window.destroy()
 	else:
 		height = cfg.WINDOW_HEIGHT
@@ -778,6 +794,9 @@ def getWindowDimensions():
 		print(strings.windowSizeWarning)
 	
 	return width, height
+
+def getWindowScaling():
+	return getWindowDimensions()[1] / 550
 
 def printProgressBar (iteration, total, prefix = "", suffix = "", decimals = 1, 
 						barLength = 50, fill = "█", printEnd = "\r"):
