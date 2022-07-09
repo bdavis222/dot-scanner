@@ -798,7 +798,8 @@ def getWindowDimensions():
 	return width, height
 
 def getWindowScaling():
-	return getWindowDimensions()[1] / 550
+	_, height = getWindowDimensions()
+	return height / 550
 
 def printProgressBar (iteration, total, prefix = "", suffix = "", decimals = 1, 
 						barLength = 50, fill = "█", printEnd = "\r"):
