@@ -65,10 +65,10 @@ def getDensityErrorAndCoords(microscopeImage, blobSize):
 	return density, error, dotsInPoly, blobsInPoly
 
 def measureDensity(directory, filename, microscopeImage, userSettings):
-	blobSize = userSettings.blobSize
-	
-	if not len(microscopeImage.polygon):
+	if len(microscopeImage.polygon) < 3:
 		return
+	
+	blobSize = userSettings.blobSize
 	
 	density, error, dotsInPoly, blobsInPoly = getDensityErrorAndCoords(microscopeImage, blobSize)
 	
