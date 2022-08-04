@@ -28,7 +28,7 @@ configurations file."
 
 programNameException = "Invalid program name selected in configurations file."
 
-regionSelectorWindowTitle = "\nDot Scanner - Region Selection (click the plot to add polygon \
+regionSelectorWindowTitle = "Dot Scanner - Region Selection (click the plot to add polygon \
 vertices)"
 
 startImageDirectoryException = "WARNING: Start image must be in the same directory as the other \
