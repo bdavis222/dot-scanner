@@ -67,7 +67,7 @@ If **Lifetime** is selected, some additional options will appear:
 ### Descriptions of Configuration Options
 
 #### Save figures
-Selecting this option will output graphical plots to a figures folder that will be created within the folder containing the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis.
+Selecting this option will output graphical plots to a `figures` folder that will be created within the folder containing the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis.
 
 #### Blob size
 This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the “dots”—the dimmer particles of interest in the image—are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots.
@@ -76,7 +76,7 @@ This option sets the radius (or, more accurately, roughly the half width of a sq
 Similar to the blob size option, this sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer pixels within a brighter dot's region will not be recognized as dots, and will therefore be removed.
 
 #### Thresholds
-There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes correspond to the following variables in config.py (displayed from left to right in the Configurations Window):
+There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes correspond to the following variables in `config.py` (displayed from left to right in the Configurations Window):
 1. `LOWER_DOT_THRESH_SCALE`: Scaling for the lower threshold defining the brightness of the dots. The default is 1.5, which corresponds to 1.5 standard deviations above the mean of the data. Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
 2. `UPPER_DOT_THRESH_SCALE`: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
 3. `LOWER_BLOB_THRESH_SCALE`: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of `UPPER_DOT_THRESH_SCALE`. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
@@ -101,26 +101,28 @@ This window features several buttons on the left sidebar:
 From top to bottom, these groups of buttons perform the following actions:
 
 #### View
-These buttons allow four different viewing options: zooming in on the top left, top right, bottom left, bottom right, or zooming back out to show the full image. The user can also press the spacebar on the keyboard to cycle through these different views.
+These buttons allow four different viewing options: zooming in on the top left, top right, bottom left, bottom right, or zooming back out to show the full image. The user can also press the **spacebar** on the keyboard to cycle through these different views.
 
 #### Contrast
 These buttons adjust the contrast of the image.
 
 #### Dots
-These buttons adjust the sensitivity for detecting “dots” in the image—the fainter, smaller dots, as opposed to the much brighter and larger “blobs.” The user can also press the up and down arrow keys on the keyboard to make these adjustments.
+These buttons adjust the sensitivity for detecting “dots” in the image (the fainter, smaller dots, as opposed to the much brighter and larger “blobs”). The user can also press the **up** and **down** arrow keys on the keyboard to make these adjustments.
 
 #### Blobs
-These buttons adjust the sensitivity for detecting “blobs” in the image. The user can also press the right and left arrow keys on the keyboard to make these adjustments.
+These buttons adjust the sensitivity for detecting “blobs” in the image. The user can also press the **right** and **left** arrow keys on the keyboard to make these adjustments.
 
 #### Edit
 This button changes the left button bar view to display some manual threshold adjustment options:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
 
-*(Once the thresholds are changed by entering new numbers into the text boxes, the* **Done** *button saves the settings and returns the left button bar to the previous button configuration.)*
+*(Once the thresholds are changed by entering new numbers into the text boxes, the* **Done** *button saves the settings and returns the left button bar to the original button configuration.)*
 
-### Other Configuration Options
+#### Reset
+This button resets the adjusted thresholds back to the default values.
 
-Several configuration options are available for both the density and lifetime programs, as described below. All of these have default values that can be modified in the `config.py` file. For more information, see the publication listed in the Citations section at the bottom of this readme file.
+#### Skip
+This button skips the current image (for example, if the user decides the data quality is not sufficient for measurement). The **escape** key on the keyboard can also be pressed to perform a skip.
 
 ## The Region Selector Window
 Clicking the **Done** button, or pressing the **return** key on the keyboard, from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
