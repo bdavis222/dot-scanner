@@ -5,7 +5,7 @@
 
 One to two paragraph statement about the product and what it does.
 
-![alt text](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
+![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
 
 ## Getting Started
 
