@@ -84,7 +84,7 @@ There are three thresholds that can be set to adjust the detection sensitivity f
 ### Descriptions of Configuration Options for the Lifetime Program
 
 #### Start image
-This option sets the first image to be considered in a lifetime calculation. The default is the first image in the folder (as the images must be numbered sequentially).
+This option sets the first image to be considered in a lifetime calculation. The default is the first image in the folder (as the images *must be numbered sequentially*).
 
 #### Skips allowed
 This sets the number of consecutive images that are allowed to be skipped in a lifetime calculation. This can be useful for dimmer dots where an image or two in a series are relatively out of focus, resulting in an unwanted non-detection for those frames. By increasing the number of skips allowed, these particles will be retained as long as they are back in focus and bright enough for detection in subsequent frames.
