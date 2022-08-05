@@ -37,7 +37,7 @@ pip install numpy
 
 *(Note that the* `pip3` *command may be required instead of* `pip` *for some Python installations.)*
 
-### How to run the software
+### Running the software
 
 To launch the main graphical user interface (GUI), navigate to the top level of the project's directory structure and run the following command:
 
