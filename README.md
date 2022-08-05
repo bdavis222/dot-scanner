@@ -5,8 +5,6 @@
 
 One to two paragraph statement about the product and what it does.
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
-
 ## Getting Started
 
 ### Dependencies
@@ -49,7 +47,11 @@ python -m dotscanner
 
 (Note that the `python3` command may be required instead of `python` for some Python installations.)
 
-When launched, the user must select the file or directory of files to be analyzed. The "File" and "Folder" buttons will allow the user to navigate their filesystem to select the desired filepath.
+This command will display the Configurations Window:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
+
+If the File or Folder buttons are clicked, another window opens, allowing the user to select a file or folder for analysis:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/4.png)
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the configurations file, only selecting values that are explicitly allowed, as explained in the comments within the file.
 
@@ -71,6 +73,15 @@ In addition to the density measuremnt program, a "lifetime" measurement program 
 2. Define a study region where the lifetimes of the particles in a series of images will be measured
 
 Because this only works with a series of images, the user must initially select a directory, not a single file.
+
+If a folder containing several images *is* selected, the user has the option to change the default program from Density to Lifetime. This is done through the Program dropdown menu:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/5.png)
+
+If Lifetime is selected, some additional options will appear:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/6.png)
+
+Clicking Next--or pressing the return (or enter) key on the keyboard--will save the user’s selections and open the Threshold Adjustment Window. This window features several buttons on the left side of the window:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
 ### Other Configuration Options
 
@@ -107,6 +118,16 @@ This option sets the first image to be considered in a lifetime calculation.
 #### Remove Edge Frames
 
 This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis. 
+
+The edit button changes the left button bar view to display some manual threshold adjustment options:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
+(Once the thresholds are changed by entering new numbers into the text boxes, the Done button saves the settings and returns the left button bar to the previous button configuration.)
+
+Clicking the done button--or pressing the return (or enter) key on the keyboard--saves the threshold settings selected by the user at this point, and advances to the Region Selector Window:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/9.png)
+This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the
+Reset button, or by pressing the backspace (or delete) key on the keyboard. It is important to note that after three vertices have been placed, the dotted line shows how the program will enclose the polygon once the Done button—or the return (or enter) key on the keyboard—is pressed.
+Information about the image processing will be displayed in the Terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
 
 ## Authors
 
