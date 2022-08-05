@@ -26,12 +26,16 @@ To install this software and its dependencies:
 python setup.py install
 ```
 
+(Note that `python3` may be required instead of `python` for some Python installations.)
+
 This should automate the dependency installation process. Alternatively, the [matplotlib](https://pypi.org/project/matplotlib/) and [numpy](https://pypi.org/project/numpy/) dependencies can be installed independently via the following commands:
 
 ```
 pip install matplotlib
 pip install numpy
 ```
+
+(Note that `pip3` may be required instead of `pip` for some Python installations.)
 
 ### How to run the software
 
@@ -40,6 +44,8 @@ To launch the main graphical user interface (GUI), navigate to the top level of 
 ```
 python -m dotscanner
 ```
+
+(Note that `python3` may be required instead of `python` for some Python installations.)
 
 When launched, the user must select the file or directory of files to be analyzed. The "File" and "Folder" buttons will allow the user to navigate their filesystem to select the desired filepath.
 
@@ -124,6 +130,8 @@ Unit tests for this software were written for use with [Python's built-in unitte
 ```
 python -m unittest
 ```
+
+(Note that `python3` may be required instead of `python` for some Python installations.)
 
 ### Bug Reports and Feature Requests
 
