@@ -115,21 +115,23 @@ This sets the number of consecutive images that are allowed to be skipped in a l
 
 #### Start Image
 
-This option sets the first image to be considered in a lifetime calculation.
+This option sets the first image to be considered in a lifetime calculation. The default is the first image in the folder (as the images *must be numbered sequentially*).
 
 #### Remove Edge Frames
 
 This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis. 
 
-The edit button changes the left button bar view to display some manual threshold adjustment options:
+The **Edit** button changes the left button bar view to display some manual threshold adjustment options:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
-(Once the thresholds are changed by entering new numbers into the text boxes, the Done button saves the settings and returns the left button bar to the previous button configuration.)
+
+*(Once the thresholds are changed by entering new numbers into the text boxes, the* **Done** *button saves the settings and returns the left button bar to the previous button configuration.)*
 
 ### The Threshold Adjustment Window
-Clicking the done button-or pressing the return (or enter) key on the keyboard-from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
+Clicking the **Done** button, or pressing the return (or enter) key on the keyboard, from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/9.png)
-This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the
-Reset button, or by pressing the backspace (or delete) key on the keyboard. It is important to note that after three vertices have been placed, the dotted line shows how the program will enclose the polygon once the Done button—or the return (or enter) key on the keyboard—is pressed.
+
+This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the **Reset** button, or by pressing the **backspace** key on the keyboard. It is important to note that after three vertices have been placed, the dotted line shows how the program will enclose the polygon once the **Done** button, or the **return** key on the keyboard, is pressed.
+
 Information about the image processing will be displayed in the Terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
 
 ## Authors
