@@ -80,7 +80,7 @@ If a folder containing several images *is* selected, the user has the option to 
 If Lifetime is selected, some additional options will appear:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/6.png)
 
-Clicking Next--or pressing the return (or enter) key on the keyboard--will save the user’s selections and open the Threshold Adjustment Window. This window features several buttons on the left side of the window:
+Clicking Next-or pressing the return (or enter) key on the keyboard-will save the user’s selections and open the Threshold Adjustment Window. This window features several buttons on the left side of the window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
 ### Other Configuration Options
@@ -93,7 +93,7 @@ Selecting this option will output graphical plots to a `figures` directory that 
 
 #### Blob Size
 
-This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"---the dimmer particles of interest in the image---are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
+This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"-the dimmer particles of interest in the image-are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
 
 #### Dot Size
 
@@ -123,7 +123,7 @@ The edit button changes the left button bar view to display some manual threshol
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
 (Once the thresholds are changed by entering new numbers into the text boxes, the Done button saves the settings and returns the left button bar to the previous button configuration.)
 
-Clicking the done button--or pressing the return (or enter) key on the keyboard--saves the threshold settings selected by the user at this point, and advances to the Region Selector Window:
+Clicking the done button-or pressing the return (or enter) key on the keyboard-saves the threshold settings selected by the user at this point, and advances to the Region Selector Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/9.png)
 This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the
 Reset button, or by pressing the backspace (or delete) key on the keyboard. It is important to note that after three vertices have been placed, the dotted line shows how the program will enclose the polygon once the Done button—or the return (or enter) key on the keyboard—is pressed.
