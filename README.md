@@ -128,9 +128,9 @@ This button skips the current image (for example, if the user decides the data q
 Clicking the **Done** button, or pressing the **return** key on the keyboard, from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/9.png)
 
-This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the **Reset** button, or by pressing the **backspace** key on the keyboard. It is important to note that after three vertices have been placed, the dotted line shows how the program will enclose the polygon once the **Done** button, or the **return** key on the keyboard, is pressed.
+This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the **Reset** button, or by pressing the **backspace** key on the keyboard. It is important to note that after at least three vertices have been placed, the dotted line shows how the program will enclose the polygon once the **Done** button, or the **return** key on the keyboard, is pressed. *(In other words, it is not necessary to re-click the first vertex created to close the polygon.)*
 
-Information about the image processing will be displayed in the Terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
+Information about the image processing will be displayed in the terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
 
 ## Authors
 
