@@ -95,10 +95,10 @@ This dictates whether edge frames should be removed from a lifetime calculation.
 Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
 ## The Threshold Adjustment Window
-This window features several buttons on the left sidebar:
+This window shows the image data with the dots and blobs identified, and features several button groups on the left sidebar:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
-From top to bottom, these groups of buttons perform the following actions:
+From top to bottom, these button groups perform the following actions:
 
 #### View
 These buttons allow four different viewing options: zooming in on the top left, top right, bottom left, bottom right, or zooming back out to show the full image. The user can also press the **spacebar** on the keyboard to cycle through these different views.
