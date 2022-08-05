@@ -26,7 +26,7 @@ To install this software and its dependencies:
 python setup.py install
 ```
 
-(Note that the `python3` command may be required instead of `python` for some Python installations.)
+*(Note that the `python3` command may be required instead of `python` for some Python installations.)*
 
 This should automate the dependency installation process. Alternatively, the [matplotlib](https://pypi.org/project/matplotlib/) and [numpy](https://pypi.org/project/numpy/) dependencies can be installed independently via the following commands:
 
@@ -35,7 +35,7 @@ pip install matplotlib
 pip install numpy
 ```
 
-(Note that the `pip3` command may be required instead of `pip` for some Python installations.)
+*(Note that the `pip3` command may be required instead of `pip` for some Python installations.)*
 
 ### How to run the software
 
@@ -45,7 +45,7 @@ To launch the main graphical user interface (GUI), navigate to the top level of 
 python -m dotscanner
 ```
 
-(Note that the `python3` command may be required instead of `python` for some Python installations.)
+*(Note that the `python3` command may be required instead of `python` for some Python installations.)*
 
 This command will display the Configurations Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
@@ -142,7 +142,7 @@ Brian Davis
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/bdavis222/dotscanner/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/bdavis222/dotscanner/blob/main/LICENSE) file for details.
 
 ## Development
 
@@ -154,7 +154,7 @@ Unit tests for this software were written for use with [Python's built-in unitte
 python -m unittest
 ```
 
-(Note that the `python3` command may be required instead of `python` for some Python installations.)
+*(Note that the `python3` command may be required instead of `python` for some Python installations.)*
 
 ### Bug Reports and Feature Requests
 
