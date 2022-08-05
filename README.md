@@ -47,10 +47,11 @@ python -m dotscanner
 
 *(Note that the* `python3` *command may be required instead of* `python` *for some Python installations.)*
 
-This command will display the Configurations Window:
+### The Configurations Window
+The first window displayed in the GUI is the Configurations Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
 
-If the File or Folder buttons are clicked, another window opens, allowing the user to select a file or folder for analysis:
+If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/4.png)
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the configurations file, only selecting values that are explicitly allowed, as explained in the comments within the file.
@@ -59,28 +60,29 @@ The software will run as expected on any directory where the most common file ex
 
 #### Density Measurement
 
-To measure the density of particles detected in a microscope image, one will run the "density" program. This is selected via a dropdown list in the GUI, and may already be set as the default program, depending on the preferences set in `config.py`.
+To measure the density of particles detected in a microscope image, one will run the **Density** program. This is selected via a dropdown list in the GUI, and may already be set as the default program, depending on the preferences set in `config.py`:
+![](https://github.com/bdavis222/dotscanner/blob/main/images/5.png)
 
-For a "density" program setting, the user will use the next window that loads to adjust the detection thresholds used by the program. After this, another window will load to allow the user to click on the screen to draw the vertices of a polygon that will enclose a custom region for density measurement. 
+For a **Density** program setting, the user will use the next window that loads to adjust the detection thresholds used by the program. After this, another window will load to allow the user to click on the screen to draw the vertices of a polygon that will enclose a custom region for density measurement. 
 
 A major benefit of this software is its ability to automatically reject portions of this custom region with bright, overexposed, or saturated data. Because of this, the user doesn't have to draw around those regions when defining the polygon, as the program will calculate the area used in the density measurement by subtracting the area taken up by the rejected portions of the image within the polygon.
 
 #### Lifetime Measurement
 
-In addition to the density measuremnt program, a "lifetime" measurement program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly do two things:
+In addition to the density measuremnt program, a **Lifetime** measurement program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly do two things:
 
 1. Allow the user to adjust thresholds
 2. Define a study region where the lifetimes of the particles in a series of images will be measured
 
 Because this only works with a series of images, the user must initially select a directory, not a single file.
 
-If a folder containing several images *is* selected, the user has the option to change the default program from Density to Lifetime. This is done through the Program dropdown menu:
-![](https://github.com/bdavis222/dotscanner/blob/main/images/5.png)
-
-If Lifetime is selected, some additional options will appear:
+If **Lifetime** is selected, some additional configuration options will appear:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/6.png)
 
-Clicking Next-or pressing the return (or enter) key on the keyboard-will save the user’s selections and open the Threshold Adjustment Window. This window features several buttons on the left side of the window:
+Clicking **Next**-or pressing the **return** (or **enter**) key on the keyboard-will save the user’s selections and open the Threshold Adjustment Window.
+
+### The Threshold Adjustment Window
+This window features several buttons on the left side of the window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
 ### Other Configuration Options
@@ -123,7 +125,8 @@ The edit button changes the left button bar view to display some manual threshol
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
 (Once the thresholds are changed by entering new numbers into the text boxes, the Done button saves the settings and returns the left button bar to the previous button configuration.)
 
-Clicking the done button-or pressing the return (or enter) key on the keyboard-saves the threshold settings selected by the user at this point, and advances to the Region Selector Window:
+### The Threshold Adjustment Window
+Clicking the done button-or pressing the return (or enter) key on the keyboard-from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/9.png)
 This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the
 Reset button, or by pressing the backspace (or delete) key on the keyboard. It is important to note that after three vertices have been placed, the dotted line shows how the program will enclose the polygon once the Done button—or the return (or enter) key on the keyboard—is pressed.
