@@ -58,73 +58,69 @@ If repeated analysis is being performed at the same target filepath, the user ca
 
 The software will run as expected on any directory where the most common file extension within the directory belongs to the images wanting to be analyzed. By default, the entire directory will be scanned, and the most common file type found within the directory will be set as the file type to analyze. If the user is experiencing issues with the wrong file type being selected, it is recommended that they reorganize their data into directories containing only their images to be analyzed. 
 
-#### Density Measurement
-
-To measure the density of particles detected in a microscope image, one will run the **Density** program. This is selected via a dropdown list in the GUI, and may already be set as the default program, depending on the preferences set in `config.py`:
+If a folder containing several images is selected, the user has the option to change the default program from **Density** to **Lifetime**. *(Note that trying to run a lifetime program on a single image will not be allowed by the software.)* This selection is made through the **Program** dropdown menu:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/5.png)
 
-For a **Density** program setting, the user will use the next window that loads to adjust the detection thresholds used by the program. After this, another window will load to allow the user to click on the screen to draw the vertices of a polygon that will enclose a custom region for density measurement. 
-
-A major benefit of this software is its ability to automatically reject portions of this custom region with bright, overexposed, or saturated data. Because of this, the user doesn't have to draw around those regions when defining the polygon, as the program will calculate the area used in the density measurement by subtracting the area taken up by the rejected portions of the image within the polygon.
-
-#### Lifetime Measurement
-
-In addition to the density measuremnt program, a **Lifetime** measurement program is also available, selected via the dropdown list button in the initial GUI window when the software is launched. This program will similarly do two things:
-
-1. Allow the user to adjust thresholds
-2. Define a study region where the lifetimes of the particles in a series of images will be measured
-
-Because this only works with a series of images, the user must initially select a directory, not a single file.
-
-If **Lifetime** is selected, some additional configuration options will appear:
+If **Lifetime** is selected, some additional options will appear:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/6.png)
 
-Clicking **Next**-or pressing the **return** (or **enter**) key on the keyboard-will save the user’s selections and open the Threshold Adjustment Window.
+#### Descriptions of Configuration Options
+
+##### Save figures
+Selecting this option will output graphical plots to a figures folder that will be created within the folder containing the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis.
+
+##### Blob size
+This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the “dots”—the dimmer particles of interest in the image—are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots.
+
+##### Dot size
+Similar to the blob size option, this sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer pixels within a brighter dot's region will not be recognized as dots, and will therefore be removed.
+
+##### Thresholds
+There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes correspond to the following variables in config.py (displayed from left to right in the Configurations Window):
+1. LOWER_DOT_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the dots. The default is 1.5, which corresponds to 1.5 standard deviations above the mean of the data. Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
+2. UPPER_DOT_THRESH_SCALE: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
+3. LOWER_BLOB_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of UPPER_DOT_THRESH_SCALE. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
+
+#### Descriptions of Configuration Options for the Lifetime Program
+
+##### Start image
+This option sets the first image to be considered in a lifetime calculation. The default is the first image in the folder (as the images must be numbered sequentially).
+
+##### Skips allowed
+This sets the number of consecutive images that are allowed to be skipped in a lifetime calculation. This can be useful for dimmer dots where an image or two in a series are relatively out of focus, resulting in an unwanted non-detection for those frames. By increasing the number of skips allowed, these particles will be retained as long as they are back in focus and bright enough for detection in subsequent frames.
+      
+##### Remove edge frames
+This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis.
+
+Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
 ### The Threshold Adjustment Window
 This window features several buttons on the left side of the window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
-### Other Configuration Options
+From top to bottom, these groups of buttons perform the following actions:
 
-Several configuration options are available for both the density and lifetime programs, as described below. All of these have default values that can be modified in the `config.py` file. For more information, see the publication listed in the Citations section at the bottom of this readme file.
+##### View
+These buttons allow four different viewing options: zooming in on the top left, top right, bottom left, bottom right, or zooming back out to show the full image. The user can also press the spacebar on the keyboard to cycle through these different views.
 
-#### Save Figures
+##### Contrast
+These buttons adjust the contrast of the image.
 
-Selecting this option will output graphical plots to a `figures` directory that will be created within the working directory of the data being analyzed. These plots serve to allow the user to quickly verify their selections made during analysis. 
+##### Dots
+These buttons adjust the sensitivity for detecting “dots” in the image—the fainter, smaller dots, as opposed to the much brighter and larger “blobs.” The user can also press the up and down arrow keys on the keyboard to make these adjustments.
 
-#### Blob Size
+##### Blobs
+These buttons adjust the sensitivity for detecting “blobs” in the image. The user can also press the right and left arrow keys on the keyboard to make these adjustments.
 
-This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the "dots"-the dimmer particles of interest in the image-are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots. 
-
-#### Dot Size
-
-Similar to the blob size option, this sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer pixels within a brighter dot's region will not be recognized as dots, and will therefore be removed. 
-
-#### Thresholds
-
-There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes in the startup GUI correspond to the following variables in `config.py` (displayed from left to right in the GUI):
-
-1. LOWER_DOT_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the dots. The default is 1.5, which corresponds to 1.5 standard deviations above the mean. Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
-2. UPPER_DOT_THRESH_SCALE: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
-3. LOWER_BLOB_THRESH_SCALE: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of UPPER_DOT_THRESH_SCALE. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
-
-#### Skips Allowed
-
-This sets the number of consecutive images that are allowed to be skipped in a lifetime calculation. This can be useful for dimmer dots where an image or two in a series are relatively out of focus, resulting in an unwanted non-detection for those frames. By increasing the number of skips allowed, these particles will be retained as long as they are back in focus and bright enough for detection in subsequent frames. 
-
-#### Start Image
-
-This option sets the first image to be considered in a lifetime calculation. The default is the first image in the folder (as the images *must be numbered sequentially*).
-
-#### Remove Edge Frames
-
-This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis. 
-
-The **Edit** button changes the left button bar view to display some manual threshold adjustment options:
+##### Edit
+This button changes the left button bar view to display some manual threshold adjustment options:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
 
 *(Once the thresholds are changed by entering new numbers into the text boxes, the* **Done** *button saves the settings and returns the left button bar to the previous button configuration.)*
+
+### Other Configuration Options
+
+Several configuration options are available for both the density and lifetime programs, as described below. All of these have default values that can be modified in the `config.py` file. For more information, see the publication listed in the Citations section at the bottom of this readme file.
 
 ### The Threshold Adjustment Window
 Clicking the **Done** button, or pressing the return (or enter) key on the keyboard, from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
