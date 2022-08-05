@@ -95,7 +95,7 @@ This dictates whether edge frames should be removed from a lifetime calculation.
 Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
 ## The Threshold Adjustment Window
-This window features several buttons on the left side of the window:
+This window features several buttons on the left sidebar:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
 From top to bottom, these groups of buttons perform the following actions:
