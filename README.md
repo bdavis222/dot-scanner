@@ -167,4 +167,4 @@ To report a bug, visit the [issues page](https://github.com/bdavis222/dotscanner
 
 When using this program on data used in published works, please cite:
 
-Allen, H., & Davis, B., Patel, J., & Gu, Y. 2022 (in prep.)
+Allen, H., Davis, B., Patel, J., & Gu, Y. 2022 (in prep.)
