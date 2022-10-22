@@ -16,10 +16,7 @@ def cleanDotCoords(data, dotCoords, blobCoords, blobSize, dotSize):
 	removeDimmerOverlappingDots(dotCoords, data, dotSize)
 
 def coordExists(y, x, coordMap):
-	if y in coordMap:
-		if x in coordMap[y]:
-			return True
-	return False
+	return y in coordMap and x in coordMap[y]
 
 def coordExistsWithinRadius(y, x, coordMap, radius):
 	yRange = range(y - radius, y + radius + 1)
