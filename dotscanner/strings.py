@@ -7,11 +7,13 @@ else:
 
 configurationsWindowTitle = "Dot Scanner - Configurations"
 
+defaultSettingsWindowTitle = "Dot Scanner - Default Settings"
+
 densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
 lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
 polygon vertices (x, y)\n"
 
-fileNumberingException = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
+fileNumberingWarning = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes."
 
 filepathException = "Filepath must point to a file or directory."
@@ -20,7 +22,10 @@ invalidPolygonWarning = "\nNo valid, enclosed polygon drawn. No measurements mad
 
 invalidThresholdEdit = "\nInvalid input. Previous threshold values will be retained."
 
-lowerBlobThreshScaleWarning = "\nWARNING: lower blob threshold scale set below 1.0, which means \
+lifetimeSingleFileWarning = "WARNING: Lifetimes must be calculated using a directory of images, \
+not a single image."
+
+lowerBlobThreshScaleWarning = "\nWARNING: Lower blob threshold scale set below 1.0, which means \
 blobs can be dimmer than the brightest dots, which shouldn't happen. Setting to 1.0."
 
 noFilesException = "No files selected. Check the values of 'FILEPATH' and 'START_IMAGE' in the \
@@ -31,7 +36,7 @@ programNameException = "Invalid program name selected in configurations file."
 regionSelectorWindowTitle = "Dot Scanner - Region Selection (click the plot to add polygon \
 vertices)"
 
-startImageDirectoryException = "WARNING: Start image must be in the same directory as the other \
+startImageDirectoryWarning = "WARNING: Start image must be in the same directory as the other \
 lifetime files."
 
 thresholdAdjusterWindowTitle = "Dot Scanner - Threshold Adjustment"
@@ -43,10 +48,10 @@ unitsInconsistentException = f"Inconsistent units with other measurements alread
 in configurations file. Otherwise, set the scale to the scale that was selected for the previous \
 measurements."
 
-upperDotThreshScaleWarning = "\nWARNING: upper dot threshold scale set below lower dot threshold \
+upperDotThreshScaleWarning = "\nWARNING: Upper dot threshold scale set below lower dot threshold \
 scale. Previous threshold values will be retained."
 
-windowSizeWarning = "\nWARNING: the current window height is smaller than 550 pixels, potentially \
+windowSizeWarning = "\nWARNING: The current window height is smaller than 550 pixels, potentially \
 resulting in some buttons not being visible. However, the Return key will still allow confirmation \
 in each window, and the Escape key will allow for skipping files, when the option is available."
 
