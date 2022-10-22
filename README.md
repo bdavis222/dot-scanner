@@ -3,7 +3,7 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?business=UA5NL9MJSFMVY)
 
-Dot Scanner is an application designed to simplify analysis of microscope imaging data. This software is *especially* useful for noisy image data, where manual "by-eye" analysis is unreliable.
+Dot Scanner is designed to simplify analysis of microscope imaging data. The program runs entirely within a window-based graphical user interface, so as to not require any programming knowledge from the user in order to complete their image analysis. This software is *especially* useful for noisy image data, where manual "by-eye" analysis is unreliable.
 
 ## Getting Started
 
