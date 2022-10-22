@@ -2,8 +2,8 @@ import dotscanner.config as cfg
 import dotscanner.files as files
 import dotscanner.dataprocessing as dp
 import dotscanner.strings as strings
-import dotscanner.ui as ui
-from dotscanner.ui import MicroscopeImage
+import dotscanner.ui.window as ui
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
 import matplotlib.pyplot as pl
 import numpy as np
 import os
