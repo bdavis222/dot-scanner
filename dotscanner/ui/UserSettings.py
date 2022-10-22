@@ -242,6 +242,3 @@ class UserSettings:
 			self.labelWarning.configure(text = strings.lifetimeSingleFileWarning)
 		else:
 			self.labelWarning.configure(text = "")
-	
-	def editDefaults(self):
-		UserDefaultSettings()
