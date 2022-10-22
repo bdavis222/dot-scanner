@@ -7,8 +7,6 @@ else:
 
 configurationsWindowTitle = "Dot Scanner - Configurations"
 
-defaultSettingsWindowTitle = "Dot Scanner - Default Settings"
-
 densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
 lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
 polygon vertices (x, y)\n"
