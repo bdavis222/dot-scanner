@@ -2,11 +2,14 @@ import dotscanner.density as density
 import dotscanner.files as files
 import dotscanner.lifetime as lifetime
 import dotscanner.strings as strings
-from dotscanner.ui import MicroscopeImage, RegionSelector, ThresholdAdjuster, UserSettings
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
+from dotscanner.ui.RegionSelector import RegionSelector
+from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
+from dotscanner.ui.UserSettings import UserSettings
 
 def main():
 	while True:
-		userSettings = UserSettings()	
+		userSettings = UserSettings()
 		directory, filenames = files.getDirectoryAndFilenames(userSettings)
 		if userSettings.program == "density":
 			getDensityData(directory, filenames, userSettings)
