@@ -1,7 +1,7 @@
 # Default selections run by the software (can be changed by the user):
 
 FILEPATH = ""
-# Path to the file or directory of files that should be used
+# Path to the file or directory of files that should be used. The default value is an empty string: ""
 
 PROGRAM = "density"
 # Whether a "density" program or "lifetime" program should be run
