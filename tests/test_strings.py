@@ -49,11 +49,11 @@ class TestStrings(unittest.TestCase):
         
         self.assertEqual(
             output,
-            "# Polygon vertices (x, y): (1, 1), (1, 10), (10, 10), (10, 1)\n\
+"# Polygon vertices (x, y): (1, 1), (1, 10), (10, 10), (10, 1)\n\
 # Threshold scales: 1.5, 5.0, 2.0\n\
-# Dot size: 2 | Blob size: 5 | Remove edge frames: \
-True | Skips allowed: 1\n\
-#\n# x | y | lifetime | starting image\n"
+# Dot size: 2 | Blob size: 5 | Remove edge frames: True | Skips allowed: 1\n\
+#\n\
+# x | y | lifetime | starting image\n"
         )
 
 if __name__ == '__main__':
