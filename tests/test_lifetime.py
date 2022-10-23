@@ -1,16 +1,23 @@
 import dotscanner.lifetime as lifetime
 import unittest
-
-class UserSettingsMock:
-    def __init__(self, skipsAllowed):
-        self.skipsAllowed = skipsAllowed
+from tests.FakeUserSettings import FakeUserSettings
 
 class TestLifetime(unittest.TestCase):
-    def test_checkEnoughFramesForLifetimes(self):
+    def test_checkEnoughFramesForLifetimes_raisesException(self):
         filenames = ["file1.tif", "file2.tif", "file3.tif", "file4.tif", "file5.tif"]
-        userSettings = UserSettingsMock(skipsAllowed=2)
+        fakeUserSettings = FakeUserSettings(skipsAllowed=2)
+        
         with self.assertRaises(Exception):
-            lifetime.checkEnoughFramesForLifetimes(filenames, userSettings)
+            lifetime.checkEnoughFramesForLifetimes(filenames, fakeUserSettings)
+    
+    def test_checkEnoughFramesForLifetimes_DoesNotRaiseException(self):
+        filenames = ["file1.tif", "file2.tif", "file3.tif", "file4.tif", "file5.tif"]
+        fakeUserSettings = FakeUserSettings(skipsAllowed=1)
+        
+        try:
+            lifetime.checkEnoughFramesForLifetimes(filenames, fakeUserSettings)
+        except Exception:
+            self.fail("checkEnoughFramesForLifetimes() raised Exception unexpectedly!")
     
     def test_getEdgeFrameNumbers(self):
         testImageNumberToCoordMap = {
@@ -23,7 +30,9 @@ class TestLifetime(unittest.TestCase):
             6: {11: {2, 0, 4}, 21: {5, 2, 7}},
             7: {11: {3}, 21: {7}}
         }
+        
         edgeFrameNumbers = lifetime.getEdgeFrameNumbers(testImageNumberToCoordMap, 0)
+        
         self.assertIn(0, edgeFrameNumbers)
         self.assertIn(7, edgeFrameNumbers)
         self.assertNotIn(1, edgeFrameNumbers)
@@ -34,6 +43,7 @@ class TestLifetime(unittest.TestCase):
         self.assertNotIn(6, edgeFrameNumbers)
         
         edgeFrameNumbers = lifetime.getEdgeFrameNumbers(testImageNumberToCoordMap, 2)
+        
         self.assertIn(0, edgeFrameNumbers)
         self.assertIn(1, edgeFrameNumbers)
         self.assertIn(2, edgeFrameNumbers)
