@@ -67,7 +67,6 @@ def getMostCommonFileExtension(directory):
 	return "." + mostCommonExtension
 
 def getRightEdgeOfTrailingNumber(string):
-	index = len(string)
 	for index, char in enumerate(reversed(string)):
 		if char.isdigit():
 			return len(string) - index - 1
