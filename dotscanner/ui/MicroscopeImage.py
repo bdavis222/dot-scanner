@@ -5,8 +5,6 @@ import dotscanner.ui.window as ui
 
 class MicroscopeImage:
 	def __init__(self, directory, filename, userSettings):
-		ui.setupWindow()
-		
 		self.memoizedCoords = {}
 		self.polygon = [] # Vertices of the region selected for analysis (mutated by other classes)
 		self.skipped = False # Whether the image should be skipped (mutated by other classes)
