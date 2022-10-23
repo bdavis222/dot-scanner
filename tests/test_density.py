@@ -5,10 +5,12 @@ import unittest
 
 class TestDensity(unittest.TestCase):
     data = np.zeros([10, 10])
+    
     points = []
     for y in range(10):
         for x in range(10):
             points.append((y, x))
+    
     polygonVertices = [
         [1, 1],
         [6, 1],
@@ -16,6 +18,7 @@ class TestDensity(unittest.TestCase):
         [1, 3],
         [1, 1]
     ]
+    
     coordsInPolygon = dp.getCoordsInPolygon(data, points, polygonVertices)
     
     def test_getCoordsInPolygon(self):
@@ -44,6 +47,7 @@ class TestDensity(unittest.TestCase):
         
         dotTotal, blobTotal, _, _ = density.getTotalsAndCoords(self.coordsInPolygon, dotCoords, 
                                                                 blobCoords, blobSize=5)
+        
         self.assertEqual(dotTotal, 1)
         self.assertEqual(blobTotal, 4)
         
@@ -58,6 +62,7 @@ class TestDensity(unittest.TestCase):
         
         dotTotal, blobTotal, _, _ = density.getTotalsAndCoords(self.coordsInPolygon, dotCoords, 
                                                                 blobCoords, blobSize=5)
+        
         self.assertEqual(dotTotal, 2)
         self.assertEqual(blobTotal, 5)
 
