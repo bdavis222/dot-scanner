@@ -3,10 +3,7 @@ import dotscanner.strings as strings
 import os
 
 def fixDirectory(string):
-	if string.endswith("/"):
-		return string
-	else:
-		return string + "/"
+	return string if string.endswith("/") else string + "/"
 
 def getDirectoryAndFilenames(userSettings):
 	filepath = userSettings.filepath
