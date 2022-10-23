@@ -3,14 +3,18 @@ import unittest
 import mock
 from tests.FakeUserSettings import FakeUserSettings
 
-testFilenames = ["file03.png", "file02.png", "file01.png", "file05.png", "file04.png", "file11.png", 
+testFilenames = ["file03.png", "file02.png", "file01.png", "file05.PNG", "file04.png", "file11.png", 
                 "readme.md", "test", "directory2/"]
 
 class TestFiles(unittest.TestCase):
     def test_fixDirectory(self):
         string = "test"
         
-        self.assertTrue(files.fixDirectory(string).endswith("/"))
+        self.assertEqual(files.fixDirectory(string), "test/")
+        
+        string2 = "testString/"
+        
+        self.assertEqual(files.fixDirectory(string2), "testString/")
     
     def test_getTrailingNumber(self):
         self.assertEqual(files.getTrailingNumber("test123.file"), 123)
@@ -34,7 +38,7 @@ class TestFiles(unittest.TestCase):
         self.assertIn("file03.png", unsortedFilenames)
         self.assertIn("file02.png", unsortedFilenames)
         self.assertIn("file01.png", unsortedFilenames)
-        self.assertIn("file05.png", unsortedFilenames)
+        self.assertIn("file05.PNG", unsortedFilenames)
         self.assertIn("file04.png", unsortedFilenames)
         self.assertIn("file11.png", unsortedFilenames)
         self.assertNotIn("readme.md", unsortedFilenames)
@@ -46,7 +50,7 @@ class TestFiles(unittest.TestCase):
         self.assertIn("readme.md", unsortedFilenames2)
         self.assertNotIn("file02.png", unsortedFilenames2)
         self.assertNotIn("file01.png", unsortedFilenames2)
-        self.assertNotIn("file05.png", unsortedFilenames2)
+        self.assertNotIn("file05.PNG", unsortedFilenames2)
         self.assertNotIn("file04.png", unsortedFilenames2)
         self.assertNotIn("file11.png", unsortedFilenames2)
         self.assertNotIn("file03.png", unsortedFilenames2)
@@ -61,14 +65,14 @@ class TestFiles(unittest.TestCase):
         
         self.assertEqual(
             sortedFilenames, 
-            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.png", "file11.png"]
+            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
         )
         
         sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png")
         
         self.assertEqual(
             sortedFilenames, 
-            ["file04.png", "file05.png", "file11.png"]
+            ["file04.png", "file05.PNG", "file11.png"]
         )
     
     @mock.patch("dotscanner.files.os.path.basename")
@@ -99,7 +103,7 @@ class TestFiles(unittest.TestCase):
         self.assertEqual(directory, fakeUserSettings.filepath)
         self.assertEqual(
             filenames, 
-            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.png", "file11.png"]
+            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
         )
 
 if __name__ == '__main__':
