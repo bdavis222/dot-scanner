@@ -9,7 +9,9 @@ class TestFunctions(unittest.TestCase):
 			3: {1},
 			4: {8, 3}
 		}
+		
 		dp.addCoordinate(2, 5, testMap)
+		
 		self.assertIn(2, testMap)
 		self.assertIn(5, testMap[2])
 		
@@ -19,6 +21,7 @@ class TestFunctions(unittest.TestCase):
 			3: {1},
 			4: {8, 3}
 		}
+		
 		self.assertTrue(dp.coordExists(4, 3, testMap))
 		self.assertFalse(dp.coordExists(4, 5, testMap))
 	
@@ -28,9 +31,9 @@ class TestFunctions(unittest.TestCase):
 			3: {1},
 			4: {8, 3}
 		}
+		
 		self.assertTrue(dp.coordExistsWithinRadius(8, 13, coordMap=testMap, radius=5))
 		self.assertFalse(dp.coordExistsWithinRadius(8, 14, coordMap=testMap, radius=5))
-		
 		self.assertTrue(dp.coordExistsWithinRadius(6, 1, coordMap=testMap, radius=2))
 		self.assertFalse(dp.coordExistsWithinRadius(6, 0, coordMap=testMap, radius=2))
 	
@@ -43,6 +46,7 @@ class TestFunctions(unittest.TestCase):
 			3: {1},
 			4: {8, 3}
 		}
+		
 		self.assertIn([5, 1], dp.getCoordPairsFromCoordMap(testMap)) # [x, y], not [y, x]
 	
 	def test_getSortedCoordPairsFromCoordMap(self):
@@ -59,7 +63,9 @@ class TestFunctions(unittest.TestCase):
 			[0, 0, 0, 7, 0, 0, 0, 0, 1],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0]
 		]
+		
 		sortedCoordPairs = dp.getSortedCoordPairsFromCoordMap(testMap, data)
+		
 		self.assertIn([5, 1], sortedCoordPairs) # [x, y], not [y, x]
 		self.assertEqual([1, 3], sortedCoordPairs[0])
 	
@@ -69,7 +75,9 @@ class TestFunctions(unittest.TestCase):
 			3: {1},
 			4: {8, 3}
 		}
+		
 		neighbors = dp.getNeighborCoords(2, 4, testMap, dotSize=2)
+		
 		self.assertNotIn((1, 1), neighbors)
 		self.assertIn((1, 2), neighbors)
 		self.assertIn((1, 5), neighbors)
@@ -87,7 +95,9 @@ class TestFunctions(unittest.TestCase):
 			[40, 41, 42, 43, 44, 45],
 			[50, 51, 52, 53, 54, 55]
 		]
+		
 		neighborSums = dp.getNeighborData(neighborCoords, data)
+		
 		self.assertIn(12, neighborSums)
 		self.assertIn(15, neighborSums)
 		self.assertIn(43, neighborSums)
@@ -101,7 +111,9 @@ class TestFunctions(unittest.TestCase):
 			[11, 2],
 			[33, 7],
 		]
+		
 		yList, xList = dp.getYAndXFromCoordList(coordList)
+		
 		self.assertEqual(yList, [1, 1, 3, 11, 33])
 		self.assertEqual(xList, [2, 5, 7, 2, 7])
 	
@@ -113,7 +125,9 @@ class TestFunctions(unittest.TestCase):
 		}
 		neighborCoords = [(1, 2), (1, 5), (4, 3)]
 		indexOfBrightestSum = 1
+		
 		dp.removeAllButBrightestCoords(neighborCoords, indexOfBrightestSum, testMap)
+		
 		self.assertNotIn(2, testMap[1])
 		self.assertIn(5, testMap[1])
 		self.assertNotIn(3, testMap[4])
@@ -124,9 +138,13 @@ class TestFunctions(unittest.TestCase):
 			3: {1},
 			4: {8, 3}
 		}
+		
 		dp.removeCoordinate(3, 1, testMap)
+		
 		self.assertNotIn(3, testMap)
+		
 		dp.removeCoordinate(1, 5, testMap)
+		
 		self.assertNotIn(5, testMap[1])
 		self.assertIn(1, testMap[1])
 		self.assertIn(2, testMap[1])
@@ -147,6 +165,7 @@ class TestFunctions(unittest.TestCase):
 		]
 		
 		dp.removeDimmerOverlappingDots(dotCoords=testMap, data=data, dotSize=2)
+		
 		self.assertNotIn(1, testMap[1])
 		self.assertNotIn(3, testMap)
 		self.assertNotIn(5, testMap[4])
@@ -165,6 +184,7 @@ class TestFunctions(unittest.TestCase):
 		}
 		
 		dp.removeDotsNearBlobs(dotCoords, blobCoords, blobSize=5)
+		
 		self.assertIn(1, dotCoords[1])
 		self.assertIn(2, dotCoords[1])
 		self.assertNotIn(5, dotCoords[1])
@@ -181,6 +201,7 @@ class TestFunctions(unittest.TestCase):
 			[3, 3, 0, 3, 2, 1],
 			[0, 0, 3, 3, 3, 3]
 		])
+		
 		self.assertEqual(dp.squareSum(data, y=1, x=1, pixelRadius=1), 15)
 		self.assertEqual(dp.squareSum(data, y=1, x=1, pixelRadius=0), 1)
 		self.assertEqual(dp.squareSum(data, y=2, x=2, pixelRadius=2), 51)
