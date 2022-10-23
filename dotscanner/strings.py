@@ -11,6 +11,9 @@ densityOutputFileHeader = f"# filename | density (per sq {UNITS}) | error | \
 lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
 polygon vertices (x, y)\n"
 
+fileNumberingException = "Filenames must contain sequentially-ordered numbers to calculate \
+lifetimes."
+
 fileNumberingWarning = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes."
 
@@ -19,6 +22,9 @@ filepathException = "Filepath must point to a file or directory."
 invalidPolygonWarning = "\nNo valid, enclosed polygon drawn. No measurements made."
 
 invalidThresholdEdit = "\nInvalid input. Previous threshold values will be retained."
+
+lifetimeSingleFileException = "Lifetimes must be calculated using a directory of images, \
+not a single image."
 
 lifetimeSingleFileWarning = "WARNING: Lifetimes must be calculated using a directory of images, \
 not a single image."
