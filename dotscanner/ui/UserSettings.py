@@ -8,7 +8,6 @@ from tkinter import filedialog
 
 class UserSettings:
 	def __init__(self):
-		ui.setupWindow()
 		self.window = ui.createConfigurationsWindow(strings.configurationsWindowTitle)
 
 		self.filepath = cfg.FILEPATH
