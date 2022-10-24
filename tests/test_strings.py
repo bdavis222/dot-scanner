@@ -1,16 +1,17 @@
-import dotscanner.strings as strings
 import dotscanner.config as cfg
+import dotscanner.strings as strings
+from tests.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
-from tests.FakeUserSettings import FakeUserSettings
 
 class TestStrings(unittest.TestCase):
+    @mock.patch("dotscanner.config.DENSITY_OUTPUT_FILENAME", "density.txt")
     def test_alreadyMeasuredNotification(self):
         output = strings.alreadyMeasuredNotification(filename="test.png")
         
         self.assertEqual(
             output, 
-            f"\nFile test.png already measured in {cfg.DENSITY_OUTPUT_FILENAME} file. Skipping."
+            f"\nFile test.png already measured in density.txt file. Skipping."
         )
     
     def test_densityOutput(self):
@@ -56,5 +57,5 @@ class TestStrings(unittest.TestCase):
 # x | y | lifetime | starting image\n"
         )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
