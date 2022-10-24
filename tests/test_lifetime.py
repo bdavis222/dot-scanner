@@ -1,6 +1,6 @@
 import dotscanner.lifetime as lifetime
-import unittest
 from tests.FakeUserSettings import FakeUserSettings
+import unittest
 
 class TestLifetime(unittest.TestCase):
     def test_checkEnoughFramesForLifetimes_raisesException(self):
