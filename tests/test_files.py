@@ -1,7 +1,7 @@
 import dotscanner.files as files
-import unittest
-import mock
 from tests.FakeUserSettings import FakeUserSettings
+import mock
+import unittest
 
 testFilenames = ["file03.png", "file02.png", "file01.png", "file05.PNG", "file04.png", "file11.png", 
                 "readme.md", "test", "directory2/"]
