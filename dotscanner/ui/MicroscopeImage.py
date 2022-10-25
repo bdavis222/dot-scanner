@@ -1,7 +1,7 @@
-import dotscanner.config as cfg
 import dotscanner.dataprocessing as dp
 import dotscanner.strings as strings
 import dotscanner.ui.window as ui
+import settings.config as cfg
 
 class MicroscopeImage:
 	def __init__(self, directory, filename, userSettings):
