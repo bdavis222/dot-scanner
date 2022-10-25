@@ -1,7 +1,7 @@
-import dotscanner.config as cfg
 import dotscanner.files as files
 import dotscanner.strings as strings
 import dotscanner.ui.window as ui
+import settings.config as cfg
 import os
 import tkinter as tk
 from tkinter import filedialog
