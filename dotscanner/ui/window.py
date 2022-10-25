@@ -1,4 +1,4 @@
-import dotscanner.config as cfg
+import settings.config as cfg
 import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as pl
