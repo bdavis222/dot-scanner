@@ -19,7 +19,7 @@ The requirements to run this software are:
 To install this software and its dependencies:
 
 1. Download this project
-2. Navigate to the top-level directory of the downloaded project in a terminal window
+2. Navigate to the top-level folder of the downloaded project in a terminal window
 3. Run the following command:
 
 ```
@@ -56,7 +56,7 @@ If the **File** or **Folder** buttons are clicked, another window opens, allowin
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the configurations file, only selecting values that are explicitly allowed, as explained in the comments within the file.
 
-The software will run as expected on any directory where the most common file extension within the directory belongs to the images wanting to be analyzed. By default, the entire directory will be scanned, and the most common file type found within the directory will be set as the file type to analyze. If the user is experiencing issues with the wrong file type being selected, it is recommended that they reorganize their data into directories containing only their images to be analyzed. 
+The software will run as expected on any folder where the most common file extension within the folder belongs to the images wanting to be analyzed. By default, the entire folder will be scanned, and the most common file type found within the folder will be set as the file type to analyze. If the user is experiencing issues with the wrong file type being selected, it is recommended that they reorganize their data into folders containing only their images to be analyzed. 
 
 If a folder containing several images is selected, the user has the option to change the default program from **Density** to **Lifetime**. *(Note that trying to run a lifetime program on a single image will not be allowed by the software.)* This selection is made through the **Program** dropdown menu:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/5.png)
