@@ -39,7 +39,7 @@ class TestMicroscopeImage(unittest.TestCase):
 		self.assertIn(1, microscopeImage.dotCoords[3])
 		self.assertEqual(microscopeImage.blobCoords, {})
 	
-	@mock.patch('dotscanner.config.THRESHOLD_DELTA', 0.1)
+	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	def test_decreaseLowerDotThreshScale(self):
 		microscopeImage = self.getMicroscopeImage()
 		
@@ -51,7 +51,7 @@ class TestMicroscopeImage(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.lowerDotThreshScale, 1.3)
 	
-	@mock.patch('dotscanner.config.THRESHOLD_DELTA', 0.1)
+	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	def test_increaseLowerDotThreshScale(self):
 		microscopeImage = self.getMicroscopeImage()
 		
@@ -63,7 +63,7 @@ class TestMicroscopeImage(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.lowerDotThreshScale, 1.7)
 	
-	@mock.patch('dotscanner.config.THRESHOLD_DELTA', 0.1)
+	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	def test_decreaseUpperDotThreshScale(self):
 		microscopeImage = self.getMicroscopeImage()
 		
@@ -75,7 +75,7 @@ class TestMicroscopeImage(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.upperDotThreshScale, 4.8)
 	
-	@mock.patch('dotscanner.config.THRESHOLD_DELTA', 0.1)
+	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	def test_increaseUpperDotThreshScale(self):
 		microscopeImage = self.getMicroscopeImage()
 		
