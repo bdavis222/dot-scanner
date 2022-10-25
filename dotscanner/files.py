@@ -1,5 +1,5 @@
-import dotscanner.config as cfg
 import dotscanner.strings as strings
+import settings.config as cfg
 import os
 
 def fixDirectory(string):
