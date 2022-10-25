@@ -1,7 +1,7 @@
-import dotscanner.config as cfg
 import dotscanner.dataprocessing as dp
 import dotscanner.files as files
 import dotscanner.strings as strings
+import settings.config as cfg
 import matplotlib.pyplot as pl
 import numpy as np
 import os
