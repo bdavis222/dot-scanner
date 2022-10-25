@@ -39,7 +39,7 @@ pip install numpy
 
 ### Running the Software
 
-To launch the main graphical user interface (GUI), navigate to the top level of the project's directory structure and run the following command:
+To launch the main graphical user interface (GUI), navigate to the top level of the project's folder structure and run the following command:
 
 ```
 python -m dotscanner
@@ -151,7 +151,7 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 
 ### Testing
 
-Unit tests for this software were written for use with [Python's built-in unittest framework](https://docs.python.org/3/library/unittest.html), and are stored in the `tests` directory. To run tests, navigate to the top level of the project's directory structure and run the following command:
+Unit tests for this software were written for use with [Python's built-in unittest framework](https://docs.python.org/3/library/unittest.html), and are stored in the `tests` folder. To run tests, navigate to the top level of the project's folder structure and run the following command:
 
 ```
 python -m unittest
