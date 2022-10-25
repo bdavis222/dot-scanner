@@ -1,4 +1,4 @@
-import dotscanner.config as cfg
+import settings.config as cfg
 
 if cfg.SCALE is None:
 	UNITS = "pix"
