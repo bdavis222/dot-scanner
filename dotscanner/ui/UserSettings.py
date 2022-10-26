@@ -1,6 +1,7 @@
 import dotscanner.files as files
 import dotscanner.strings as strings
 import dotscanner.ui.window as ui
+from dotscanner.ui.DefaultUserSettingsEditor import DefaultUserSettingsEditor
 import settings.config as cfg
 import os
 import tkinter as tk
@@ -8,14 +9,9 @@ from tkinter import filedialog
 
 class UserSettings:
 	def __init__(self):
-		self.window = ui.createConfigurationsWindow(strings.configurationsWindowTitle)
+		self.window = ui.createConfigurationsWindow()
 
-		self.filepath = cfg.FILEPATH
-		if self.filepath in ["", " ", "/"]:
-			self.filepathSet = False
-		else:
-			self.filepathSet = True
-		
+		self.filepath = cfg.FILEPATH		
 		self.startImage = ""
 		self.program = cfg.PROGRAM
 		self.blobSize = round(cfg.BLOB_SIZE, 0)
@@ -29,10 +25,16 @@ class UserSettings:
 		self.removeEdgeFrames = cfg.REMOVE_EDGE_FRAMES
 		self.skipsAllowed = round(cfg.SKIPS_ALLOWED, 0)
 		
+		self.filepathFrame = tk.Frame(self.window)
+		
+		self.labelFilepath = tk.Label(self.window, text="Filepath:")
 		self.labelSelectedPath = tk.Label(self.window, text="Select a file or folder for analysis", 
 											fg="red", bg="white")
-		if self.filepathSet:
+		if self.filepath not in ["", " ", "/"]:
 			self.labelSelectedPath.configure(text=self.filepath, bg="white", fg="black")
+		
+		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
+		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
 		
 		self.navigation = tk.Frame(self.window)
 		
@@ -115,16 +117,23 @@ class UserSettings:
 		self.entrySkipsAllowed.pack(in_=self.lifetimeOptions, side=tk.LEFT)
 		self.checkboxRemoveEdge.pack(in_=self.lifetimeOptions, side=tk.LEFT)
 		
+		self.bottomButtons = tk.Frame(self.window)
+		
+		self.buttonEditDefaults = tk.Button(self.window, text="Edit defaults...", 
+											command=self.editDefaults)
 		self.buttonNext = tk.Button(self.window, text="Next", command=self.done, fg="blue", 
 									font=tk.font.Font(weight="bold"))
 		
+		self.buttonEditDefaults.pack(in_=self.bottomButtons, side=tk.LEFT)
+		self.buttonNext.pack(in_=self.bottomButtons, side=tk.LEFT)
+		
 		self.labelWarning = tk.Label(self.window, text="", fg="red")
 				
-		self.labelSelectedPath.pack()
+		self.filepathFrame.pack()
 		self.navigation.pack()
 		self.entries.pack()
 		self.lifetimeOptions.pack()
-		self.buttonNext.pack()
+		self.bottomButtons.pack()
 		self.labelWarning.pack()
 		
 		self.toggleExtraOptions(click=self.program.capitalize())
@@ -137,7 +146,7 @@ class UserSettings:
 	def browseFiles(self):
 		chosenFile = filedialog.askopenfilename(initialdir=self.filepath, 
 												title="Select a file to analyze")
-		if chosenFile != "":
+		if chosenFile not in ["", " ", "/"]:
 			self.filepath = chosenFile
 			displayedFilename = chosenFile
 			if len(chosenFile) > 50:
@@ -149,7 +158,7 @@ class UserSettings:
 	def browseFolders(self):
 		chosenFolder = filedialog.askdirectory(initialdir=self.filepath, 
 												title="Select a folder with images to analyze")
-		if chosenFolder != "":
+		if chosenFolder not in ["", " ", "/"]:
 			self.filepath = chosenFolder
 			displayedFolder = chosenFolder
 			if len(chosenFolder) > 50:
@@ -188,7 +197,9 @@ class UserSettings:
 		self.window.update()
 		self.window.focus_force()
 	
-	def done(self):        
+	def done(self):
+		if self.filepath in ["", " ", "/"]:
+			return
 		self.dotSize = int(self.entryDotSize.get())
 		self.blobSize = int(self.entryBlobSize.get())
 		self.lowerDotThresh = round(float(self.entryThreshold1.get()), 1)
@@ -204,6 +215,9 @@ class UserSettings:
 	
 	def doneWithReturnKey(self, event):        
 		self.done()
+	
+	def editDefaults(self):
+		DefaultUserSettingsEditor()
 
 	def setRemoveEdge(self):
 		if self.checkboxRemoveEdgeVar.get():
@@ -222,17 +236,17 @@ class UserSettings:
 	def toggleExtraOptions(self, click):
 		if click == "Lifetime":
 			self.program = "lifetime"
-			self.buttonNext.pack_forget()
+			self.bottomButtons.pack_forget()
 			self.labelWarning.pack_forget()
 			self.lifetimeOptions.pack()
-			self.buttonNext.pack()
+			self.bottomButtons.pack()
 			self.labelWarning.pack()
 		else:
 			self.program = "density"
 			self.lifetimeOptions.pack_forget()
-			self.buttonNext.pack_forget()
+			self.bottomButtons.pack_forget()
 			self.labelWarning.pack_forget()
-			self.buttonNext.pack()
+			self.bottomButtons.pack()
 			self.labelWarning.pack()
 		self.checkForWarning()
 
