@@ -16,7 +16,7 @@ setup(
     author="Holly Allen and Brian Davis",  # Optional
     author_email="holly.allen@colorado.edu",  # Optional
     classifiers=[  # Optional
-        "Intended Audience :: Scientists",
+        "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Operating System :: Unix",
