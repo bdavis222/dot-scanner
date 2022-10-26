@@ -137,7 +137,7 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 
 ## Development
 
-To contribute, download or clone the project. During development, the following command can be used to run a local version of the software (e.g., for UI testing):
+To contribute, download or clone the project. From the top level of the project's folder structure, one can use the following command to run a local version of the software (e.g., for UI testing):
 
 ```
 python -m dotscanner
