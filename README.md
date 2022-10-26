@@ -128,8 +128,14 @@ Brian Davis
 
 ## Release History
 
+* 1.2.7
+     * Bug fixes
+* 1.2.0
+     * Added options for editing configurations file
+* 1.1.0
+     * Migrated the remaining portions of the app that were terminal-based to GUI windows
 * 1.0.0
-    * Initial Release
+     * Initial Release
 
 ## License
 
