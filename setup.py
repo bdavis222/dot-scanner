@@ -19,6 +19,9 @@ setup(
         "Intended Audience :: Scientists",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
+        "Operating System :: Unix",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows"
     ],
     package_dir={"": "dotscanner"},  # Optional
     packages=find_packages(where="dotscanner"),  # Required
