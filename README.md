@@ -16,36 +16,21 @@ The requirements to run this software are:
 
 ### Installation
 
-To install this software and its dependencies:
-
-1. Download this project
-2. Navigate to the top-level folder of the downloaded project in a terminal window
-3. Run the following command:
+To install this software and its dependencies run the following command:
 
 ```
-python setup.py install
-```
-
-*(Note that the* `python3` *command may be required instead of* `python` *for some Python installations.)*
-
-This should automate the dependency installation process. Alternatively, the [matplotlib](https://pypi.org/project/matplotlib/) and [numpy](https://pypi.org/project/numpy/) dependencies can be installed independently via the following commands:
-
-```
-pip install matplotlib
-pip install numpy
+pip install Dot-Scanner
 ```
 
 *(Note that the* `pip3` *command may be required instead of* `pip` *for some Python installations.)*
 
 ### Running the Software
 
-To launch the main graphical user interface (GUI), navigate to the top level of the project's folder structure and run the following command:
+To launch the main graphical user interface (GUI), run the following command:
 
 ```
-python -m dotscanner
+dotscanner
 ```
-
-*(Note that the* `python3` *command may be required instead of* `python` *for some Python installations.)*
 
 ## The Configurations Window
 The first window displayed in the GUI is the Configurations Window:
@@ -54,7 +39,7 @@ The first window displayed in the GUI is the Configurations Window:
 If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/4.png)
 
-If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by modifying the `FILEPATH` variable in the `config.py` file, located in the `settings` folder. Any of the variables in this configurations file can be modified to change the default behavior of the software. However, users should be *very careful* when changing values in the configurations file, only selecting values that are explicitly allowed, as explained in the comments within the file.
+If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by clicking the "Edit defaults" button. An entire configurations file is editable for other defaults as well. Any of the variables in this configurations file can be modified to change the default behavior of the software.
 
 The software will run as expected on any folder where the most common file extension within the folder belongs to the images wanting to be analyzed. By default, the entire folder will be scanned, and the most common file type found within the folder will be set as the file type to analyze. If the user is experiencing issues with the wrong file type being selected, it is recommended that they reorganize their data into folders containing only their images to be analyzed. 
 
@@ -76,7 +61,7 @@ This option sets the radius (or, more accurately, roughly the half width of a sq
 Similar to the blob size option, this sets the size of a "dot" in the dataset. Because dots should not overlap, the larger the dot size, the fewer dots will be detected, as dimmer pixels within a brighter dot's region will not be recognized as dots, and will therefore be removed.
 
 #### Thresholds
-There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes correspond to the following variables in `settings/config.py` (displayed from left to right in the Configurations Window):
+There are three thresholds that can be set to adjust the detection sensitivity for "dots" and "blobs" in a given image. The three editable text boxes correspond to the following variables (displayed from left to right in the Configurations Window):
 1. `LOWER_DOT_THRESH_SCALE`: Scaling for the lower threshold defining the brightness of the dots. The default is 1.5, which corresponds to 1.5 standard deviations above the mean of the data. Lower this value to increase the number of faint dots detected, or raise it to reduce the number.
 2. `UPPER_DOT_THRESH_SCALE`: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
 3. `LOWER_BLOB_THRESH_SCALE`: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of `UPPER_DOT_THRESH_SCALE`. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
@@ -91,6 +76,9 @@ This sets the number of consecutive images that are allowed to be skipped in a l
       
 #### Remove edge frames
 This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis.
+
+#### Edit defaults
+This opens a new window that allows the user to edit or reset the configuration file directly.
 
 Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
