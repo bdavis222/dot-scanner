@@ -1,3 +1,4 @@
+import dotscanner.strings as strings
 import settings.config as cfg
 import matplotlib
 matplotlib.use("TkAgg")
@@ -19,13 +20,22 @@ def createPlots(data, userSettings):
 								linewidths=cfg.BLOB_THICKNESS)
 	return figure, axes, dataPlot, dotScatter, blobScatter
 
-def createConfigurationsWindow(title):
+def createConfigurationsWindow():
 	window = tk.Tk()
-	window.title(title)
+	window.title(strings.configurationsWindowTitle)
 	width, _ = getWindowDimensions()
 	if width > 650:
 		width = 650
 	window.geometry(f"{width}x170+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
+	return window
+
+def createDefaultConfigurationsEditorWindow():
+	window = tk.Tk()
+	window.title(strings.defaultConfigurationsEditorWindowTitle)
+	width, _ = getWindowDimensions()
+	if width > 650:
+		width = 650
+	window.geometry(f"{width}x170+{cfg.WINDOW_X + 20}+{cfg.WINDOW_Y + 20}")
 	return window
 
 def createPlotWindow(title):
