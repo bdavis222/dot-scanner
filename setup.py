@@ -8,7 +8,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="Dot Scanner",  # Required
-    version="1.2.0",  # Required
+    version="1.2.5",  # Required
     description="A program designed for analysis of microscope imaging data",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
@@ -23,8 +23,9 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows"
     ],
-    package_dir={"": "dotscanner"},  # Optional
-    packages=find_packages(where="dotscanner"),  # Required
+    # packages=["dotscanner", "tests"],  # Required
+    packages=find_packages(),
+    py_modules=["dotscanner", "dotscanner.ui", "settings", "tests"],
     python_requires=">=3.7, <4",
     install_requires=["matplotlib", "numpy"],
     project_urls={  # Optional
@@ -34,7 +35,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "dotscanner=dotscanner.__main__:main"
+            "dotscanner = dotscanner.__main__:main"
         ]
     }
 )
