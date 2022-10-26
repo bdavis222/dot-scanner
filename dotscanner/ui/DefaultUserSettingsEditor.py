@@ -1,4 +1,4 @@
-import dotscanner.configmanagement as cm
+import settings.configmanagement as cm
 import dotscanner.ui.window as ui
 import settings.config as cfg
 import tkinter as tk
