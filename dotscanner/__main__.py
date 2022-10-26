@@ -1,4 +1,4 @@
-import dotscanner.configmanagement as cm
+import settings.configmanagement as cm
 cm.runChecks()
 import dotscanner.density as density
 import dotscanner.files as files
