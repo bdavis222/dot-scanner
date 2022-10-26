@@ -1,3 +1,5 @@
+import dotscanner.configmanagement as cm
+cm.runChecks()
 import dotscanner.density as density
 import dotscanner.files as files
 import dotscanner.lifetime as lifetime
@@ -7,7 +9,7 @@ from dotscanner.ui.RegionSelector import RegionSelector
 from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
 from dotscanner.ui.UserSettings import UserSettings
 
-def main():
+def main():	
 	while True:
 		userSettings = UserSettings()
 		directory, filenames = files.getDirectoryAndFilenames(userSettings)
