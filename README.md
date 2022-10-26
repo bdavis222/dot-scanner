@@ -131,9 +131,10 @@ Brian Davis
 * 1.2.7
      * Bug fixes
 * 1.2.0
-     * Added options for editing configurations file
+     * Added options for editing the configuration file
+     * Added startup processes to check the configuration file for errors
 * 1.1.0
-     * Migrated the remaining portions of the app that were terminal-based to GUI windows
+     * Migrated the remaining portions of the app from a terminal interface to a GUI
 * 1.0.0
      * Initial Release
 
