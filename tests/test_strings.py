@@ -4,7 +4,7 @@ from tests.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
 
-class TestStrings(unittest.TestCase):
+class TestStrings(unittest.TestCase):    
     @mock.patch("settings.config.DENSITY_OUTPUT_FILENAME", "density.txt")
     def test_alreadyMeasuredNotification(self):
         output = strings.alreadyMeasuredNotification(filename="test.png")
