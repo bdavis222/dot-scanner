@@ -96,7 +96,7 @@ BLOB_THICKNESS = 0.5
 PLOT_POLYGON = True
 # Whether to plot the polygon in outputted figures. Default is True.
 
-POLYGON_COLOR = "C1"
+POLYGON_COLOR = "darkorange"
 # The color used for the polygon in output plots. 
 # Only use default Python colors (https://matplotlib.org/3.5.0/gallery/color/named_colors.html)
 
