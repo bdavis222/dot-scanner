@@ -1,6 +1,6 @@
-import settings.configmanagement as cm
 import dotscanner.ui.window as ui
 import settings.config as cfg
+import settings.configmanagement as cm
 import tkinter as tk
 from tkinter import filedialog
 
