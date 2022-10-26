@@ -29,4 +29,9 @@ setup(
         "Funding": "https://www.paypal.com/donate/?business=UA5NL9MJSFMVY",
         "Source": "https://github.com/bdavis222/dotscanner",
     },
+    entry_points={
+        "console_scripts": [
+            "dotscanner=dotscanner.__main__:main"
+        ]
+    }
 )
