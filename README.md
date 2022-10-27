@@ -35,7 +35,7 @@ Some demo images are included in the `images/demo/` folder, which can be downloa
 The first window displayed in the GUI is the Configurations Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
 
-If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis (one can try this out by downloading the images in the `images/demo/` folder and pointing to that download location):
+If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis (the images in the `images/demo/` folder can be downloaded to try this out for oneself):
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/4.png)
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by clicking the "Edit defaults" button. An entire configurations file is editable for other defaults as well. Any of the variables in this configurations file can be modified to change the default behavior of the software.
@@ -127,7 +127,7 @@ Brian Davis
 
 ## Release History
 
-* 1.2.1
+* 1.2.2
      * Bug fixes
 * 1.2.0
      * Added options for editing the configuration file
