@@ -9,14 +9,11 @@ Dot Scanner is designed to simplify analysis of microscope imaging data. The pro
 
 ### Dependencies
 
-The requirements to run this software are:
-- [Python 3](https://www.python.org/downloads/)
-- [matplotlib](https://pypi.org/project/matplotlib/)
-- [numpy](https://pypi.org/project/numpy/)
+[Python 3](https://www.python.org/downloads/) must be installed before Dot Scanner can be installed. 
 
 ### Installation
 
-To install this software and its dependencies run the following command:
+To install Dot Scanner, run the following command:
 
 ```
 pip install dotscanner
