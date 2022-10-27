@@ -1,5 +1,4 @@
 from dotscanner.ui.DialogWindow import DialogWindow
-import sys
 import traceback
 
 def runChecks():
