@@ -127,7 +127,7 @@ Brian Davis
 
 ## Release History
 
-* 1.2.4
+* 1.2.5
      * Bug fixes
 * 1.2.0
      * Added options for editing the configuration file
