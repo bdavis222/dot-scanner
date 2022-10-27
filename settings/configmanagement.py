@@ -130,8 +130,8 @@ def editConfigFile():
 def resetConfigFile():	
 	configFilePath = getConfigFilePath()
 	
-	with open(configFilePath, "w") as FILE:
-		FILE.write('\
+	with open(configFilePath, "w") as file:
+		file.write('\
 # Default selections run by the software (can be changed by the user):\n\
 \n\
 FILEPATH = ""\n\
