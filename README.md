@@ -29,13 +29,13 @@ To launch the main graphical user interface (GUI), run the following command:
 dotscanner
 ```
 
-Some demo images are included in `images/demo/`, which can be downloaded and used as explained below to familiarize oneself with how the software works. 
+Some demo images are included in the `images/demo/` folder, which can be downloaded and used as explained below to familiarize oneself with how the software works. 
 
 ## The Configurations Window
 The first window displayed in the GUI is the Configurations Window:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
 
-If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis (one can try this out by downloading the images in `images/demo/` and pointing to that download location):
+If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis (one can try this out by downloading the images in the `images/demo/` folder and pointing to that download location):
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/4.png)
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by clicking the "Edit defaults" button. An entire configurations file is editable for other defaults as well. Any of the variables in this configurations file can be modified to change the default behavior of the software.
