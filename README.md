@@ -19,7 +19,7 @@ The requirements to run this software are:
 To install this software and its dependencies run the following command:
 
 ```
-pip install Dot-Scanner
+pip install dotscanner
 ```
 
 *(Note that the* `pip3` *command may be required instead of* `pip` *for some Python installations.)*
@@ -128,7 +128,7 @@ Brian Davis
 
 ## Release History
 
-* 1.2.10
+* 1.2.1
      * Bug fixes
 * 1.2.0
      * Added options for editing the configuration file
