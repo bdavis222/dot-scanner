@@ -30,8 +30,7 @@ class UserSettings:
 		self.labelFilepath = tk.Label(self.window, text="Filepath:")
 		self.labelSelectedPath = tk.Label(self.window, text="Select a file or folder for analysis", 
 											fg="red", bg="white")
-		if self.filepath not in ["", " ", "/"]:
-			self.labelSelectedPath.configure(text=self.filepath, bg="white", fg="black")
+		self.showFilepath()
 		
 		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
 		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
@@ -148,10 +147,7 @@ class UserSettings:
 												title="Select a file to analyze")
 		if chosenFile not in ["", " ", "/"]:
 			self.filepath = chosenFile
-			displayedFilename = chosenFile
-			if len(chosenFile) > 50:
-				displayedFilename = "..." + chosenFile[-50:]
-			self.labelSelectedPath.configure(text=displayedFilename, bg="white", fg="black")
+			self.showFilepath()
 		self.window.focus_force()
 		self.checkForWarning()
 
@@ -160,10 +156,7 @@ class UserSettings:
 												title="Select a folder with images to analyze")
 		if chosenFolder not in ["", " ", "/"]:
 			self.filepath = chosenFolder
-			displayedFolder = chosenFolder
-			if len(chosenFolder) > 50:
-				displayedFolder = "..." + chosenFolder[-50:]
-			self.labelSelectedPath.configure(text=displayedFolder, bg="white", fg="black")
+			self.showFilepath()
 		self.window.focus_force()
 		self.checkForWarning()
 
@@ -217,7 +210,7 @@ class UserSettings:
 		self.done()
 	
 	def editDefaults(self):
-		DefaultUserSettingsEditor()
+		DefaultUserSettingsEditor(self)
 
 	def setRemoveEdge(self):
 		if self.checkboxRemoveEdgeVar.get():
@@ -232,6 +225,16 @@ class UserSettings:
 		else:
 			self.saveFigures = False
 		self.checkForWarning()
+	
+	def showFilepath(self):
+		if self.filepath in ["", " ", "/"]:
+			self.labelSelectedPath.configure(text="Select a file or folder for analysis", fg="red", 
+												bg="white")
+		else:
+			displayedFilepath = self.filepath
+			if len(displayedFilepath) > 50:
+				displayedFilepath = "..." + displayedFilepath[-50:]
+			self.labelSelectedPath.configure(text=displayedFilepath, bg="white", fg="black")
 
 	def toggleExtraOptions(self, click):
 		if click == "Lifetime":
