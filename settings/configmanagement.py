@@ -1,10 +1,14 @@
 from dotscanner.ui.DialogWindow import DialogWindow
+import sys
+import traceback
 
 def runChecks():
 	try:
 		scanConfigFileForErrors()
-	except:
+	except Exception as exception:
+		print("\n", traceback.format_exc())
 		showStartupErrorDialog()
+		quit()
 
 def scanConfigFileForErrors():
 	import settings.config as cfg
@@ -87,7 +91,8 @@ def showStartupErrorDialog():
 		title="Config file error",
 		message="\
 Errors found in config file. \n\
-Fix the errors manually or reset the file.",
+Fix the errors manually or reset the file.\n\
+See terminal output for details.",
 		positiveButtonText="Reset",
 		negativeButtonText="Edit",
 		positiveButtonAction=showResetConfigFileDialog,
