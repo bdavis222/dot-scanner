@@ -59,43 +59,6 @@ class DefaultUserSettingsEditor:
 		self.configFileButtons.pack()
 		
 		self.window.mainloop()
-	
-	def showSavedText(self):
-		self.labelFilepath.pack_forget()
-		self.labelSelectedPath.pack_forget()
-		self.labelSaved.pack_forget()
-		
-		self.filepathFrame.pack_forget()
-		self.navigation.pack_forget()
-		self.spacer.pack_forget()
-		self.configFileButtons.pack_forget()
-		
-		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
-		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
-		self.labelSaved.pack(in_=self.filepathFrame, side=tk.LEFT)
-		
-		self.filepathFrame.pack()
-		self.navigation.pack()
-		self.spacer.pack()
-		self.configFileButtons.pack()
-	
-	def unshowSavedText(self):
-		self.labelFilepath.pack_forget()
-		self.labelSelectedPath.pack_forget()
-		self.labelSaved.pack_forget()
-		
-		self.filepathFrame.pack_forget()
-		self.navigation.pack_forget()
-		self.spacer.pack_forget()
-		self.configFileButtons.pack_forget()
-		
-		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
-		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
-		
-		self.filepathFrame.pack()
-		self.navigation.pack()
-		self.spacer.pack()
-		self.configFileButtons.pack()
 
 	def browseFolders(self):
 		chosenFolder = filedialog.askdirectory(initialdir=self.filepath, 
@@ -133,3 +96,40 @@ class DefaultUserSettingsEditor:
 		self.showSavedText()
 		self.userSettings.filepath = self.filepath
 		self.userSettings.showFilepath()
+	
+	def showSavedText(self):
+		self.labelFilepath.pack_forget()
+		self.labelSelectedPath.pack_forget()
+		self.labelSaved.pack_forget()
+		
+		self.filepathFrame.pack_forget()
+		self.navigation.pack_forget()
+		self.spacer.pack_forget()
+		self.configFileButtons.pack_forget()
+		
+		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
+		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
+		self.labelSaved.pack(in_=self.filepathFrame, side=tk.LEFT)
+		
+		self.filepathFrame.pack()
+		self.navigation.pack()
+		self.spacer.pack()
+		self.configFileButtons.pack()
+	
+	def unshowSavedText(self):
+		self.labelFilepath.pack_forget()
+		self.labelSelectedPath.pack_forget()
+		self.labelSaved.pack_forget()
+		
+		self.filepathFrame.pack_forget()
+		self.navigation.pack_forget()
+		self.spacer.pack_forget()
+		self.configFileButtons.pack_forget()
+		
+		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
+		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
+		
+		self.filepathFrame.pack()
+		self.navigation.pack()
+		self.spacer.pack()
+		self.configFileButtons.pack()
