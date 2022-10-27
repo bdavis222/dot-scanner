@@ -29,7 +29,7 @@ To launch the main graphical user interface (GUI), run the following command:
 dotscanner
 ```
 
-Some demo images are included in `images/demo/`, which can be used as explained below to familiarize oneself with how the software works. 
+Some demo images are included in `images/demo/`, which can be downloaded and used as explained below to familiarize oneself with how the software works. 
 
 ## The Configurations Window
 The first window displayed in the GUI is the Configurations Window:
