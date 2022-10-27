@@ -10,7 +10,10 @@ class DefaultUserSettingsEditor:
 		self.window = ui.createDefaultConfigurationsEditorWindow()
 		
 		self.userSettings = userSettings
-		self.filepath = os.path.dirname(self.userSettings.filepath)
+		if os.path.isdir(self.userSettings.filepath):
+			self.filepath = self.userSettings.filepath
+		else:
+			self.filepath = os.path.dirname(self.userSettings.filepath)
 		
 		self.filepathFrame = tk.Frame(self.window)
 		
