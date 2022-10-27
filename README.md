@@ -13,7 +13,7 @@ Dot Scanner is designed to simplify analysis of microscope imaging data. The pro
 
 ### Installation
 
-To install Dot Scanner, run the following command:
+To install Dot Scanner, open a terminal window and run the following command:
 
 ```
 pip install dotscanner
