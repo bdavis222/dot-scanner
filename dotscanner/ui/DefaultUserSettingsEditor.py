@@ -4,12 +4,12 @@ import settings.configmanagement as cm
 import tkinter as tk
 from tkinter import filedialog
 
-class DefaultUserSettingsEditor:
+class DefaultUserSettingsEditor:	
 	def __init__(self, userSettings):
 		self.window = ui.createDefaultConfigurationsEditorWindow()
 		
 		self.userSettings = userSettings
-		self.filepath = cfg.FILEPATH
+		self.filepath = self.userSettings.filepath
 		
 		self.filepathFrame = tk.Frame(self.window)
 		
@@ -17,15 +17,12 @@ class DefaultUserSettingsEditor:
 		self.labelSelectedPath = tk.Label(self.window, text="No default filepath selected", 
 											bg="white", fg="lightgray")
 		self.labelSaved = tk.Label(self.window, text="Saved!", fg="green")
-		if self.filepath not in ["", " ", "/"]:
-			self.labelSelectedPath.configure(text=self.filepath, bg="white", fg="black")
+		self.showFilepath()
 		
 		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
 		self.labelSelectedPath.pack(in_=self.filepathFrame, side=tk.LEFT)
 		
 		self.navigation = tk.Frame(self.window)
-		
-		self.labelBrowse = tk.Label(self.window, text="Default filepath:")
 
 		self.buttonSelectFolder = tk.Button(self.window, text="Browse...", 
 											command=self.browseFolders)
@@ -34,7 +31,6 @@ class DefaultUserSettingsEditor:
 		self.buttonSaveDefaultPath = tk.Button(self.window, text="Save", fg="blue", 
 											command=self.saveDefaultPath)
 		
-		self.labelBrowse.pack(in_=self.navigation, side=tk.LEFT)
 		self.buttonSelectFolder.pack(in_=self.navigation, side=tk.LEFT)
 		self.buttonClearDefaultPath.pack(in_=self.navigation, side=tk.LEFT)
 		self.buttonSaveDefaultPath.pack(in_=self.navigation, side=tk.LEFT)
@@ -76,9 +72,8 @@ class DefaultUserSettingsEditor:
 		self.unshowSavedText()
 		if self.filepath in ["", " ", "/"]:
 			return
-		self.filepath = "/"
-		self.labelSelectedPath.configure(text="No default filepath selected", bg="white", 
-											fg="lightgray")
+		self.filepath = ""
+		self.showFilepath()
 	
 	def saveDefaultPath(self):
 		import settings.configmanagement as cm
@@ -96,6 +91,16 @@ class DefaultUserSettingsEditor:
 		self.showSavedText()
 		self.userSettings.filepath = self.filepath
 		self.userSettings.showFilepath()
+	
+	def showFilepath(self):
+		if self.filepath in ["", " ", "/"]:
+			self.labelSelectedPath.configure(text="No default filepath selected", fg="lightgray", 
+												bg="white")
+		else:
+			displayedFilepath = self.filepath
+			if len(displayedFilepath) > 50:
+				displayedFilepath = "..." + displayedFilepath[-50:]
+			self.labelSelectedPath.configure(text=displayedFilepath, bg="white", fg="black")
 	
 	def showSavedText(self):
 		self.labelFilepath.pack_forget()
