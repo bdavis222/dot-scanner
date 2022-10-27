@@ -1,6 +1,7 @@
 import dotscanner.ui.window as ui
 import settings.config as cfg
 import settings.configmanagement as cm
+import os
 import tkinter as tk
 from tkinter import filedialog
 
@@ -9,14 +10,14 @@ class DefaultUserSettingsEditor:
 		self.window = ui.createDefaultConfigurationsEditorWindow()
 		
 		self.userSettings = userSettings
-		self.filepath = self.userSettings.filepath
+		self.filepath = os.path.dirname(self.userSettings.filepath)
 		
 		self.filepathFrame = tk.Frame(self.window)
 		
-		self.labelFilepath = tk.Label(self.window, text="Filepath:")
+		self.labelFilepath = tk.Label(self.window, text="Default filepath:")
 		self.labelSelectedPath = tk.Label(self.window, text="No default filepath selected", 
 											bg="white", fg="lightgray")
-		self.labelSaved = tk.Label(self.window, text="Saved!", fg="green")
+		self.labelSaved = tk.Label(self.window, text=" Saved!", fg="green")
 		self.showFilepath()
 		
 		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
@@ -91,6 +92,7 @@ class DefaultUserSettingsEditor:
 		self.showSavedText()
 		self.userSettings.filepath = self.filepath
 		self.userSettings.showFilepath()
+		self.userSettings.checkForWarning()
 	
 	def showFilepath(self):
 		if self.filepath in ["", " ", "/"]:
