@@ -192,6 +192,10 @@ SKIPS_ALLOWED = 1\n\
 REMOVE_EDGE_FRAMES = True\n\
 # Whether edge frames should be removed from a lifetime calculation\n\
 \n\
+LIFETIME_MIN_FOR_PLOT = 1\n\
+# Minimum lifetime to mark a dot in the output figure. The default value is 1, so that all dots\n\
+# with a lifetime of 1 or greater are plotted.\n\
+\n\
 ######################################\n\
 ############ DOT SETTINGS ############\n\
 ######################################\n\
