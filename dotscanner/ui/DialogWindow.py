@@ -8,6 +8,9 @@ class DialogWindow:
 		self.window.title(title)
 		self.window.geometry(f"{windowWidth}x{windowHeight}+{windowX}+{windowY}")
 		
+		self.positiveButtonAction = positiveButtonAction
+		self.negativeButtonAction = negativeButtonAction
+		
 		self.spacer = tk.Label(self.window, text=" ")
 		
 		self.messageText = tk.Label(self.window, text=message)
@@ -22,6 +25,7 @@ class DialogWindow:
 		if negativeButtonAction is None:
 			self.negativeButton = tk.Button(self.window, text=negativeButtonText, 
 											command=self.window.destroy)
+			self.window.bind("<Escape>", self.closeWindowWithEscapeKey)
 		else:
 			self.negativeButton = tk.Button(self.window, text=negativeButtonText, 
 											command=negativeButtonAction)
@@ -34,4 +38,17 @@ class DialogWindow:
 		self.spacer2.pack()
 		self.buttonsFrame.pack()
 		
+		self.window.bind("<q>", self.quitWithQKey)
+		self.window.bind("<Return>", self.positiveButtonWithReturnKey)
+		
+		
 		self.window.mainloop()
+	
+	def closeWindowWithEscapeKey(self, event):
+		self.window.destroy()
+	
+	def positiveButtonWithReturnKey(self, event):
+		self.positiveButtonAction()
+	
+	def quitWithQKey(self, event):
+		quit()
