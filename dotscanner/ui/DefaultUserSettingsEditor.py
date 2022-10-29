@@ -58,6 +58,8 @@ class DefaultUserSettingsEditor:
 		self.spacer.pack()
 		self.configFileButtons.pack()
 		
+		self.window.bind("<q>", self.quitWithQKey)
+		
 		self.window.mainloop()
 
 	def browseFolders(self):
@@ -78,6 +80,9 @@ class DefaultUserSettingsEditor:
 			return
 		self.filepath = ""
 		self.showFilepath()
+	
+	def quitWithQKey(self, event):
+		quit()
 	
 	def saveDefaultPath(self):
 		import settings.configmanagement as cm
