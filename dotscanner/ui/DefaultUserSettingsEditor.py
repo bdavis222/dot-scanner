@@ -59,6 +59,7 @@ class DefaultUserSettingsEditor:
 		self.configFileButtons.pack()
 		
 		self.window.bind("<q>", self.quitWithQKey)
+		self.window.bind("<w>", self.closeWindowWithWKey)
 		
 		self.window.mainloop()
 
@@ -80,6 +81,9 @@ class DefaultUserSettingsEditor:
 			return
 		self.filepath = ""
 		self.showFilepath()
+	
+	def closeWindowWithWKey(self, event):
+		self.window.destroy()
 	
 	def quitWithQKey(self, event):
 		quit()
