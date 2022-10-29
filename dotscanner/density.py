@@ -17,7 +17,8 @@ def checkUnitsConsistent(directory):
 	if os.path.exists(directory + cfg.DENSITY_OUTPUT_FILENAME):
 		with open(directory + cfg.DENSITY_OUTPUT_FILENAME, "r") as file:
 			firstLine = file.readline().rstrip()
-			if firstLine.split()[6][:-1] != UNITS:
+			unitsInFile = firstLine.split("per sq ")[1].split(")")[0]
+			if unitsInFile != UNITS:
 				raise Exception(strings.unitsInconsistentException)
 
 def getAlreadyMeasured(directory):
