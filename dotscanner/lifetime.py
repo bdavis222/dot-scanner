@@ -33,6 +33,10 @@ def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap,
 						skipsAllowed, removeEdgeFrames):
 	skipsRemaining = skipsAllowed
 	nextImageNumber = imageNumber + 1
+	
+	if nextImageNumber not in imageNumberToCoordMap and skipsAllowed > 0:
+		return None
+	
 	while nextImageNumber in imageNumberToCoordMap:
 		nextCoords = imageNumberToCoordMap[nextImageNumber]
 		
@@ -193,18 +197,23 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
 							imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
 							removeEdgeFrames, saveFigures, coordsToPlot):
-	if not removeEdgeFrames or imageNumber > skipsAllowed:
-		if not coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
-										dotSize, skipsAllowed):
-			
-			coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
-												imageNumberToCoordMap, dotSize, skipsAllowed, 
-												removeEdgeFrames)
-			
-			if coordLifetime is not None:
-				lifetimes.append(coordLifetime)
-				resultCoords.append((y, x))
-				startImages.append(imageNumber)
-				
-				if saveFigures:
-					addToPlotCoords(coordsToPlot, y, x, imageNumber, coordLifetime)
+	if removeEdgeFrames and imageNumber <= skipsAllowed:
+		return
+	
+	if coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
+								dotSize, skipsAllowed):
+		return
+		
+	coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
+										imageNumberToCoordMap, dotSize, skipsAllowed, 
+										removeEdgeFrames)
+	
+	if coordLifetime is None:
+		return
+	
+	lifetimes.append(coordLifetime)
+	resultCoords.append((y, x))
+	startImages.append(imageNumber)
+	
+	if saveFigures and coordLifetime >= cfg.LIFETIME_MIN_FOR_PLOT:
+		addToPlotCoords(coordsToPlot, y, x, imageNumber, coordLifetime)
