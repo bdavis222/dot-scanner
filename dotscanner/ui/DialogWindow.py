@@ -9,8 +9,7 @@ class DialogWindow:
 		self.window.geometry(f"{windowWidth}x{windowHeight}+{windowX}+{windowY}")
 		
 		self.positiveButtonAction = positiveButtonAction
-		self.negativeButtonAction = negativeButtonAction
-		
+				
 		self.spacer = tk.Label(self.window, text=" ")
 		
 		self.messageText = tk.Label(self.window, text=message)
