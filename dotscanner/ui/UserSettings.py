@@ -138,6 +138,7 @@ class UserSettings:
 		self.toggleExtraOptions(click=self.program.capitalize())
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
+		self.window.bind("<q>", self.quitWithQKey)
 		self.window.bind("<Return>", self.doneWithReturnKey)
 		
 		self.window.mainloop()
@@ -211,6 +212,9 @@ class UserSettings:
 	
 	def editDefaults(self):
 		DefaultUserSettingsEditor(self)
+	
+	def quitWithQKey(self, event):
+		quit()
 
 	def setRemoveEdge(self):
 		if self.checkboxRemoveEdgeVar.get():
