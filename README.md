@@ -103,7 +103,7 @@ These buttons adjust the sensitivity for detecting “blobs” in the image. The
 This button changes the left button bar view to display some manual threshold adjustment options:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
 
-*(Once the thresholds are changed by entering new numbers into the text boxes, the* **Done** *button saves the settings and returns the left button bar to the original button configuration.)*
+*(Once the thresholds are changed by entering new numbers into the text boxes, clicking the* **Done** *button, or pressing the* **return** *key on the keyboard, saves the settings and returns the left button bar to the original button configuration.)*
 
 #### Reset
 This button resets the adjusted thresholds back to the default values.
