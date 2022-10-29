@@ -38,12 +38,16 @@ class DialogWindow:
 		self.buttonsFrame.pack()
 		
 		self.window.bind("<q>", self.quitWithQKey)
+		self.window.bind("<w>", self.closeWindowWithWKey)
 		self.window.bind("<Return>", self.positiveButtonWithReturnKey)
 		
 		
 		self.window.mainloop()
 	
 	def closeWindowWithEscapeKey(self, event):
+		self.window.destroy()
+	
+	def closeWindowWithWKey(self, event):
 		self.window.destroy()
 	
 	def positiveButtonWithReturnKey(self, event):
