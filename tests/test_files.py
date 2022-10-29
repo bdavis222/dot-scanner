@@ -3,10 +3,11 @@ from tests.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
 
-testFilenames = ["file03.png", "file02.png", "file01.png", "file05.PNG", "file04.png", "file11.png", 
-                "readme.md", "test", "directory2/"]
-
 class TestFiles(unittest.TestCase):
+    def getTestFilenames(self):
+        return ["file03.png", "file02.png", "file01.png", "file05.PNG", "file04.png", "file11.png", 
+                "readme.md", "test", "directory2/"]
+    
     def test_fixDirectory(self):
         string = "test"
         
@@ -23,7 +24,7 @@ class TestFiles(unittest.TestCase):
     
     @mock.patch("dotscanner.files.os.listdir")
     def test_getMostCommonFileExtension(self, mock_listdir):
-        mock_listdir.return_value = testFilenames
+        mock_listdir.return_value = self.getTestFilenames()
         
         extension = files.getMostCommonFileExtension("test/directory/")
         
@@ -31,7 +32,7 @@ class TestFiles(unittest.TestCase):
     
     @mock.patch("dotscanner.files.os.listdir")
     def test_getFilenamesWithExtension(self, mock_listdir):
-        mock_listdir.return_value = testFilenames
+        mock_listdir.return_value = self.getTestFilenames()
         
         unsortedFilenames = files.getFilenamesWithExtension("test/directory/", ".png")
         
@@ -59,7 +60,7 @@ class TestFiles(unittest.TestCase):
     
     @mock.patch("dotscanner.files.os.listdir")
     def test_getSortedFilenames(self, mock_listdir):
-        mock_listdir.return_value = testFilenames
+        mock_listdir.return_value = self.getTestFilenames()
         
         sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png")
         
@@ -96,7 +97,7 @@ class TestFiles(unittest.TestCase):
         fakeUserSettings = FakeUserSettings()
         mock_isfile.return_value = False
         mock_isdir.return_value = True
-        mock_listdir.return_value = testFilenames
+        mock_listdir.return_value = self.getTestFilenames()
         
         directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
         
