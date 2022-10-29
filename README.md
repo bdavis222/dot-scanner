@@ -77,7 +77,7 @@ This sets the number of consecutive images that are allowed to be skipped in a l
 This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis.
 
 #### Edit defaults
-This opens a new window that allows the user to edit the default filepath or edit or reset the entire configuration file directly.
+This opens a new window that allows the user to edit the default filepath or edit/reset the entire configuration file directly.
 
 Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
