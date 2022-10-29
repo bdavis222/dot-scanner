@@ -173,6 +173,7 @@ class ThresholdAdjuster:
 										fg="blue", font=tk.font.Font(weight="bold"))
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
+		self.window.bind("<q>", self.quitWithQKey)
 		self.window.bind("<Return>", self.finishWithReturnKey)
 		self.window.bind("<space>", self.cycleViews)
 		self.window.bind("<Up>", self.lowerDotThresholdScaleDownWithUpKey)
@@ -335,6 +336,9 @@ class ThresholdAdjuster:
 	
 	def skipWithEscapeKey(self, event):
 		self.skip()
+	
+	def quitWithQKey(self, event):
+		quit()
 
 	def resetThreshScalesToDefaultValues(self):
 		self.image.setThresholds(self.defaultThresholds)
