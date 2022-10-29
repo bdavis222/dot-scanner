@@ -1,9 +1,9 @@
 # Default selections run by the software (can be changed by the user):
 
-FILEPATH = "/Users/holly/Desktop/dotscanner-main/images/demo"
+FILEPATH = ""
 # Path to the file or directory of files that should be used. The default value is an empty string: ""
 
-PROGRAM = "lifetime"
+PROGRAM = "density"
 # Whether a "density" program or "lifetime" program should be run
 
 SCALE = None
@@ -58,7 +58,7 @@ SKIPS_ALLOWED = 1
 REMOVE_EDGE_FRAMES = True
 # Whether edge frames should be removed from a lifetime calculation
 
-LIFETIME_MIN_FOR_PLOT = 3
+LIFETIME_MIN_FOR_PLOT = 1
 # Minimum lifetime to mark a dot in the output figure. The default value is 1, so that all dots
 # with a lifetime of 1 or greater are plotted.
 
@@ -127,7 +127,7 @@ WINDOW_Y = 30
 ############ OUTPUT SETTINGS ############
 #########################################
 
-SAVE_FIGURES = True
+SAVE_FIGURES = False
 # Whether the displayed figures should be saved in a "figures" directory. Default is False.
 
 DENSITY_OUTPUT_FILENAME = "densities.txt"
