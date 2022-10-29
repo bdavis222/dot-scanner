@@ -63,6 +63,7 @@ class RegionSelector:
 		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
+		self.window.bind("<q>", self.quitWithQKey)
 		self.window.bind("<Return>", self.finishWithReturnKey)
 		self.window.bind("<BackSpace>", self.resetWithDeleteKey)
 		
@@ -108,6 +109,9 @@ class RegionSelector:
 	
 	def finishWithReturnKey(self, event):
 		self.finish()
+	
+	def quitWithQKey(self, event):
+		quit()
 		
 	def reset(self):
 		self.xList = []
