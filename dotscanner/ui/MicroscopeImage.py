@@ -36,6 +36,9 @@ class MicroscopeImage:
 		value = self.upperDotThreshScale - cfg.THRESHOLD_DELTA
 		value = round(value, 1)
 		if value < self.lowerDotThreshScale:
+                        print(strings.upperDotThreshScaleWarning)
+                        return
+                else:
 			value = self.lowerDotThreshScale
 		self.upperDotThreshScale = value
 		self.updateThresholds()
@@ -55,6 +58,9 @@ class MicroscopeImage:
 		value = self.lowerDotThreshScale + cfg.THRESHOLD_DELTA
 		value = round(value, 1)
 		if value > self.upperDotThreshScale:
+                        print(strings.upperDotThreshScaleWarning)
+                        return
+                else:
 			value = self.upperDotThreshScale
 		self.lowerDotThreshScale = value
 		self.updateThresholds()
