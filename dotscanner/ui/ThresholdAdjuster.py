@@ -1,7 +1,6 @@
 import dotscanner.dataprocessing as dp
 import dotscanner.strings as strings
 import dotscanner.ui.window as ui
-import settings.config as cfg
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -350,17 +349,13 @@ class ThresholdAdjuster:
 		self.canvas.draw()
 	
 	def upperContrastDown(self):
-		value = self.userSettings.upperContrast - cfg.CONTRAST_DELTA
-		value = round(value, 1)
-		self.userSettings.upperContrast = value
+		self.userSettings.decreaseUpperContrast()
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
 								self.userSettings.upperContrast * np.std(self.data))
 		self.canvas.draw()
 	
 	def upperContrastUp(self):
-		value = self.userSettings.upperContrast + cfg.CONTRAST_DELTA
-		value = round(value, 1)
-		self.userSettings.upperContrast = value
+		self.userSettings.increaseUpperContrast()
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
 								self.userSettings.upperContrast * np.std(self.data))
 		self.canvas.draw()
