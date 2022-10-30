@@ -28,8 +28,6 @@ class MicroscopeImage:
 	def decreaseLowerDotThreshScale(self):
 		value = self.lowerDotThreshScale - cfg.THRESHOLD_DELTA
 		value = round(value, 1)
-		if value < 0:
-			value = 0
 		self.lowerDotThreshScale = value
 		self.updateThresholds()
 		self.dotCoords, self.blobCoords = self.getCoords()
