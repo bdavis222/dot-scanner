@@ -25,20 +25,20 @@ def scanConfigFileForErrors():
 	
 	assert type(cfg.LOWER_DOT_THRESH_SCALE) in [int, float]
 	assert type(cfg.UPPER_DOT_THRESH_SCALE) in [int, float]
-        assert cfg.LOWER_DOT_THRESH_SCALE < cfg.UPPER_DOT_THRESH_SCALE
+	assert cfg.LOWER_DOT_THRESH_SCALE <= cfg.UPPER_DOT_THRESH_SCALE
 	assert type(cfg.LOWER_BLOB_THRESH_SCALE) in [int, float]
-        assert cfg.LOWER_BLOB_THRESH_SCALE >= 1
+	assert cfg.LOWER_BLOB_THRESH_SCALE >= 1
 	assert type(cfg.THRESHOLD_DELTA) in [int, float]
 	
 	assert type(cfg.LOWER_CONTRAST) in [int, float]
 	assert type(cfg.UPPER_CONTRAST) in [int, float]
-        assert cfg.LOWER_CONTRAST < cfg.UPPER_CONTRAST
+	assert cfg.LOWER_CONTRAST < cfg.UPPER_CONTRAST
 	assert type(cfg.CONTRAST_DELTA) in [int, float]
 	
 	assert type(cfg.SKIPS_ALLOWED) == int
-        assert cfg.SKIPS_ALLOWED >= 0
+	assert cfg.SKIPS_ALLOWED >= 0
 	assert type(cfg.REMOVE_EDGE_FRAMES) == bool
-        assert type(cfg.LIFETIME_MIN_FOR_PLOT) == int
+	assert type(cfg.LIFETIME_MIN_FOR_PLOT) == int
 	
 	assert type(cfg.DOT_SIZE) == int
 	assert cfg.DOT_COLOR in matplotlibColors
