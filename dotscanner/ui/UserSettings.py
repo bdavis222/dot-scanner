@@ -199,11 +199,6 @@ class UserSettings:
 			return
 		self.upperContrast = value
 	
-	def increaseUpperContrast(self):
-		value = self.upperContrast + cfg.CONTRAST_DELTA
-		value = round(value, 1)
-		self.upperContrast = value
-	
 	def done(self):
 		if self.filepath in ["", " ", "/"]:
 			return
@@ -225,6 +220,11 @@ class UserSettings:
 	
 	def editDefaults(self):
 		DefaultUserSettingsEditor(self)
+	
+	def increaseUpperContrast(self):
+		value = self.upperContrast + cfg.CONTRAST_DELTA
+		value = round(value, 1)
+		self.upperContrast = value
 	
 	def quitWithQKey(self, event):
 		quit()
