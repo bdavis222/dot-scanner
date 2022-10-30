@@ -93,7 +93,7 @@ def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerB
 def getData(directory, filename):
 	image = Image.open(directory + filename)
 	data = np.array(image)
-	subtractedData = data - np.mean(image)
+	subtractedData = data - np.median(image)
 	return subtractedData
 
 def getFullDataSquareSum(data):
