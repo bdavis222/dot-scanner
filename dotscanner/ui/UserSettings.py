@@ -191,6 +191,19 @@ class UserSettings:
 		self.window.update()
 		self.window.focus_force()
 	
+	def decreaseUpperContrast(self):
+		value = self.upperContrast - cfg.CONTRAST_DELTA
+		value = round(value, 1)
+		if value <= self.lowerContrast:
+			print(strings.maxContrastWarning)
+			return
+		self.upperContrast = value
+	
+	def increaseUpperContrast(self):
+		value = self.upperContrast + cfg.CONTRAST_DELTA
+		value = round(value, 1)
+		self.upperContrast = value
+	
 	def done(self):
 		if self.filepath in ["", " ", "/"]:
 			return
