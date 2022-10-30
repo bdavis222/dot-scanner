@@ -127,8 +127,9 @@ Brian Davis
 
 ## Release History
 
-* 1.2.8
+* 1.2.9
      * Bug fixes
+     * Added more robust configuration file startup checks
 * 1.2.0
      * Added options for editing the configuration file
      * Added startup processes to check the configuration file for errors
