@@ -29,6 +29,8 @@ not a single image."
 lowerBlobThreshScaleWarning = "\nWARNING: Lower blob threshold scale set below 1.0, which means \
 blobs can be dimmer than the brightest dots, which shouldn't happen. Setting to 1.0."
 
+maxContrastWarning = "\nWARNING: Max contrast reached. Previous contrast values will be retained."
+
 noFilesException = "No files selected. Check the values of 'FILEPATH' and 'START_IMAGE' in the \
 configurations file."
 
