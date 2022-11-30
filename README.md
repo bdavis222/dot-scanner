@@ -3,6 +3,8 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?business=UA5NL9MJSFMVY)
 
+![](https://github.com/bdavis222/dotscanner/blob/main/images/header.png)
+
 Dot Scanner is designed to simplify analysis of microscope imaging data. The program runs entirely within a window-based graphical user interface, so as to not require any programming knowledge from the user in order to complete their image analysis (see the images below for examples). This software is *especially* useful for noisy image data, where manual "by-eye" analysis is unreliable.
 
 ## Getting Started
