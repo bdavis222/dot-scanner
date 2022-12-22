@@ -119,6 +119,8 @@ This window allows the user to click different locations on the image to set the
 
 Information about the image processing will be displayed in the terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
 
+*Note: the extraneous `+[CATransaction synchronize]` output in the terminal window is a known bug in macOS 13 that will not affect your data.*
+
 ## Authors
 
 Holly Allen (holly.allen@colorado.edu)
