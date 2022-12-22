@@ -1,5 +1,6 @@
 import dotscanner.strings as strings
 import settings.config as cfg
+from tests.FakeMicroscopeImage import FakeMicroscopeImage
 from tests.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
@@ -39,6 +40,8 @@ class TestStrings(unittest.TestCase):
     
     def test_lifetimeOutputFileHeader(self):
         polygon = [[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]]
+        thresholds = (1.5, 5.0, 2.0)
+        fakeMicroscopeImage = FakeMicroscopeImage(polygon, thresholds)
         fakeUserSettings = FakeUserSettings(
                                 dotSize=2, 
                                 blobSize=5, 
@@ -46,7 +49,7 @@ class TestStrings(unittest.TestCase):
                                 thresholds=(1.5, 5.0, 2.0), 
                                 removeEdgeFrames=True)
         
-        output = strings.lifetimeOutputFileHeader(polygon, fakeUserSettings)
+        output = strings.lifetimeOutputFileHeader(fakeMicroscopeImage, fakeUserSettings)
         
         self.assertEqual(
             output,
