@@ -31,14 +31,14 @@ def getDensityData(directory, filenames, userSettings):
 		print(f"\n----------\nDisplaying {filename}\n----------")
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
-		ThresholdAdjuster(microscopeImage, userSettings)
+		thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
 		if microscopeImage.skipped:
-			density.skipFile(directory, filename, userSettings)
+			density.skipFile(directory, filename, thresholdAdjuster.userSettings)
 			continue
 		
-		RegionSelector(microscopeImage, userSettings)
+		RegionSelector(microscopeImage, thresholdAdjuster.userSettings)
 		if microscopeImage.skipped:
-			density.skipFile(directory, filename, userSettings)
+			density.skipFile(directory, filename, thresholdAdjuster.userSettings)
 			continue
 		
 		density.measureDensity(directory, filename, microscopeImage, userSettings)
@@ -49,10 +49,11 @@ def getLifetimeData(directory, filenames, userSettings):
 	middleIndex = len(filenames) // 2
 	middleMicroscopeImage = MicroscopeImage(directory, filenames[middleIndex], userSettings)
 	
-	ThresholdAdjuster(middleMicroscopeImage, userSettings, skipButton=False)
-	RegionSelector(middleMicroscopeImage, userSettings, skipButton=False)
+	thresholdAdjuster = ThresholdAdjuster(middleMicroscopeImage, userSettings, skipButton=False)
+	RegionSelector(middleMicroscopeImage, thresholdAdjuster.userSettings, skipButton=False)
 	
-	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings)
+	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, 
+		thresholdAdjuster.userSettings)
 
 if __name__ == '__main__':
 	main()
