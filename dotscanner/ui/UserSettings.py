@@ -19,6 +19,7 @@ class UserSettings:
 		self.lowerDotThresh = round(cfg.LOWER_DOT_THRESH_SCALE, 1)
 		self.upperDotThresh = round(cfg.UPPER_DOT_THRESH_SCALE, 1)
 		self.lowerBlobThresh = round(cfg.LOWER_BLOB_THRESH_SCALE, 1)
+		self.thresholds = (self.lowerDotThresh, self.upperDotThresh, self.lowerBlobThresh)
 		self.lowerContrast = round(cfg.LOWER_CONTRAST, 1)
 		self.upperContrast = round(cfg.UPPER_CONTRAST, 1)
 		self.saveFigures = cfg.SAVE_FIGURES
