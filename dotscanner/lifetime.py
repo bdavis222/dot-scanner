@@ -127,16 +127,12 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages,
 							imageNumberToCoordMap, imageNumberToBlobCoordMap, 
 							imageNumberToFilenameMap, microscopeImage, userSettings, coordsToPlot, 
 							polygon):
-	dotSize = userSettings.dotSize
-	polygon = microscopeImage.polygon
-	thresholds = microscopeImage.thresholds
-	
 	targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME
 	if os.path.exists(targetPath):
 		os.remove(targetPath)
 	
 	with open(targetPath, "a") as file:
-		file.write(strings.lifetimeOutputFileHeader(polygon, userSettings))
+		file.write(strings.lifetimeOutputFileHeader(microscopeImage, userSettings))
 		for lifetime, resultCoord, startImage in zip(lifetimes, resultCoords, startImages):
 			y, x = resultCoord
 			filename = imageNumberToFilenameMap[startImage]
