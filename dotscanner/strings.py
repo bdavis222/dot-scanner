@@ -74,15 +74,15 @@ def densityOutput(filename, density, error, thresholds, dotSize, blobSize, polyg
 def fileSkippedNotification(filename):
 	return f"\nFile {filename} skipped"
 
-def lifetimeOutputFileHeader(polygon, userSettings):
+def lifetimeOutputFileHeader(microscopeImage, userSettings):
 	verticesStringList = []
-	for vertex in polygon[:-1]:
+	for vertex in microscopeImage.polygon[:-1]:
 		y, x = vertex
 		verticesStringList.append(f"({x}, {y})")
 	verticesString = ", ".join(verticesStringList)
 	
 	thresholdsStringList = []
-	for threshold in userSettings.thresholds:
+	for threshold in microscopeImage.thresholds:
 		thresholdsStringList.append(str(threshold))
 	thresholdsString = ", ".join(thresholdsStringList)
 	
