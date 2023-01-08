@@ -35,7 +35,10 @@ def getFilenamesWithExtension(directory, fileExtension):
 	return filenames
 
 def getLeftEdgeOfTrailingNumber(string, index):
-	while index > 0:
+	if index == 0:
+		return 0
+	
+	while index >= 0:
 		if string[index].isdigit():
 			index -= 1
 		else:
@@ -64,9 +67,17 @@ def getMostCommonFileExtension(directory):
 	return "." + mostCommonExtension
 
 def getRightEdgeOfTrailingNumber(string):
+	periodReached = False
 	for index, char in enumerate(reversed(string)):
+		if char == ".":
+			periodReached = True
+		
+		if not periodReached:
+			continue
+		
 		if char.isdigit():
 			return len(string) - index - 1
+	
 	raise Exception(strings.fileNumberingException)
 
 def getSortedFilenames(directory, startImage):

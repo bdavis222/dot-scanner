@@ -17,10 +17,26 @@ class TestFiles(unittest.TestCase):
         
         self.assertEqual(files.fixDirectory(string2), "testString/")
     
+    def test_getRightEdgeOfTrailingNumber(self):
+        self.assertEqual(files.getRightEdgeOfTrailingNumber("test123.fil35e"), 6)
+        self.assertEqual(files.getRightEdgeOfTrailingNumber("test123gjw.file"), 6)
+        self.assertEqual(files.getRightEdgeOfTrailingNumber("test123lj010.file"), 11)
+        self.assertEqual(files.getRightEdgeOfTrailingNumber("6.file"), 0)
+        self.assertEqual(files.getRightEdgeOfTrailingNumber("010.file"), 2)
+    
+    def test_getLeftEdgeOfTrailingNumber(self):
+        self.assertEqual(files.getLeftEdgeOfTrailingNumber("test123.fil35e", 6), 4)
+        self.assertEqual(files.getLeftEdgeOfTrailingNumber("test123gjw.file", 6), 4)
+        self.assertEqual(files.getLeftEdgeOfTrailingNumber("test123lj010.file", 11), 9)
+        self.assertEqual(files.getLeftEdgeOfTrailingNumber("6.file", 0), 0)
+        self.assertEqual(files.getLeftEdgeOfTrailingNumber("010.file", 2), 0)
+    
     def test_getTrailingNumber(self):
-        self.assertEqual(files.getTrailingNumber("test123.file"), 123)
+        self.assertEqual(files.getTrailingNumber("test123.fil35e"), 123)
         self.assertEqual(files.getTrailingNumber("test123gjw.file"), 123)
         self.assertEqual(files.getTrailingNumber("test123lj010.file"), 10)
+        self.assertEqual(files.getTrailingNumber("6.file"), 6)
+        self.assertEqual(files.getTrailingNumber("010.file"), 10)
     
     @mock.patch("dotscanner.files.os.listdir")
     def test_getMostCommonFileExtension(self, mock_listdir):
