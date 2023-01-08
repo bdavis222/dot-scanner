@@ -8,8 +8,8 @@ densityOutputFileHeader = f"# filename | density (per sq {'pix' if cfg.SCALE is 
 error | lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
 polygon vertices (x, y)\n"
 
-fileNumberingException = "Filenames must contain sequentially-ordered numbers to calculate \
-lifetimes."
+fileNumberingException = "Filenames must contain sequentially-ordered numbers and valid file \
+extensions to calculate lifetimes."
 
 fileNumberingWarning = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes."
