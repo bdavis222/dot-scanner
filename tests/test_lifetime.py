@@ -1,5 +1,5 @@
 import dotscanner.lifetime as lifetime
-from tests.FakeUserSettings import FakeUserSettings
+from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
 

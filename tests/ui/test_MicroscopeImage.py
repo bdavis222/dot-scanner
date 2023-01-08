@@ -1,5 +1,5 @@
 from dotscanner.ui.MicroscopeImage import MicroscopeImage
-from tests.FakeUserSettings import FakeUserSettings
+from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import numpy as np
 import unittest

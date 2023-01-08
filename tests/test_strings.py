@@ -1,7 +1,7 @@
 import dotscanner.strings as strings
 import settings.config as cfg
-from tests.FakeMicroscopeImage import FakeMicroscopeImage
-from tests.FakeUserSettings import FakeUserSettings
+from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
+from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
 
