@@ -47,7 +47,7 @@ class MicroscopeImage:
 			dotCoords, blobCoords = self.memoizedCoords[self.thresholds]
 		else:
 			dotCoords, blobCoords = dp.getCoords(self.data, self.sums, self.thresholds, 
-													self.dotSize)
+				self.dotSize)
 			dp.cleanDotCoords(self.data, dotCoords, blobCoords, self.blobSize, self.dotSize)
 			self.memoizedCoords[self.thresholds] = (dotCoords, blobCoords)
 		return dotCoords, blobCoords
@@ -90,4 +90,4 @@ class MicroscopeImage:
 	
 	def updateThresholds(self):
 		self.thresholds = (self.lowerDotThreshScale, self.upperDotThreshScale, 
-							self.lowerBlobThreshScale)
+			self.lowerBlobThreshScale)

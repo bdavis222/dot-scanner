@@ -20,7 +20,7 @@ def checkEnoughFramesForLifetimes(filenames, userSettings):
 		raise Exception(strings.tooFewFramesException)
 
 def coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
-							skipsAllowed):
+	skipsAllowed):
 	firstFrameNumber = max(0, imageNumber - skipsAllowed - 1)
 	frameNumbers = range(firstFrameNumber, imageNumber)
 	for frameNumber in frameNumbers:
@@ -30,7 +30,7 @@ def coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoo
 	return False
 
 def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
-						skipsAllowed, removeEdgeFrames):
+	skipsAllowed, removeEdgeFrames):
 	skipsRemaining = skipsAllowed
 	nextImageNumber = imageNumber + 1
 	
@@ -88,12 +88,9 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	for index, filename in enumerate(filenames):
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
-		dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(
-														microscopeImage.data, microscopeImage.sums, 
-														lowerDotThresh, upperDotThresh, 
-														lowerBlobThresh, dotSize, 
-														middleImagePolygonCoordMap, xMin, xMax, 
-														yMin, yMax)
+		dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(microscopeImage.data, 
+			microscopeImage.sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
+			middleImagePolygonCoordMap, xMin, xMax, yMin, yMax)
 		dp.cleanDotCoords(microscopeImage.data, dotCoords, blobCoords, blobSize, dotSize)
 		
 		imageNumberToCoordMap[index] = dotCoords
@@ -114,19 +111,16 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		for y, xSet in coordMap.items():
 			for x in xSet:
 				updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-										imageNumberToCoordMap, edgeFrameNumbers, dotSize, 
-										skipsAllowed, removeEdgeFrames, userSettings.saveFigures, 
-										coordsToPlot)
+					imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
+					removeEdgeFrames, userSettings.saveFigures, coordsToPlot)
 	
 	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
-							imageNumberToBlobCoordMap, imageNumberToFilenameMap, 
-							middleMicroscopeImage, userSettings, coordsToPlot, 
-							middleMicroscopeImage.polygon)
+		imageNumberToBlobCoordMap, imageNumberToFilenameMap, middleMicroscopeImage, userSettings, 
+		coordsToPlot, middleMicroscopeImage.polygon)
 
-def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, imageNumberToBlobCoordMap, 
-							imageNumberToFilenameMap, microscopeImage, userSettings, coordsToPlot, 
-							polygon):
+def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
+	imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage, userSettings, 
+	coordsToPlot, polygon):
 	targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME
 	if os.path.exists(targetPath):
 		os.remove(targetPath)
@@ -146,7 +140,7 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages,
 							imageNumberToFilenameMap, userSettings, polygon)
 
 def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
-						imageNumberToFilenameMap, userSettings, polygon):
+	imageNumberToFilenameMap, userSettings, polygon):
 	print("Saving figures...")
 	coordsToPlotSize = len(list(coordsToPlot.keys()))
 	count = 0
@@ -158,26 +152,24 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 	
 		figure, axes = pl.subplots()
 		axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-					vmax=userSettings.upperContrast * np.std(data), zorder=0)
+			vmax=userSettings.upperContrast * np.std(data), zorder=0)
 		dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
-									edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, 
-									zorder=4)
+			edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
 		dotScatter.set_offsets(list(dotCoordSet))
 		
 		if cfg.PLOT_BLOBS:
 			blobSize = userSettings.blobSize
 			blobCoordMap = imageNumberToBlobCoordMap[imageNumber]
 			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
-										edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, 
-										zorder=3)
+				edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
 			dp.setScatterOffset(blobCoordMap, blobScatter)
 		
 		if cfg.PLOT_POLYGON:
 			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
 			underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
-									zorder=1)
+				zorder=1)
 			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
-								linewidth=cfg.POLYGON_THICKNESS, zorder=2)
+				linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 		
 		targetPath = files.getTargetPath(directory, userSettings.program)
 		truncatedFilename = ".".join(filename.split(".")[:-1])
@@ -191,18 +183,17 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 		ui.printProgressBar(count, coordsToPlotSize)
 
 def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-							imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
-							removeEdgeFrames, saveFigures, coordsToPlot):
+	imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, removeEdgeFrames, saveFigures, 
+	coordsToPlot):
 	if removeEdgeFrames and imageNumber <= skipsAllowed:
 		return
 	
 	if coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
-								dotSize, skipsAllowed):
+		dotSize, skipsAllowed):
 		return
 		
 	coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
-										imageNumberToCoordMap, dotSize, skipsAllowed, 
-										removeEdgeFrames)
+		imageNumberToCoordMap, dotSize, skipsAllowed, removeEdgeFrames)
 	
 	if coordLifetime is None:
 		return

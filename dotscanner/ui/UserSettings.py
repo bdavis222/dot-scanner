@@ -30,7 +30,7 @@ class UserSettings:
 		
 		self.labelFilepath = tk.Label(self.window, text="Filepath:")
 		self.labelSelectedPath = tk.Label(self.window, text="Select a file or folder for analysis", 
-											fg="red", bg="white")
+			fg="red", bg="white")
 		self.showFilepath()
 		
 		self.labelFilepath.pack(in_=self.filepathFrame, side=tk.LEFT)
@@ -49,12 +49,12 @@ class UserSettings:
 		self.menuProgramSelectVar = tk.StringVar(self.window)
 		self.menuProgramSelectVar.set(self.program.capitalize()) # default value
 		self.menuProgramSelect = tk.OptionMenu(self.window, self.menuProgramSelectVar, "Density", 
-												"Lifetime", command=self.toggleExtraOptions)
+			"Lifetime", command=self.toggleExtraOptions)
 		
 		self.checkboxSaveFigsVar = tk.BooleanVar()
 		self.checkboxSaveFigs = tk.Checkbutton(self.window, text='Save figures', 
-												variable=self.checkboxSaveFigsVar, onvalue=True, 
-												offvalue=False, command=self.setSaveFigs)
+			variable=self.checkboxSaveFigsVar, onvalue=True, offvalue=False, 
+			command=self.setSaveFigs)
 		self.checkboxSaveFigsVar.set(self.saveFigures)
 		
 		self.labelBrowse.pack(in_=self.navigation, side=tk.LEFT)
@@ -98,7 +98,7 @@ class UserSettings:
 
 		self.labelStartImage = tk.Label(self.window, text="Start image:")
 		self.buttonSelectStartingImage = tk.Button(self.window, text="Browse...", 
-													command=self.browseStartingImage)
+			command=self.browseStartingImage)
 
 		self.labelSkipsAllowed = tk.Label(self.window, text="Skips allowed:")
 		self.entrySkipsAllowed = tk.Entry(self.window, width=5)
@@ -106,9 +106,8 @@ class UserSettings:
 
 		self.checkboxRemoveEdgeVar = tk.BooleanVar()
 		self.checkboxRemoveEdge = tk.Checkbutton(self.window, text='Remove edge frames', 
-													variable=self.checkboxRemoveEdgeVar, 
-													onvalue=True, offvalue=False, 
-													command=self.setRemoveEdge)
+			variable=self.checkboxRemoveEdgeVar, onvalue=True, offvalue=False, 
+			command=self.setRemoveEdge)
 		self.checkboxRemoveEdgeVar.set(self.removeEdgeFrames)
 		
 		self.labelStartImage.pack(in_=self.lifetimeOptions, side=tk.LEFT)
@@ -120,9 +119,9 @@ class UserSettings:
 		self.bottomButtons = tk.Frame(self.window)
 		
 		self.buttonEditDefaults = tk.Button(self.window, text="Edit defaults...", 
-											command=self.editDefaults)
+			command=self.editDefaults)
 		self.buttonNext = tk.Button(self.window, text="Next", command=self.done, fg="blue", 
-									font=tk.font.Font(weight="bold"))
+			font=tk.font.Font(weight="bold"))
 		
 		self.buttonEditDefaults.pack(in_=self.bottomButtons, side=tk.LEFT)
 		self.buttonNext.pack(in_=self.bottomButtons, side=tk.LEFT)
@@ -146,7 +145,7 @@ class UserSettings:
 
 	def browseFiles(self):
 		chosenFile = filedialog.askopenfilename(initialdir=self.filepath, 
-												title="Select a file to analyze")
+			title="Select a file to analyze")
 		if chosenFile not in ["", " ", "/"]:
 			self.filepath = chosenFile
 			self.showFilepath()
@@ -155,7 +154,7 @@ class UserSettings:
 
 	def browseFolders(self):
 		chosenFolder = filedialog.askdirectory(initialdir=self.filepath, 
-												title="Select a folder with images to analyze")
+			title="Select a folder with images to analyze")
 		if chosenFolder not in ["", " ", "/"]:
 			self.filepath = chosenFolder
 			self.showFilepath()
@@ -164,7 +163,7 @@ class UserSettings:
 
 	def browseStartingImage(self):
 		chosenFilepath = filedialog.askopenfilename(initialdir=self.filepath, 
-									title="Select the starting image for the lifetime measurement")
+			title="Select the starting image for the lifetime measurement")
 		chosenImage = os.path.basename(chosenFilepath)
 		if chosenImage != "":
 			if os.path.isfile(self.filepath):
@@ -247,7 +246,7 @@ class UserSettings:
 	def showFilepath(self):
 		if self.filepath in ["", " ", "/"]:
 			self.labelSelectedPath.configure(text="Select a file or folder for analysis", fg="red", 
-												bg="white")
+				bg="white")
 		else:
 			displayedFilepath = self.filepath
 			if len(displayedFilepath) > 50:

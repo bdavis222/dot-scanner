@@ -49,7 +49,7 @@ class TestDensity(unittest.TestCase):
 		}
 		
 		dotTotal, blobTotal, _, _ = density.getTotalsAndCoords(coordsInPolygon, dotCoords, 
-																blobCoords, blobSize=5)
+			blobCoords, blobSize=5)
 		
 		self.assertEqual(dotTotal, 1)
 		self.assertEqual(blobTotal, 4)
@@ -64,7 +64,7 @@ class TestDensity(unittest.TestCase):
 		}
 		
 		dotTotal, blobTotal, _, _ = density.getTotalsAndCoords(coordsInPolygon, dotCoords, 
-																blobCoords, blobSize=5)
+			blobCoords, blobSize=5)
 		
 		self.assertEqual(dotTotal, 2)
 		self.assertEqual(blobTotal, 5)

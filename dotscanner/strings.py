@@ -4,9 +4,9 @@ configurationsWindowTitle = "Dot Scanner - Configurations"
 
 defaultConfigurationsEditorWindowTitle = "Dot Scanner - Default Configurations"
 
-densityOutputFileHeader = f"# filename | density (per sq {'pix' if cfg.SCALE is None else 'um'}) | \
-error | lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | \
-polygon vertices (x, y)\n"
+densityOutputFileHeader = f"# filename | number of dots | number of pixels surveyed | \
+density (per sq {'pix' if cfg.SCALE is None else 'um'}) | error | lowerDotThreshScale | \
+upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | polygon vertices (x, y)\n"
 
 fileNumberingException = "Filenames must contain sequentially-ordered numbers and valid file \
 extensions to calculate lifetimes."
@@ -61,15 +61,16 @@ in each window, and the Escape key will allow for skipping files, when the optio
 def alreadyMeasuredNotification(filename):
 	return f"\nFile {filename} already measured in {cfg.DENSITY_OUTPUT_FILENAME} file. Skipping."
 
-def densityOutput(filename, density, error, thresholds, dotSize, blobSize, polygon):
+def densityOutput(filename, dotTotal, surveyedArea, density, error, thresholds, dotSize, blobSize,
+	polygon):
 	verticesStringList = []
 	for vertex in polygon[:-1]:
 		y, x = vertex
 		verticesStringList.append(f"({x}, {y})")
 	verticesString = ", ".join(verticesStringList)
 	
-	return f"{filename} {density} {error} {thresholds[0]} {thresholds[1]} {thresholds[2]} \
-{blobSize} {dotSize} {verticesString}\n"
+	return f"{filename} {dotTotal} {surveyedArea} {density} {error} {thresholds[0]} \
+{thresholds[1]} {thresholds[2]} {blobSize} {dotSize} {verticesString}\n"
 
 def fileSkippedNotification(filename):
 	return f"\nFile {filename} skipped"

@@ -42,11 +42,10 @@ class ThresholdAdjuster:
 		self.windowScaling = ui.getWindowScaling()
 		
 		self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = ui.createPlots(
-																					self.data, 
-																					userSettings)
+			self.data, userSettings)
 
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		
 		self.displayCorrectMarkerSize(self.index)
 		
@@ -75,10 +74,10 @@ class ThresholdAdjuster:
 		self.viewLabel = tk.Label(self.window, text="View:")
 		self.viewTopLeftButton = tk.Button(self.window, text="⌜", command=self.showTopLeftRegion)
 		self.viewBottomLeftButton = tk.Button(self.window, text="⌞", 
-												command=self.showBottomLeftRegion)
+			command=self.showBottomLeftRegion)
 		self.viewTopRightButton = tk.Button(self.window, text="⌝", command=self.showTopRightRegion)
 		self.viewBottomRightButton = tk.Button(self.window, text="⌟", 
-												command=self.showBottomRightRegion)
+			command=self.showBottomRightRegion)
 		self.viewFullButton = tk.Button(self.window, text="Full", command=self.showWholeImage)
 		
 		self.contrastLabel = tk.Label(self.window, text="Contrast:")
@@ -98,10 +97,10 @@ class ThresholdAdjuster:
 		self.editButton = tk.Button(self.window, text="Edit", command=self.edit)
 		
 		self.resetButton = tk.Button(self.window, text="Reset", 
-										command=self.resetThreshScalesToDefaultValues)
+			command=self.resetThreshScalesToDefaultValues)
 		
 		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue", 
-									font=tk.font.Font(weight="bold"))
+			font=tk.font.Font(weight="bold"))
 		
 		self.buttonBar.pack(side=tk.LEFT, expand=False)
 		self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -116,7 +115,7 @@ class ThresholdAdjuster:
 		if self.skipButtonExists:
 			self.window.bind("<Escape>", self.skipWithEscapeKey)
 			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
-										fg="darkgoldenrod")
+				fg="darkgoldenrod")
 			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
 		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
@@ -169,7 +168,7 @@ class ThresholdAdjuster:
 		self.entryThreshold3.insert(0, userSettings.lowerBlobThresh)
 		
 		self.editDoneButton = tk.Button(self.window, text="Done", command=self.editFinish, 
-										fg="blue", font=tk.font.Font(weight="bold"))
+			fg="blue", font=tk.font.Font(weight="bold"))
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
 		self.window.bind("<q>", self.quitWithQKey)
@@ -261,7 +260,7 @@ class ThresholdAdjuster:
 		
 		self.image.dotCoords, self.image.blobCoords = self.image.getCoords()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		self.canvas.draw()
 	
 	def editFinishWithReturnKey(self, event):
@@ -278,7 +277,7 @@ class ThresholdAdjuster:
 		self.image.decreaseLowerDotThreshScale()
 		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		self.canvas.draw()
 	
 	def lowerDotThresholdScaleDownWithUpKey(self, event):
@@ -288,7 +287,7 @@ class ThresholdAdjuster:
 		self.image.increaseLowerDotThreshScale()
 		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		self.canvas.draw()
 	
 	def lowerDotThresholdScaleUpWithDownKey(self, event):
@@ -345,26 +344,26 @@ class ThresholdAdjuster:
 		
 		self.image.dotCoords, self.image.blobCoords = self.image.getCoords()
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		self.canvas.draw()
 	
 	def upperContrastDown(self):
 		self.userSettings.decreaseUpperContrast()
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
-								self.userSettings.upperContrast * np.std(self.data))
+			self.userSettings.upperContrast * np.std(self.data))
 		self.canvas.draw()
 	
 	def upperContrastUp(self):
 		self.userSettings.increaseUpperContrast()
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
-								self.userSettings.upperContrast * np.std(self.data))
+			self.userSettings.upperContrast * np.std(self.data))
 		self.canvas.draw()
 	
 	def upperDotThresholdScaleDown(self):
 		self.image.decreaseUpperDotThreshScale()
 		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		self.canvas.draw()
 	
 	def upperDotThresholdScaleDownWithRightKey(self, event):
@@ -374,7 +373,7 @@ class ThresholdAdjuster:
 		self.image.increaseUpperDotThreshScale()
 		self.setThresholdEntries(self.image.thresholds)
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		self.canvas.draw()
 	
 	def upperDotThresholdScaleUpWithLeftKey(self, event):

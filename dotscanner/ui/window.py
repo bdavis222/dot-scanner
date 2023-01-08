@@ -11,13 +11,11 @@ def createPlots(data, userSettings):
 	windowScaling = getWindowScaling()
 	figure, axes = pl.subplots()
 	dataPlot = axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-							vmax=userSettings.upperContrast * np.std(data))
+		vmax=userSettings.upperContrast * np.std(data))
 	dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize * windowScaling, 
-								facecolors="none", edgecolors=cfg.DOT_COLOR, 
-								linewidths=cfg.DOT_THICKNESS)
+		facecolors="none", edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS)
 	blobScatter = axes.scatter([None], [None], s=2 * userSettings.blobSize * windowScaling, 
-								facecolors="none", edgecolor=cfg.BLOB_COLOR, 
-								linewidths=cfg.BLOB_THICKNESS)
+		facecolors="none", edgecolor=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS)
 	return figure, axes, dataPlot, dotScatter, blobScatter
 
 def createConfigurationsWindow():
@@ -69,8 +67,8 @@ def getWindowScaling():
 	_, height = getWindowDimensions()
 	return height / 550
 
-def printProgressBar (iteration, total, prefix = "", suffix = "", decimals = 1, 
-						barLength = 50, fill = "█", printEnd = "\r"):
+def printProgressBar (iteration, total, prefix = "", suffix = "", decimals = 1, barLength = 50, 
+	fill = "█", printEnd = "\r"):
 	percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
 	filledLength = int(barLength * iteration // total)
 	bar = fill * filledLength + "-" * (barLength - filledLength)

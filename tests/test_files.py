@@ -6,7 +6,7 @@ import unittest
 class TestFiles(unittest.TestCase):
     def getTestFilenames(self):
         return ["file03.png", "file02.png", "file01.png", "file05.PNG", "file04.png", "file11.png", 
-                "readme.md", "test", "directory2/"]
+        "readme.md", "test", "directory2/"]
     
     def test_fixDirectory(self):
         string = "test"

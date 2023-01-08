@@ -21,20 +21,20 @@ class RegionSelector:
 		self.window = ui.createPlotWindow(strings.regionSelectorWindowTitle)
 		
 		self.figure, self.axes, _, self.dotScatter, self.blobScatter = ui.createPlots(self.data, 
-																					userSettings)
+			userSettings)
 		
 		self.clickMarkerBackdrop = self.axes.scatter([None], [None], s=100, marker='x', color="k", 
-														linewidth=4)
+			linewidth=4)
 		self.underLine, = self.axes.plot([None], [None], linestyle="-", color="k", linewidth=5)
 		self.line, = self.axes.plot([None], [None], linestyle="-", color="C1", linewidth=1.5)
 		self.dottedLine, = self.axes.plot([None], [None], linestyle=":", color="C1", linewidth=1.5)
 		self.clickMarker = self.axes.scatter([None], [None], s=100, marker='x', color="C1", 
-												linewidth=1.5)
+			linewidth=1.5)
 		
 		self.connectId = self.line.figure.canvas.mpl_connect("button_press_event", self)
 		
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
-							self.blobScatter)
+			self.blobScatter)
 		
 		self.canvas = FigureCanvasTkAgg(self.figure, master=self.window)
 		self.canvas.draw()
@@ -55,11 +55,11 @@ class RegionSelector:
 		if skipButton:
 			self.window.bind("<Escape>", self.skipWithEscapeKey)
 			self.skipButton = tk.Button(self.window, text="Skip", command=self.skip, 
-										fg="darkgoldenrod")
+				fg="darkgoldenrod")
 			self.skipButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.doneButton = tk.Button(self.window, text="Done", command=self.finish, fg="blue", 
-									font=tk.font.Font(weight="bold"))
+			font=tk.font.Font(weight="bold"))
 		self.doneButton.pack(in_=self.buttonBar, side=tk.TOP)
 		
 		self.window.protocol("WM_DELETE_WINDOW", quit)
@@ -89,7 +89,7 @@ class RegionSelector:
 		if len(self.xList) > 2:
 			self.underLine.set_data([self.xList + [self.xList[0]], self.yList + [self.yList[0]]])
 			self.dottedLine.set_data([[self.xList[0], self.xList[-1]], [self.yList[0], 
-										self.yList[-1]]])
+				self.yList[-1]]])
 		self.underLine.figure.canvas.draw_idle()
 		self.line.figure.canvas.draw_idle()
 	

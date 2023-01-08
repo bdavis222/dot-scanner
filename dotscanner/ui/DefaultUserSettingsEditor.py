@@ -19,7 +19,7 @@ class DefaultUserSettingsEditor:
 		
 		self.labelFilepath = tk.Label(self.window, text="Default filepath:")
 		self.labelSelectedPath = tk.Label(self.window, text="No default filepath selected", 
-											bg="white", fg="lightgray")
+			bg="white", fg="lightgray")
 		self.labelSaved = tk.Label(self.window, text=" Saved!", fg="green")
 		self.showFilepath()
 		
@@ -29,11 +29,11 @@ class DefaultUserSettingsEditor:
 		self.navigation = tk.Frame(self.window)
 
 		self.buttonSelectFolder = tk.Button(self.window, text="Browse...", 
-											command=self.browseFolders)
+			command=self.browseFolders)
 		self.buttonClearDefaultPath = tk.Button(self.window, text="Clear", fg="red", 
-											command=self.clearDefaultPath)
+			command=self.clearDefaultPath)
 		self.buttonSaveDefaultPath = tk.Button(self.window, text="Save", fg="blue", 
-											command=self.saveDefaultPath)
+			command=self.saveDefaultPath)
 		
 		self.buttonSelectFolder.pack(in_=self.navigation, side=tk.LEFT)
 		self.buttonClearDefaultPath.pack(in_=self.navigation, side=tk.LEFT)
@@ -45,9 +45,9 @@ class DefaultUserSettingsEditor:
 		
 		self.configFileLabel = tk.Label(self.window, text="Config file:")
 		self.buttonEdit = tk.Button(self.window, text="Edit...", 
-									command=cm.showEditConfigFileDialog)
+			command=cm.showEditConfigFileDialog)
 		self.buttonReset = tk.Button(self.window, text="Reset", fg="red", 
-									command=cm.showResetConfigFileDialog)
+			command=cm.showResetConfigFileDialog)
 		
 		self.configFileLabel.pack(in_=self.configFileButtons, side=tk.LEFT)
 		self.buttonEdit.pack(in_=self.configFileButtons, side=tk.LEFT)
@@ -65,7 +65,7 @@ class DefaultUserSettingsEditor:
 
 	def browseFolders(self):
 		chosenFolder = filedialog.askdirectory(initialdir=self.filepath, 
-												title="Select a default starting folder")
+			title="Select a default starting folder")
 		if chosenFolder not in ["", " ", "/"]:
 			self.filepath = chosenFolder
 			displayedFolder = chosenFolder
@@ -109,7 +109,7 @@ class DefaultUserSettingsEditor:
 	def showFilepath(self):
 		if self.filepath in ["", " ", "/"]:
 			self.labelSelectedPath.configure(text="No default filepath selected", fg="lightgray", 
-												bg="white")
+				bg="white")
 		else:
 			displayedFilepath = self.filepath
 			if len(displayedFilepath) > 50:

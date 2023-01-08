@@ -20,6 +20,8 @@ class TestStrings(unittest.TestCase):
         
         output = strings.densityOutput(
             filename="test.png", 
+            dotTotal=6,
+            surveyedArea=600,
             density=0.01,
             error=0.0001,
             thresholds=(1.5, 5.0, 2.0),
@@ -30,7 +32,7 @@ class TestStrings(unittest.TestCase):
         
         self.assertEqual(
             output,
-            "test.png 0.01 0.0001 1.5 5.0 2.0 5 2 (1, 1), (1, 10), (10, 10), (10, 1)\n"
+            "test.png 6 600 0.01 0.0001 1.5 5.0 2.0 5 2 (1, 1), (1, 10), (10, 10), (10, 1)\n"
         )
     
     def test_fileSkippedNotification(self):

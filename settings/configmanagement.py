@@ -146,7 +146,7 @@ PROGRAM = "density"\n\
 # Whether a "density" program or "lifetime" program should be run\n\
 \n\
 SCALE = None\n\
-# Scale of the image (in nanometers per pixel). If unknown, leave as None.\n\
+# Linear scale of the image (width of a single pixel in nanometers per pixel). Default value is None. If None is entered, the final density output will be in dots per pixel^2. If a numerical value is entered, the final density output will be in dots per micron^2.\n\
 \n\
 ############################################\n\
 ############ THRESHOLD SETTINGS ############\n\

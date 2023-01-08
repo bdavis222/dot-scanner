@@ -73,7 +73,7 @@ def getCoordsInPolygon(data, points, polygonVertices):
 	return coordsInPolygon
 
 def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
-								polygonCoordMap, xMin, xMax, yMin, yMax):
+	polygonCoordMap, xMin, xMax, yMin, yMax):
 	dotCoords = {}
 	blobCoords = {}
 	for y in range(yMin, yMax + 1):

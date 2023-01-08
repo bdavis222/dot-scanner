@@ -19,15 +19,15 @@ class DialogWindow:
 		self.buttonsFrame = tk.Frame(self.window)
 		
 		self.positiveButton = tk.Button(self.window, text=positiveButtonText, 
-										fg=positiveButtonColor, command=positiveButtonAction)
+			fg=positiveButtonColor, command=positiveButtonAction)
 		
 		if negativeButtonAction is None:
 			self.negativeButton = tk.Button(self.window, text=negativeButtonText, 
-											command=self.window.destroy)
+				command=self.window.destroy)
 			self.window.bind("<Escape>", self.closeWindowWithEscapeKey)
 		else:
 			self.negativeButton = tk.Button(self.window, text=negativeButtonText, 
-											command=negativeButtonAction)
+				command=negativeButtonAction)
 		
 		self.negativeButton.pack(in_=self.buttonsFrame, side=tk.LEFT)
 		self.positiveButton.pack(in_=self.buttonsFrame, side=tk.LEFT)

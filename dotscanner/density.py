@@ -57,13 +57,13 @@ def getDensityErrorAndCoords(microscopeImage, blobSize):
 	coordsInPolygon = dp.getCoordsInPolygon(data, points, microscopeImage.polygon)
 	
 	dotTotal, blobTotal, dotsInPoly, blobsInPoly = getTotalsAndCoords(coordsInPolygon, dotCoords, 
-																		blobCoords, blobSize)
+		blobCoords, blobSize)
 	
 	surveyedArea = len(coordsInPolygon) - blobTotal
 	density = dotTotal / surveyedArea * PIXELS_TO_MICRONS
 	error = np.sqrt(dotTotal) / surveyedArea * PIXELS_TO_MICRONS
 	
-	return density, error, dotsInPoly, blobsInPoly
+	return dotTotal, surveyedArea, density, error, dotsInPoly, blobsInPoly
 
 def measureDensity(directory, filename, microscopeImage, userSettings):
 	if len(microscopeImage.polygon) < 3:
@@ -71,13 +71,14 @@ def measureDensity(directory, filename, microscopeImage, userSettings):
 	
 	blobSize = userSettings.blobSize
 	
-	density, error, dotsInPoly, blobsInPoly = getDensityErrorAndCoords(microscopeImage, blobSize)
+	dotTotal, surveyedArea, density, error, dotsInPoly, blobsInPoly = getDensityErrorAndCoords(
+		microscopeImage, blobSize)
 	
-	saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
-							dotsInPoly, blobsInPoly)
+	saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, error, 
+		microscopeImage, userSettings, dotsInPoly, blobsInPoly)
 
-def saveDensityDataFiles(directory, filename, density, error, microscopeImage, userSettings, 
-							dotCoords, blobCoords, skipped=False):
+def saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, error, 
+	microscopeImage, userSettings, dotCoords, blobCoords, skipped=False):
 	saveFigures = userSettings.saveFigures
 	blobSize = userSettings.blobSize
 	dotSize = userSettings.dotSize
@@ -88,13 +89,13 @@ def saveDensityDataFiles(directory, filename, density, error, microscopeImage, u
 			file.write(strings.densityOutputFileHeader)
 			
 	if skipped:
-		output = f"{filename} skipped - - - - - - - -\n"
+		output = f"{filename} skipped - - - - - - - - - -\n"
 		
 	else:
 		density = np.round(density, 7)
 		error = np.round(error, 7)
-		output = strings.densityOutput(filename, density, error, microscopeImage.thresholds, 
-										dotSize, blobSize, microscopeImage.polygon)
+		output = strings.densityOutput(filename, dotTotal, surveyedArea, density, error, 
+			microscopeImage.thresholds, dotSize, blobSize, microscopeImage.polygon)
 	
 	if not skipped and saveFigures:
 		saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords)
@@ -111,34 +112,32 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoo
 	
 	figure, axes = pl.subplots()
 	axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-					vmax=userSettings.upperContrast * np.std(data), zorder=0)
+		vmax=userSettings.upperContrast * np.std(data), zorder=0)
 	dotScatter = axes.scatter([None], [None], s=5 * dotSize, facecolors="none", 
-								edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
+		edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
 	dotScatter.set_offsets(dotCoords)
 	
 	if cfg.PLOT_BLOBS:
 		blobSize = userSettings.blobSize
 		blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
-									edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, 
-									zorder=3)
+			edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
 		blobScatter.set_offsets(blobCoords)
 	
 	if cfg.PLOT_POLYGON:
 		polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
 		underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
-								zorder=1)
+			zorder=1)
 		line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
-							linewidth=cfg.POLYGON_THICKNESS, zorder=2)
+			linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 	
 	targetPath = files.getTargetPath(directory, program)
 	
 	truncatedFilename = ".".join(filename.split(".")[:-1])
-	figure.savefig(f"{targetPath}{truncatedFilename}.pdf", 
-		bbox_inches="tight", pad_inches=0)
+	figure.savefig(f"{targetPath}{truncatedFilename}.pdf", bbox_inches="tight", pad_inches=0)
 	figure.clf()
 	pl.close(figure)
 
 def skipFile(directory, filename, userSettings):
 	saveDensityDataFiles(directory, filename, None, None, None, userSettings, None, None, 
-							skipped=True)
+		skipped=True)
 	print(strings.fileSkippedNotification(filename))
