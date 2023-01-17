@@ -124,7 +124,7 @@ LIFETIME_OUTPUT_FILENAME = "lifetimes.txt"
 FIGURE_DIRECTORY_NAME = "figures/"
 # The directory name where figures are to be saved (only if SAVE_FIGURES = True). The default is "figures/", but this can be changed if the user typically keeps a similarly named folder in their file structure for something else.
 
-FIGURE_FILETYPES = ["pdf", "png"]
+FIGURE_FILETYPES = ["pdf"]
 # The filetypes for the output figures. Multiple types can also be selected, e.g., ["png", "pdf", "tif"]. Only use the supported filetypes ("eps", "tif", "ps", "tiff", "rgba", "svg", "png", "jpg", "raw", "pdf", "svgz", "pgf", and "jpeg").
 
 FIGURE_RESOLUTION = 300
