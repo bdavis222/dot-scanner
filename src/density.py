@@ -1,7 +1,7 @@
-import dotscanner.dataprocessing as dp
-import dotscanner.files as files
-import dotscanner.strings as strings
 import settings.config as cfg
+import src.dataprocessing as dp
+import src.files as files
+import src.strings as strings
 import matplotlib.pyplot as pl
 import numpy as np
 import os
@@ -110,32 +110,40 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoo
 	data = microscopeImage.data
 	polygon = microscopeImage.polygon
 	
-	figure, axes = pl.subplots()
-	axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-		vmax=userSettings.upperContrast * np.std(data), zorder=0)
-	dotScatter = axes.scatter([None], [None], s=5 * dotSize, facecolors="none", 
-		edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
-	dotScatter.set_offsets(dotCoords)
-	
-	if cfg.PLOT_BLOBS:
-		blobSize = userSettings.blobSize
-		blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
-			edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
-		blobScatter.set_offsets(blobCoords)
-	
-	if cfg.PLOT_POLYGON:
-		polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
-		underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
-			zorder=1)
-		line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
-			linewidth=cfg.POLYGON_THICKNESS, zorder=2)
-	
-	targetPath = files.getTargetPath(directory, program)
-	
-	truncatedFilename = ".".join(filename.split(".")[:-1])
-	figure.savefig(f"{targetPath}{truncatedFilename}.pdf", bbox_inches="tight", pad_inches=0)
-	figure.clf()
-	pl.close(figure)
+	for fileExtension in cfg.FIGURE_FILETYPES:
+		figure, axes = pl.subplots()
+		axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
+			vmax=userSettings.upperContrast * np.std(data), zorder=0)
+		dotScatter = axes.scatter([None], [None], s=5 * dotSize, facecolors="none", 
+			edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
+		dotScatter.set_offsets(dotCoords)
+		
+		if cfg.PLOT_BLOBS:
+			blobSize = userSettings.blobSize
+			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
+				edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
+			blobScatter.set_offsets(blobCoords)
+		
+		if cfg.PLOT_POLYGON:
+			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
+			underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
+				zorder=1)
+			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
+				linewidth=cfg.POLYGON_THICKNESS, zorder=2)
+		
+		targetPath = files.getTargetPath(directory, program, fileExtension)
+		
+		truncatedFilename = ".".join(filename.split(".")[:-1])
+		
+		if fileExtension == "pdf":
+			figure.savefig(f"{targetPath}{truncatedFilename}.{fileExtension}", 
+				bbox_inches="tight", pad_inches=0)
+		else:
+			figure.savefig(f"{targetPath}{truncatedFilename}.{fileExtension}", 
+				bbox_inches="tight", pad_inches=0, dpi=cfg.FIGURE_RESOLUTION)
+		
+		figure.clf()
+		pl.close(figure)
 
 def skipFile(directory, filename, userSettings):
 	saveDensityDataFiles(directory, filename, None, None, None, userSettings, None, None, 

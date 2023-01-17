@@ -1,9 +1,9 @@
-import dotscanner.files as files
-import dotscanner.dataprocessing as dp
-import dotscanner.strings as strings
-import dotscanner.ui.window as ui
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
 import settings.config as cfg
+import src.files as files
+import src.dataprocessing as dp
+import src.strings as strings
+import src.ui.window as ui
+from src.ui.MicroscopeImage import MicroscopeImage
 import matplotlib.pyplot as pl
 import numpy as np
 import os
@@ -144,43 +144,51 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 	print("Saving figures...")
 	coordsToPlotSize = len(list(coordsToPlot.keys()))
 	count = 0
-	ui.printProgressBar(count, coordsToPlotSize)
-	for imageNumber, dotCoordSet in coordsToPlot.items():
-		filename = imageNumberToFilenameMap[imageNumber]
-		microscopeImage = MicroscopeImage(directory, filename, userSettings)
-		data = microscopeImage.data
+	totalCount = coordsToPlotSize * len(cfg.FIGURE_FILETYPES)
+	ui.printProgressBar(count, totalCount)
 	
-		figure, axes = pl.subplots()
-		axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
-			vmax=userSettings.upperContrast * np.std(data), zorder=0)
-		dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
-			edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
-		dotScatter.set_offsets(list(dotCoordSet))
+	for fileExtension in cfg.FIGURE_FILETYPES:
+		for imageNumber, dotCoordSet in coordsToPlot.items():
+			filename = imageNumberToFilenameMap[imageNumber]
+			microscopeImage = MicroscopeImage(directory, filename, userSettings)
+			data = microscopeImage.data
 		
-		if cfg.PLOT_BLOBS:
-			blobSize = userSettings.blobSize
-			blobCoordMap = imageNumberToBlobCoordMap[imageNumber]
-			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
-				edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
-			dp.setScatterOffset(blobCoordMap, blobScatter)
-		
-		if cfg.PLOT_POLYGON:
-			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
-			underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
-				zorder=1)
-			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
-				linewidth=cfg.POLYGON_THICKNESS, zorder=2)
-		
-		targetPath = files.getTargetPath(directory, userSettings.program)
-		truncatedFilename = ".".join(filename.split(".")[:-1])
-		
-		figure.savefig(f"{targetPath}{truncatedFilename}.pdf", 
-			bbox_inches="tight", pad_inches=0)
-		figure.clf()
-		pl.close(figure)
-		
-		count += 1
-		ui.printProgressBar(count, coordsToPlotSize)
+			figure, axes = pl.subplots()
+			axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
+				vmax=userSettings.upperContrast * np.std(data), zorder=0)
+			dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
+				edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
+			dotScatter.set_offsets(list(dotCoordSet))
+			
+			if cfg.PLOT_BLOBS:
+				blobSize = userSettings.blobSize
+				blobCoordMap = imageNumberToBlobCoordMap[imageNumber]
+				blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
+					edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
+				dp.setScatterOffset(blobCoordMap, blobScatter)
+			
+			if cfg.PLOT_POLYGON:
+				polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
+				underLine, = axes.plot(polygonX, polygonY, linestyle="-", color="k", linewidth=0.75, 
+					zorder=1)
+				line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
+					linewidth=cfg.POLYGON_THICKNESS, zorder=2)
+			
+			targetPath = files.getTargetPath(directory, userSettings.program, fileExtension)
+			truncatedFilename = ".".join(filename.split(".")[:-1])
+			
+			if fileExtension == "pdf":
+				figure.savefig(f"{targetPath}{truncatedFilename}.{fileExtension}", 
+					bbox_inches="tight", pad_inches=0)
+			else:
+				figure.savefig(f"{targetPath}{truncatedFilename}.{fileExtension}", 
+					bbox_inches="tight", pad_inches=0, dpi=cfg.FIGURE_RESOLUTION)
+			
+			figure.clf()
+			pl.close(figure)
+			
+			count += 1
+			ui.printProgressBar(count, totalCount)
 
 def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
 	imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, removeEdgeFrames, saveFigures, 

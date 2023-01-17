@@ -8,7 +8,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name='dotscanner',
-    version='1.2.14', # Required 
+    version='1.2.15', # Required 
     description='A program designed for analysis of microscope imaging data',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -34,7 +34,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'dotscanner = dotscanner.__main__:main'
+            'dotscanner = src.__main__:main'
         ]
     }
 )

@@ -1,11 +1,11 @@
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
+from src.ui.MicroscopeImage import MicroscopeImage
 from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import numpy as np
 import unittest
 
 class TestMicroscopeImage(unittest.TestCase):
-	@mock.patch("dotscanner.dataprocessing.getData")
+	@mock.patch("src.dataprocessing.getData")
 	def getMicroscopeImage(self, mock_getData):
 		mock_getData.return_value = np.array([
 			[0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -1,4 +1,4 @@
-import dotscanner.files as files
+import src.files as files
 from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
@@ -38,7 +38,7 @@ class TestFiles(unittest.TestCase):
         self.assertEqual(files.getTrailingNumber("6.file"), 6)
         self.assertEqual(files.getTrailingNumber("010.file"), 10)
     
-    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("src.files.os.listdir")
     def test_getMostCommonFileExtension(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
         
@@ -46,7 +46,7 @@ class TestFiles(unittest.TestCase):
         
         self.assertEqual(extension, ".png")
     
-    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("src.files.os.listdir")
     def test_getFilenamesWithExtension(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
         
@@ -74,7 +74,7 @@ class TestFiles(unittest.TestCase):
         self.assertNotIn("test", unsortedFilenames2)
         self.assertNotIn("directory2/", unsortedFilenames2)
     
-    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("src.files.os.listdir")
     def test_getSortedFilenames(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
         
@@ -92,9 +92,9 @@ class TestFiles(unittest.TestCase):
             ["file04.png", "file05.PNG", "file11.png"]
         )
     
-    @mock.patch("dotscanner.files.os.path.basename")
-    @mock.patch("dotscanner.files.os.path.dirname")
-    @mock.patch("dotscanner.files.os.path.isfile")
+    @mock.patch("src.files.os.path.basename")
+    @mock.patch("src.files.os.path.dirname")
+    @mock.patch("src.files.os.path.isfile")
     def test_getDirectoryAndFilenames_forFile(self, mock_isfile, mock_dirname, mock_basename):
         fakeUserSettings = FakeUserSettings()
         mock_isfile.return_value = True
@@ -106,9 +106,9 @@ class TestFiles(unittest.TestCase):
         self.assertEqual(directory, "test/directory/")
         self.assertEqual(filenames, ["testFile.png"])
     
-    @mock.patch("dotscanner.files.os.listdir")
-    @mock.patch("dotscanner.files.os.path.isdir")
-    @mock.patch("dotscanner.files.os.path.isfile")
+    @mock.patch("src.files.os.listdir")
+    @mock.patch("src.files.os.path.isdir")
+    @mock.patch("src.files.os.path.isfile")
     def test_getDirectoryAndFilenames_forDirectory(self, mock_isfile, mock_isdir, mock_listdir):
         fakeUserSettings = FakeUserSettings()
         mock_isfile.return_value = False

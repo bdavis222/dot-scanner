@@ -1,5 +1,5 @@
-import dotscanner.strings as strings
 import settings.config as cfg
+import src.strings as strings
 import os
 
 def fixDirectory(string):
@@ -103,10 +103,17 @@ def removeImagesBeforeStartingImage(filenames, startImage):
 			filenamesFromStartingImage.append(filename)
 	return filenamesFromStartingImage
 
-def getTargetPath(directory, program):
-	figurePath = f"{directory}{cfg.FIGURE_DIRECTORY_NAME}"
-	if not figurePath.endswith("/"):
-		figurePath += "/"
+def getTargetPath(directory, program, fileExtension):
+	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
+	if not figureDirectoryName.endswith("/"):
+		figureDirectoryName += "/"
+	
+	figurePathWithoutExtension = f"{directory}{figureDirectoryName}"
+	
+	if not os.path.exists(figurePathWithoutExtension):
+	    os.mkdir(figurePathWithoutExtension)
+	
+	figurePath = f"{directory}{figureDirectoryName}{fileExtension}/"
 	
 	if not os.path.exists(figurePath):
 	    os.mkdir(figurePath)

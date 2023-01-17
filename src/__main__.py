@@ -1,13 +1,13 @@
 import settings.configmanagement as cm
 cm.runChecks()
-import dotscanner.density as density
-import dotscanner.files as files
-import dotscanner.lifetime as lifetime
-import dotscanner.strings as strings
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
-from dotscanner.ui.RegionSelector import RegionSelector
-from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
-from dotscanner.ui.UserSettings import UserSettings
+import src.density as density
+import src.files as files
+import src.lifetime as lifetime
+import src.strings as strings
+from src.ui.MicroscopeImage import MicroscopeImage
+from src.ui.RegionSelector import RegionSelector
+from src.ui.ThresholdAdjuster import ThresholdAdjuster
+from src.ui.UserSettings import UserSettings
 
 def main():	
 	while True:

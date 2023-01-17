@@ -1,4 +1,6 @@
-from dotscanner.ui.DialogWindow import DialogWindow
+import settings.config as cfg
+from src.ui.DialogWindow import DialogWindow
+import matplotlib.colors as colors
 import traceback
 
 def runChecks():
@@ -10,9 +12,6 @@ def runChecks():
 		quit()
 
 def scanConfigFileForErrors():
-	import settings.config as cfg
-	import matplotlib.colors as colors
-	
 	matplotlibColors = set(colors.BASE_COLORS.keys())
 	for color in colors.TABLEAU_COLORS.keys():
 		matplotlibColors.add(color)
@@ -63,6 +62,13 @@ def scanConfigFileForErrors():
 	assert type(cfg.DENSITY_OUTPUT_FILENAME) == str
 	assert type(cfg.LIFETIME_OUTPUT_FILENAME) == str
 	assert type(cfg.FIGURE_DIRECTORY_NAME) == str
+	assert type(cfg.FIGURE_FILETYPES) == list
+	assert type(cfg.FIGURE_FILETYPES[0]) == str
+	
+	supportedPlotOutputTypes = {"eps", "tif", "ps", "tiff", "rgba", "svg", "png", "jpg", "raw", 
+	"pdf", "svgz", "pgf", "jpeg"}
+	for fileExtension in cfg.FIGURE_FILETYPES:
+		assert fileExtension in supportedPlotOutputTypes
 
 def showEditConfigFileDialog():
 	DialogWindow(
@@ -261,7 +267,13 @@ LIFETIME_OUTPUT_FILENAME = "lifetimes.txt"\n\
 # The filename to be saved in the directory containing the images used for lifetime measurement.\n\
 \n\
 FIGURE_DIRECTORY_NAME = "figures/"\n\
-# The directory name where figures are to be saved (only if SAVE_FIGURES = True). The default is "figures/", but this can be changed if the user typically keeps a similarly named folder in their file structure for something else.\
+# The directory name where figures are to be saved (only if SAVE_FIGURES = True). The default is "figures/", but this can be changed if the user typically keeps a similarly named folder in their file structure for something else.\n\
+\n\
+FIGURE_FILETYPES = ["pdf", "png"]\n\
+# The filetypes for the output figures. Multiple types can also be selected, e.g., ["png", "pdf", "tif"]. Only use the supported filetypes ("eps", "tif", "ps", "tiff", "rgba", "svg", "png", "jpg", "raw", "pdf", "svgz", "pgf", and "jpeg").\n\
+\n\
+FIGURE_RESOLUTION = 300\n\
+# Resolution (DPI) of the output figures. This is for images only; PDF outputs are unaffected by this value.\
 ')
 	
 	quit()

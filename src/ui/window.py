@@ -1,5 +1,5 @@
-import dotscanner.strings as strings
 import settings.config as cfg
+import src.strings as strings
 import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as pl

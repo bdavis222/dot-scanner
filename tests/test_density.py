@@ -1,5 +1,5 @@
-import dotscanner.dataprocessing as dp
-import dotscanner.density as density
+import src.dataprocessing as dp
+import src.density as density
 import numpy as np
 import unittest
 
