@@ -24,7 +24,7 @@ setup(
         'Operating System :: Microsoft :: Windows'
     ],
     packages=find_packages(),
-    py_modules=['dotscanner', 'dotscanner.ui', 'settings', 'tests'],
+    py_modules=['src', 'src.ui', 'settings', 'tests', 'tests.ui'],
     python_requires='>=3.7, <4',
     install_requires=['matplotlib', 'numpy'],
     project_urls={
