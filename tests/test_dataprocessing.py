@@ -1,4 +1,4 @@
-import src.dataprocessing as dp
+import dotscanner.dataprocessing as dp
 import numpy as np
 import unittest
 

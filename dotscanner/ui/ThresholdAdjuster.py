@@ -1,6 +1,6 @@
-import src.dataprocessing as dp
-import src.strings as strings
-import src.ui.window as ui
+import dotscanner.dataprocessing as dp
+import dotscanner.strings as strings
+import dotscanner.ui.window as ui
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg

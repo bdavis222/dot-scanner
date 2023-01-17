@@ -1,7 +1,7 @@
+import dotscanner.dataprocessing as dp
+import dotscanner.files as files
+import dotscanner.strings as strings
 import settings.config as cfg
-import src.dataprocessing as dp
-import src.files as files
-import src.strings as strings
 import matplotlib.pyplot as pl
 import numpy as np
 import os

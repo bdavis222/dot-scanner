@@ -1,5 +1,4 @@
-import settings.config as cfg
-from src.ui.DialogWindow import DialogWindow
+from dotscanner.ui.DialogWindow import DialogWindow
 import matplotlib.colors as colors
 import traceback
 
@@ -12,6 +11,8 @@ def runChecks():
 		quit()
 
 def scanConfigFileForErrors():
+	import settings.config as cfg
+	
 	matplotlibColors = set(colors.BASE_COLORS.keys())
 	for color in colors.TABLEAU_COLORS.keys():
 		matplotlibColors.add(color)
