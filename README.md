@@ -97,7 +97,7 @@ These buttons adjust the contrast of the image.
 These buttons adjust the sensitivity for detecting “dots” in the image (the fainter, smaller dots, as opposed to the much brighter and larger “blobs”). The user can also press the **up** and **down** arrow keys on the keyboard to make these adjustments.
 
 #### Blobs
-These buttons adjust the sensitivity for detecting “blobs” in the image. The user can also press the **right** and **left** arrow keys on the keyboard to make these adjustments. *Note: since increasing the blob sensitivity changes the threshold between blobs and dots, this almost always results in a different number of dots being detected as well.*
+These buttons adjust the sensitivity for detecting “blobs” in the image. The user can also press the **right** and **left** arrow keys on the keyboard to make these adjustments. *Note: since increasing the blob sensitivity changes the threshold between blobs and dots, this results in a different number of dots being detected as well.*
 
 #### Edit
 This button changes the left button bar view to display some manual threshold adjustment options:
