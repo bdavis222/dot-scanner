@@ -46,11 +46,6 @@ thresholdAdjusterWindowTitle = "Dot Scanner - Threshold Adjustment"
 
 tooFewFramesException = "There are not enough images to get meaningful lifetimes."
 
-unitsInconsistentException = f"Inconsistent units with other measurements already recorded in \
-{cfg.DENSITY_OUTPUT_FILENAME}. To record measurements in units of per sq pix, set SCALE to None \
-in configurations file. Otherwise, set the scale to the scale that was selected for the previous \
-measurements."
-
 upperDotThreshScaleWarning = "\nWARNING: Upper dot threshold scale set below lower dot threshold \
 scale. Previous threshold values will be retained."
 
