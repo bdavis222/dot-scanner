@@ -6,7 +6,7 @@ FILEPATH = ""
 PROGRAM = "density"
 # Whether a "density" program or "lifetime" program should be run
 
-SCALE = 147
+SCALE = None
 # Linear scale of the image (width of a single pixel in nanometers per pixel). Default value is None. If None is entered, the final density output will be in dots per pixel^2. If a numerical value is entered, the final density output will be in dots per micron^2.
 
 ############################################
