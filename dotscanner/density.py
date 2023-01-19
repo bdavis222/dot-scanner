@@ -1,7 +1,9 @@
 import dotscanner.dataprocessing as dp
 import dotscanner.files as files
 import dotscanner.strings as strings
+from dotscanner.ui.DialogWindow import DialogWindow
 import settings.config as cfg
+import settings.configmanagement as cm
 import matplotlib.pyplot as pl
 import numpy as np
 import os
@@ -19,7 +21,23 @@ def checkUnitsConsistent(directory):
 			firstLine = file.readline().rstrip()
 			unitsInFile = firstLine.split("per sq ")[1].split(")")[0]
 			if unitsInFile != UNITS:
-				raise Exception(strings.unitsInconsistentException)
+				showMismatchedUnitsErrorDialog()
+				quit()
+
+def showMismatchedUnitsErrorDialog():
+	DialogWindow(
+		title="Inconsistent units error",
+		message="\
+Other measurements already recorded in output file \n\
+have different units than those selected.\n\
+This must be reconciled before proceeding.",
+		positiveButtonText="Edit configurations",
+		negativeButtonText="Cancel",
+		positiveButtonAction=cm.showEditConfigFileDialog,
+		windowWidth=400,
+		windowX=10,
+		windowY=30
+		)
 
 def getAlreadyMeasured(directory):
 	alreadyMeasured = set()
