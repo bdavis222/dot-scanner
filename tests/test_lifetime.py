@@ -166,7 +166,7 @@ class TestLifetime(unittest.TestCase):
 		
 		self.assertEqual(result, None)
 	
-	def test_updateLifetimeResults_doesNotUpdateContainers_whenImageNumberLessThanOrEqualToSkipsAllowedAndEdgeFramesRemoved(self):
+	def test_updateLifetimes_notUpdateContainers_whenImNumLessThanSkipsAndEdgeFramesRemoved(self):
 		lifetimes = []
 		resultCoords = []
 		startImages = []

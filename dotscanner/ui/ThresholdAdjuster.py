@@ -8,12 +8,9 @@ import numpy as np
 import tkinter as tk
 
 class ThresholdAdjuster:
-	def __init__(self, image, userSettings, skipButton=True):
-		ui.setupWindow()
-		
+	def __init__(self, image, userSettings, skipButton=True, drawUi=True):
 		self.index = 0
 		self.skipButtonExists = skipButton
-		
 		
 		self.image = image
 		self.dotSize = userSettings.dotSize
@@ -38,9 +35,10 @@ class ThresholdAdjuster:
 			(0,                     len(self.data) / 2),
 		]
 		
+		ui.setupWindow()
 		self.window = ui.createPlotWindow(strings.thresholdAdjusterWindowTitle)
 		self.windowScaling = ui.getWindowScaling()
-		
+	
 		self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = ui.createPlots(
 			self.data, userSettings)
 
@@ -48,9 +46,12 @@ class ThresholdAdjuster:
 			self.blobScatter)
 		
 		self.displayCorrectMarkerSize(self.index)
-		
+	
 		self.canvas = FigureCanvasTkAgg(self.figure, master=self.window)
 		self.canvas.draw()
+		
+		if not drawUi: # For unit testing
+			return
 		
 		self.buttonBar = tk.Frame(self.window)
 		

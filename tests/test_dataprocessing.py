@@ -1,4 +1,5 @@
 import dotscanner.dataprocessing as dp
+import matplotlib.pyplot as pl
 import numpy as np
 import unittest
 
@@ -191,6 +192,64 @@ class TestFunctions(unittest.TestCase):
 		self.assertNotIn(3, dotCoords)
 		self.assertNotIn(5, dotCoords[4])
 		self.assertIn(3, dotCoords[4])
+	
+	def test_setScatterData(self):
+		dotCoords = {
+			1: {1, 2, 5},
+			3: {1},
+			4: {8, 3}
+		}
+		blobCoords = {
+			11: {3, 0, 8},
+			31: {1},
+			41: {6, 3, 3}
+		}
+		dotScatter = pl.scatter([], [])
+		blobScatter = pl.scatter([], [])
+		
+		dp.setScatterData(dotCoords, blobCoords, dotScatter, blobScatter)
+		dotOffsets = dotScatter.get_offsets()
+		blobOffsets = blobScatter.get_offsets()
+		
+		for offset in dotOffsets:
+			x, y = offset
+			self.assertIn(y, dotCoords)
+			self.assertIn(x, dotCoords[y])
+		
+		for offset in blobOffsets:
+			x, y = offset
+			self.assertIn(y, blobCoords)
+			self.assertIn(x, blobCoords[y])
+	
+	def test_setScatterOffset(self):
+		testScatterPlot = pl.scatter([], [])
+		testMap = {
+			1: {1, 2, 5},
+			3: {1},
+			4: {8, 3}
+		}
+		
+		dp.setScatterOffset(testMap, testScatterPlot)
+		newOffsets = testScatterPlot.get_offsets()
+		
+		for offset in newOffsets:
+			x, y = offset
+			self.assertIn(y, testMap)
+			self.assertIn(x, testMap[y])
+		
+		testMap2 = {
+			1: {3, 0, 8},
+			3: {1},
+			4: {6, 3, 3}
+		}
+		
+		dp.setScatterOffset(testMap2, testScatterPlot)
+		newOffsets2 = testScatterPlot.get_offsets()
+		
+		for offset in newOffsets2:
+			x, y = offset
+			self.assertIn(y, testMap2)
+			self.assertIn(x, testMap2[y])
 	
 	def test_squareSum(self):
 		data = np.array([
