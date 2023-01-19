@@ -1,2 +1,0 @@
-# filename | number of dots | number of pixels surveyed | density (per sq pix) | error | lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | polygon vertices (x, y)
-demo_image1.TIF 14 976 0.0143443 0.0038337 1.5 5.0 2.0 5 2 (136, 402), (131, 357), (173, 348), (174, 377)
