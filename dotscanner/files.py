@@ -100,7 +100,7 @@ def getSortedFilenames(directory, startImage, programSelected):
 	else:
 		filenames.sort()
 	
-	if startImage != "":
+	if programSelected == "lifetime" and startImage != "":
 		filenames = removeImagesBeforeStartingImage(filenames, startImage)
 	
 	return filenames

@@ -76,7 +76,56 @@ class TestFiles(unittest.TestCase):
         self.assertNotIn("directory2/", unsortedFilenames2)
     
     @mock.patch("dotscanner.files.os.listdir")
-    def test_getSortedFilenames(self, mock_listdir):
+    def test_getSortedFilenames_withDensityProgramNumbered(self, mock_listdir):
+        mock_listdir.return_value = self.getTestFilenames()
+        
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png", 
+            programSelected="density")
+        
+        self.assertEqual(
+            sortedFilenames, 
+            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
+        )
+        
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png", 
+            programSelected="density")
+        
+        # The value of startImage should be ignored for a density program
+        self.assertEqual(
+            sortedFilenames, 
+            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
+        )
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    def test_getSortedFilenames_withDensityProgramUnnumbered(self, mock_listdir):
+        mock_listdir.return_value = ["filec.png", "fileb.png", "filea.png", "filef.png", 
+        "filee.PNG", "filed.png"]
+        
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="filec.png", 
+            programSelected="density")
+        
+        # The value of startImage should be ignored for a density program
+        self.assertEqual(
+            sortedFilenames, 
+            ["filea.png", "fileb.png", "filec.png", "filed.png", "filee.PNG", "filef.png"]
+        )
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    def test_getSortedFilenames_withDensityProgramUnnumberedNoStartImage(self, mock_listdir):
+        mock_listdir.return_value = ["filec.png", "fileb.png", "filea.png", "filef.png", 
+        "filee.PNG", "filed.png"]
+        
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="", 
+            programSelected="density")
+        
+        # The value of startImage should be ignored for a density program
+        self.assertEqual(
+            sortedFilenames, 
+            ["filea.png", "fileb.png", "filec.png", "filed.png", "filee.PNG", "filef.png"]
+        )
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    def test_getSortedFilenames_withLifetimeProgram(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
         
         sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png", 
@@ -93,6 +142,14 @@ class TestFiles(unittest.TestCase):
         self.assertEqual(
             sortedFilenames, 
             ["file04.png", "file05.PNG", "file11.png"]
+        )
+        
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="", 
+            programSelected="lifetime")
+        
+        self.assertEqual(
+            sortedFilenames, 
+            ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
         )
     
     @mock.patch("dotscanner.files.os.path.basename")
