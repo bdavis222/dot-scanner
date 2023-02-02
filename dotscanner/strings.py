@@ -8,8 +8,8 @@ densityOutputFileHeader = f"# filename | number of dots | number of pixels surve
 density (per sq {'pix' if cfg.SCALE is None else 'um'}) | error | lowerDotThreshScale | \
 upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | polygon vertices (x, y)\n"
 
-fileNumberingException = "Filenames must contain sequentially-ordered numbers and valid file \
-extensions to calculate lifetimes."
+fileNumberingException = "Filenames must contain sequentially-ordered numbers with no gaps and \
+have valid file extensions to calculate lifetimes."
 
 fileNumberingWarning = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
 lifetimes."
@@ -31,8 +31,9 @@ blobs can be dimmer than the brightest dots, which shouldn't happen. Setting to 
 
 maxContrastWarning = "\nWARNING: Max contrast reached. Previous contrast values will be retained."
 
-noFilesException = "No files selected. Check the values of 'FILEPATH' and 'START_IMAGE' in the \
-configurations file."
+noFilesException = "No valid files selected. Does the folder you've selected contain files with \
+valid file extensions (e.g., .tiff)? Subfolders within the selected folder will not be scanned for \
+files. Check the values of 'FILEPATH' and 'START_IMAGE' in the configurations file."
 
 programNameException = "Invalid program name selected in configurations file."
 

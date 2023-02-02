@@ -20,7 +20,7 @@ def getDirectoryAndFilenames(userSettings):
 	else:
 		raise Exception(strings.filepathException)
 	
-	filenames = getSortedFilenames(directory, startImage)
+	filenames = getSortedFilenames(directory, startImage, userSettings.program)
 	
 	if not len(filenames):
 		raise Exception(strings.noFilesException)
@@ -64,6 +64,10 @@ def getMostCommonFileExtension(directory):
 		if frequency > highestFrequency:
 			highestFrequency = frequency
 			mostCommonExtension = extension
+	
+	if mostCommonExtension is None:
+		raise Exception(strings.noFilesException)
+	
 	return "." + mostCommonExtension
 
 def getRightEdgeOfTrailingNumber(string):
@@ -80,15 +84,46 @@ def getRightEdgeOfTrailingNumber(string):
 	
 	raise Exception(strings.fileNumberingException)
 
-def getSortedFilenames(directory, startImage):
+def getSortedFilenames(directory, startImage, programSelected):
+	if hasNoValidFiles(directory):
+		return []
+	
 	fileExtension = getMostCommonFileExtension(directory)
 	filenames = getFilenamesWithExtension(directory, fileExtension)
-	filenames.sort(key=lambda filename: getTrailingNumber(filename))
+	
+	allFilesNumbered = allFilesAreNumbered(filenames)
+	if programSelected == "lifetime" and not allFilesNumbered:
+		raise Exception(strings.fileNumberingException)
+	
+	if allFilesNumbered:
+		filenames.sort(key=lambda filename: getTrailingNumber(filename))
+	else:
+		filenames.sort()
 	
 	if startImage != "":
 		filenames = removeImagesBeforeStartingImage(filenames, startImage)
 	
 	return filenames
+
+def hasNoValidFiles(directory):
+	for file in os.listdir(directory):
+		if "." in file:
+			return False
+	return True
+
+def allFilesAreNumbered(filenames):
+	for filename in filenames:
+		digitFound = False
+		
+		for char in reversed(filename):
+			if char.isdigit():
+				digitFound = True
+				break
+				
+		if not digitFound:
+			return False
+	
+	return True
 
 def getTrailingNumber(string):
 	rightIndex = getRightEdgeOfTrailingNumber(string)

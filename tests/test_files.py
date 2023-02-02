@@ -1,4 +1,5 @@
 import dotscanner.files as files
+import dotscanner.strings as strings
 from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
@@ -78,14 +79,16 @@ class TestFiles(unittest.TestCase):
     def test_getSortedFilenames(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
         
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png")
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png", 
+            programSelected="lifetime")
         
         self.assertEqual(
             sortedFilenames, 
             ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
         )
         
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png")
+        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png", 
+            programSelected="lifetime")
         
         self.assertEqual(
             sortedFilenames, 
@@ -122,6 +125,93 @@ class TestFiles(unittest.TestCase):
             filenames, 
             ["file01.png", "file02.png", "file03.png", "file04.png", "file05.PNG", "file11.png"]
         )
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("dotscanner.files.os.path.isdir")
+    @mock.patch("dotscanner.files.os.path.isfile")
+    def test_getDirectoryAndFilenames_forEmptyDirectory(self, mock_isfile, mock_isdir, mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_isfile.return_value = False
+        mock_isdir.return_value = True
+        mock_listdir.return_value = []
+        
+        with self.assertRaises(Exception) as context:
+            directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        
+        self.assertTrue(strings.noFilesException in str(context.exception))
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("dotscanner.files.os.path.isdir")
+    @mock.patch("dotscanner.files.os.path.isfile")
+    def test_getDirectoryAndFilenames_forNeitherFileNorDirectory(self, mock_isfile, mock_isdir, 
+        mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_isfile.return_value = False
+        mock_isdir.return_value = False
+        mock_listdir.return_value = []
+        
+        with self.assertRaises(Exception) as context:
+            directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        
+        self.assertTrue(strings.filepathException in str(context.exception))
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("dotscanner.files.os.path.isdir")
+    @mock.patch("dotscanner.files.os.path.isfile")
+    def test_getDirectoryAndFilenames_forFilesWithoutExtensions(self, mock_isfile, mock_isdir, 
+        mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_isfile.return_value = False
+        mock_isdir.return_value = True
+        mock_listdir.return_value = ["file", "file2"]
+        
+        with self.assertRaises(Exception) as context:
+            directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        
+        self.assertTrue(strings.noFilesException in str(context.exception))
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    @mock.patch("dotscanner.files.os.path.isdir")
+    @mock.patch("dotscanner.files.os.path.isfile")
+    def test_getDirectoryAndFilenames_forFilesWithoutNumbers(self, mock_isfile, mock_isdir, 
+        mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_isfile.return_value = False
+        mock_isdir.return_value = True
+        mock_listdir.return_value = ["filec.png", "filez.png", "filea.png"]
+        
+        directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        
+        self.assertEqual(filenames, ["filea.png", "filec.png", "filez.png"])
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    def test_hasNoValidFiles_forEmptyDirectory(self, mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_listdir.return_value = []
+        
+        self.assertTrue(files.hasNoValidFiles(fakeUserSettings))
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    def test_hasNoValidFiles_forNoFileExtensions(self, mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_listdir.return_value = ["dir1", "other", "file75"]
+        
+        self.assertTrue(files.hasNoValidFiles(fakeUserSettings))
+    
+    @mock.patch("dotscanner.files.os.listdir")
+    def test_hasNoValidFiles_forSingleFileWithExtension(self, mock_listdir):
+        fakeUserSettings = FakeUserSettings()
+        mock_listdir.return_value = ["dir1", "other", "file75.png"]
+        
+        self.assertFalse(files.hasNoValidFiles(fakeUserSettings))
+    
+    def test_allFilesAreNumbered_withAllNumberedFiles(self):
+        testFiles = ["file03.png", "file02.png", "file05.PNG", "file04.png", "file11.png"]
+        self.assertTrue(files.allFilesAreNumbered(testFiles))
+    
+    def test_allFilesAreNumbered_withOneUnnumberedFile(self):
+        testFiles = ["file03.png", "file02.png", "file05.PNG", "file.png", "file11.png"]
+        self.assertFalse(files.allFilesAreNumbered(testFiles))
 
 if __name__ == '__main__':
     unittest.main()
