@@ -1,6 +1,8 @@
 import dotscanner.dataprocessing as dp
 import dotscanner.density as density
+import mock
 import numpy as np
+import os
 import unittest
 
 class TestDensity(unittest.TestCase):
@@ -21,6 +23,15 @@ class TestDensity(unittest.TestCase):
 		]
 
 		return dp.getCoordsInPolygon(data, points, polygonVertices)
+	
+	@mock.patch("settings.config.DENSITY_OUTPUT_FILENAME", "fakeData.txt")
+	def test_getAlreadyMeasured(self):
+		dir_path = os.path.dirname(os.path.realpath(__file__))
+		directory = dir_path if dir_path.endswith("/") else dir_path + "/"
+		alreadyMeasured = density.getAlreadyMeasured(directory)
+		
+		self.assertEqual(len(alreadyMeasured), 3)
+		self.assertIn("108.TIF", alreadyMeasured)
 
 	def test_getCoordsInPolygon(self):
 		coordsInPolygon = self.getTestCoordsInPolygon()
