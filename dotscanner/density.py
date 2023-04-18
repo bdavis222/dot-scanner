@@ -44,8 +44,10 @@ def getAlreadyMeasured(directory):
 	if os.path.exists(directory + cfg.DENSITY_OUTPUT_FILENAME):
 		with open(directory + cfg.DENSITY_OUTPUT_FILENAME, "r") as file:
 			for line in file:
-				filename = line.split()[0]
-				alreadyMeasured.add(filename)
+				lineList = line.split()
+				if len(lineList) and lineList[0] != "#":
+					filename = lineList[0]
+					alreadyMeasured.add(filename)
 	return alreadyMeasured
 
 def getTotalsAndCoords(coordsInPolygon, dotCoords, blobCoords, blobSize):
@@ -92,14 +94,17 @@ def measureDensity(directory, filename, microscopeImage, userSettings):
 	dotTotal, surveyedArea, density, error, dotsInPoly, blobsInPoly = getDensityErrorAndCoords(
 		microscopeImage, blobSize)
 	
+	microscopeImage.dotCoords, microscopeImage.blobCoords = dotsInPoly, blobsInPoly
 	saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, error, 
-		microscopeImage, userSettings, dotsInPoly, blobsInPoly)
+		microscopeImage, userSettings)
 
 def saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, error, 
-	microscopeImage, userSettings, dotCoords, blobCoords, skipped=False):
+	microscopeImage, userSettings, skipped=False):
 	saveFigures = userSettings.saveFigures
 	blobSize = userSettings.blobSize
 	dotSize = userSettings.dotSize
+	dotCoords = microscopeImage.dotCoords
+	blobCoords = microscopeImage.blobCoords
 	
 	targetPath = directory + cfg.DENSITY_OUTPUT_FILENAME
 	if not os.path.exists(targetPath):
@@ -163,7 +168,7 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoo
 		figure.clf()
 		pl.close(figure)
 
-def skipFile(directory, filename, userSettings):
-	saveDensityDataFiles(directory, filename, None, None, None, userSettings, None, None, 
+def skipFile(directory, filename, userSettings, microscopeImage):
+	saveDensityDataFiles(directory, filename, None, None, None, None, microscopeImage, userSettings,
 		skipped=True)
 	print(strings.fileSkippedNotification(filename))

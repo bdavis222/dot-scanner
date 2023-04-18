@@ -33,12 +33,13 @@ def getDensityData(directory, filenames, userSettings):
 		
 		thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
 		if microscopeImage.skipped:
-			density.skipFile(directory, filename, thresholdAdjuster.userSettings)
+			
+			density.skipFile(directory, filename, thresholdAdjuster.userSettings, microscopeImage)
 			continue
 		
 		RegionSelector(microscopeImage, thresholdAdjuster.userSettings)
 		if microscopeImage.skipped:
-			density.skipFile(directory, filename, thresholdAdjuster.userSettings)
+			density.skipFile(directory, filename, thresholdAdjuster.userSettings, microscopeImage)
 			continue
 		
 		density.measureDensity(directory, filename, microscopeImage, userSettings)
