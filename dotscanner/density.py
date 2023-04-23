@@ -121,17 +121,19 @@ def saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, e
 			microscopeImage.thresholds, dotSize, blobSize, microscopeImage.polygon)
 	
 	if not skipped and saveFigures:
-		saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords)
+		saveDensityFigure(directory, filename, microscopeImage, userSettings)
 	
 	with open(targetPath, "a") as file:
 		file.write(output)
 
-def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoords, blobCoords):
+def saveDensityFigure(directory, filename, microscopeImage, userSettings):
 	dotSize = userSettings.dotSize
 	program = userSettings.program
 	
 	data = microscopeImage.data
 	polygon = microscopeImage.polygon
+	dotCoords = microscopeImage.dotCoords
+	blobCoords = microscopeImage.blobCoords
 	
 	for fileExtension in cfg.FIGURE_FILETYPES:
 		figure, axes = pl.subplots()
@@ -145,7 +147,8 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings, dotCoo
 			blobSize = userSettings.blobSize
 			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
 				edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
-			blobScatter.set_offsets(blobCoords)
+			if blobCoords:
+				blobScatter.set_offsets(blobCoords)
 		
 		if cfg.PLOT_POLYGON:
 			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
