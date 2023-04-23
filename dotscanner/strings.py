@@ -88,3 +88,7 @@ def lifetimeOutputFileHeader(microscopeImage, userSettings):
 # Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize} | Remove edge frames: \
 {userSettings.removeEdgeFrames} | Skips allowed: {userSettings.skipsAllowed}\n\
 #\n# x | y | lifetime | starting image\n"
+
+class ProgramType:
+	DENSITY = "Density"
+	LIFETIME = "Lifetime"

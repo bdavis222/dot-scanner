@@ -1,5 +1,6 @@
 import dotscanner.files as files
 import dotscanner.strings as strings
+from dotscanner.strings import ProgramType
 import dotscanner.ui.window as ui
 from dotscanner.ui.DefaultUserSettingsEditor import DefaultUserSettingsEditor
 import settings.config as cfg
@@ -13,7 +14,7 @@ class UserSettings:
 
 		self.filepath = cfg.FILEPATH		
 		self.startImage = ""
-		self.program = cfg.PROGRAM
+		self.program = self.getProgramType(cfg.PROGRAM)
 		self.blobSize = round(cfg.BLOB_SIZE, 0)
 		self.dotSize = round(cfg.DOT_SIZE, 0)
 		self.lowerDotThresh = round(cfg.LOWER_DOT_THRESH_SCALE, 1)
@@ -47,12 +48,12 @@ class UserSettings:
 		self.labelProgram = tk.Label(self.window, text="Program:")
 
 		self.menuProgramSelectVar = tk.StringVar(self.window)
-		self.menuProgramSelectVar.set(self.program.capitalize()) # default value
-		self.menuProgramSelect = tk.OptionMenu(self.window, self.menuProgramSelectVar, "Density", 
-			"Lifetime", command=self.toggleExtraOptions)
+		self.menuProgramSelectVar.set(self.program) # default value
+		self.menuProgramSelect = tk.OptionMenu(self.window, self.menuProgramSelectVar, 
+			ProgramType.DENSITY, ProgramType.LIFETIME, command=self.toggleExtraOptions)
 		
 		self.checkboxSaveFigsVar = tk.BooleanVar()
-		self.checkboxSaveFigs = tk.Checkbutton(self.window, text='Save figures', 
+		self.checkboxSaveFigs = tk.Checkbutton(self.window, text="Save figures", 
 			variable=self.checkboxSaveFigsVar, onvalue=True, offvalue=False, 
 			command=self.setSaveFigs)
 		self.checkboxSaveFigsVar.set(self.saveFigures)
@@ -191,6 +192,12 @@ class UserSettings:
 		self.window.update()
 		self.window.focus_force()
 	
+	def checkForWarning(self):
+		if os.path.isfile(self.filepath) and self.program == ProgramType.LIFETIME:
+			self.labelWarning.configure(text = strings.lifetimeSingleFileWarning)
+		else:
+			self.labelWarning.configure(text = "")
+	
 	def decreaseUpperContrast(self):
 		value = self.upperContrast - cfg.CONTRAST_DELTA
 		value = round(value, 1)
@@ -220,6 +227,14 @@ class UserSettings:
 	
 	def editDefaults(self):
 		DefaultUserSettingsEditor(self)
+	
+	def getProgramType(self, programString):
+		if programString.lower() == "density":
+			return ProgramType.DENSITY
+		elif programString.lower() == "lifetime":
+			return ProgramType.LIFETIME
+		else:
+			raise Exception(strings.programNameException)
 	
 	def increaseUpperContrast(self):
 		value = self.upperContrast + cfg.CONTRAST_DELTA
@@ -254,24 +269,18 @@ class UserSettings:
 			self.labelSelectedPath.configure(text=displayedFilepath, bg="white", fg="black")
 
 	def toggleExtraOptions(self, click):
-		if click == "Lifetime":
-			self.program = "lifetime"
+		if click == ProgramType.LIFETIME:
+			self.program = ProgramType.LIFETIME
 			self.bottomButtons.pack_forget()
 			self.labelWarning.pack_forget()
 			self.lifetimeOptions.pack()
 			self.bottomButtons.pack()
 			self.labelWarning.pack()
 		else:
-			self.program = "density"
+			self.program = ProgramType.DENSITY
 			self.lifetimeOptions.pack_forget()
 			self.bottomButtons.pack_forget()
 			self.labelWarning.pack_forget()
 			self.bottomButtons.pack()
 			self.labelWarning.pack()
 		self.checkForWarning()
-
-	def checkForWarning(self):
-		if os.path.isfile(self.filepath) and self.program == "lifetime":
-			self.labelWarning.configure(text = strings.lifetimeSingleFileWarning)
-		else:
-			self.labelWarning.configure(text = "")

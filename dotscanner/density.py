@@ -143,12 +143,11 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings):
 			edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
 		dotScatter.set_offsets(dotCoords)
 		
-		if cfg.PLOT_BLOBS:
+		if cfg.PLOT_BLOBS and blobCoords:
 			blobSize = userSettings.blobSize
 			blobScatter = axes.scatter([None], [None], s=0.1 * blobSize, facecolors="none", 
 				edgecolors=cfg.BLOB_COLOR, linewidths=cfg.BLOB_THICKNESS/2, zorder=3)
-			if blobCoords:
-				blobScatter.set_offsets(blobCoords)
+			blobScatter.set_offsets(blobCoords)
 		
 		if cfg.PLOT_POLYGON:
 			polygonY, polygonX = dp.getYAndXFromCoordList(polygon)
