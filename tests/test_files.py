@@ -1,5 +1,6 @@
 import dotscanner.files as files
 import dotscanner.strings as strings
+from dotscanner.strings import ProgramType
 from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import unittest
@@ -137,7 +138,7 @@ class TestFiles(unittest.TestCase):
         )
         
         sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png", 
-            programSelected="lifetime")
+            programSelected=ProgramType.LIFETIME)
         
         self.assertEqual(
             sortedFilenames, 

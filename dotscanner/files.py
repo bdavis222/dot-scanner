@@ -1,4 +1,5 @@
 import dotscanner.strings as strings
+from dotscanner.strings import ProgramType
 import settings.config as cfg
 import os
 
@@ -92,7 +93,7 @@ def getSortedFilenames(directory, startImage, programSelected):
 	filenames = getFilenamesWithExtension(directory, fileExtension)
 	
 	allFilesNumbered = allFilesAreNumbered(filenames)
-	if programSelected == "lifetime" and not allFilesNumbered:
+	if programSelected == ProgramType.LIFETIME and not allFilesNumbered:
 		raise Exception(strings.fileNumberingException)
 	
 	if allFilesNumbered:
@@ -100,7 +101,7 @@ def getSortedFilenames(directory, startImage, programSelected):
 	else:
 		filenames.sort()
 	
-	if programSelected == "lifetime" and startImage != "":
+	if programSelected == ProgramType.LIFETIME and startImage != "":
 		filenames = removeImagesBeforeStartingImage(filenames, startImage)
 	
 	return filenames
