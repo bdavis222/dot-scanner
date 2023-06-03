@@ -147,15 +147,27 @@ def getTargetPath(directory, program, fileExtension):
 	figurePathWithoutExtension = f"{directory}{figureDirectoryName}"
 	
 	if not os.path.exists(figurePathWithoutExtension):
-	    os.mkdir(figurePathWithoutExtension)
+		os.mkdir(figurePathWithoutExtension)
 	
 	figurePath = f"{directory}{figureDirectoryName}{fileExtension}/"
 	
 	if not os.path.exists(figurePath):
-	    os.mkdir(figurePath)
+		os.mkdir(figurePath)
 	
 	targetPath = figurePath + f"{program}/"
 	if not os.path.exists(targetPath):
-	    os.mkdir(targetPath)
+		os.mkdir(targetPath)
 	
 	return targetPath
+
+def getTargetPathForLifetimeHistogram(directory):
+	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
+	if not figureDirectoryName.endswith("/"):
+		figureDirectoryName += "/"
+	
+	figurePath = f"{directory}{figureDirectoryName}/"
+	
+	if not os.path.exists(figurePath):
+		os.mkdir(figurePath)
+	
+	return figurePath

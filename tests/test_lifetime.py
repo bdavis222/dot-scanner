@@ -27,7 +27,6 @@ class TestLifetime(unittest.TestCase):
 			y=8,
 			x=13,
 			imageNumber=5,
-			edgeFrameNumbers=[0, 1, 9, 10],
 			imageNumberToCoordMap={
 				0: {},
 				1: {},
@@ -50,7 +49,6 @@ class TestLifetime(unittest.TestCase):
 			y=8,
 			x=13,
 			imageNumber=5,
-			edgeFrameNumbers=[0, 1, 9, 10],
 			imageNumberToCoordMap={
 				0: {},
 				1: {},

@@ -5,6 +5,7 @@ import dotscanner.ui.window as ui
 from dotscanner.ui.MicroscopeImage import MicroscopeImage
 import settings.config as cfg
 import matplotlib.pyplot as pl
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import os
 
@@ -19,11 +20,11 @@ def checkEnoughFramesForLifetimes(filenames, userSettings):
 	if len(filenames) <= 2 * (userSettings.skipsAllowed + 1):
 		raise Exception(strings.tooFewFramesException)
 
-def coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
+def coordExistsInPrevFrame(y, x, imageNumber, imageNumberToCoordMap, dotSize, 
 	skipsAllowed):
 	firstFrameNumber = max(0, imageNumber - skipsAllowed - 1)
 	frameNumbers = range(firstFrameNumber, imageNumber)
-	for frameNumber in frameNumbers:
+	for frameNumber in reversed(frameNumbers):
 		frameCoords = imageNumberToCoordMap[frameNumber]
 		if dp.coordExistsWithinRadius(y, x, frameCoords, dotSize):
 			return True
@@ -137,15 +138,17 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, image
 	
 	if userSettings.saveFigures:
 		saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
-							imageNumberToFilenameMap, userSettings, polygon)
+							imageNumberToFilenameMap, userSettings, polygon, lifetimes)
 
 def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
-	imageNumberToFilenameMap, userSettings, polygon):
+	imageNumberToFilenameMap, userSettings, polygon, lifetimes):
 	print("Saving figures...")
 	coordsToPlotSize = len(list(coordsToPlot.keys()))
 	count = 0
 	totalCount = coordsToPlotSize * len(cfg.FIGURE_FILETYPES)
 	ui.printProgressBar(count, totalCount)
+	
+	saveHistogram(directory, lifetimes)
 	
 	for fileExtension in cfg.FIGURE_FILETYPES:
 		for imageNumber, dotCoordSet in coordsToPlot.items():
@@ -190,14 +193,42 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 			count += 1
 			ui.printProgressBar(count, totalCount)
 
+def saveHistogram(directory, lifetimes):
+	figure = pl.figure()
+	axes = figure.add_subplot(111)
+
+	plotBins = max(lifetimes) + 1
+	histData = axes.hist(lifetimes, bins=np.arange(plotBins)+0.5, rwidth=0.9, color="C1")
+	yOffset = max(histData[0]) * 0.005
+
+	for i in range(plotBins - 1):
+		if plotBins < 25 or (i+1) % 5 == 0:
+			axes.text(i+1, yOffset, i+1, fontsize=6, horizontalalignment="center")
+
+	if plotBins < 25:
+		for i in range(plotBins - 1):
+			if histData[0][i] > 5 * yOffset:
+				axes.text(i+1, histData[0][i] + yOffset, int(histData[0][i]), fontsize=6, color="C1", horizontalalignment="center")
+	else:
+		maxCounts = max(histData[0])
+		for i in range(plotBins - 1):
+			if histData[0][i] == maxCounts:
+				axes.text(i+1, histData[0][i] + yOffset, int(histData[0][i]), fontsize=6, color="C1", horizontalalignment="center")
+				break
+
+	targetPath = files.getTargetPathForLifetimeHistogram(directory)
+	figure.savefig(f"{targetPath}lifetime_hist.pdf")
+
+	figure.clf()
+	pl.close(figure)
+
 def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
 	imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, removeEdgeFrames, saveFigures, 
 	coordsToPlot):
 	if removeEdgeFrames and imageNumber <= skipsAllowed:
 		return
 	
-	if coordExistsInPrevFrame(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
-		dotSize, skipsAllowed):
+	if coordExistsInPrevFrame(y, x, imageNumber, imageNumberToCoordMap, dotSize, skipsAllowed):
 		return
 		
 	coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
