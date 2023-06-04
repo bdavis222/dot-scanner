@@ -37,6 +37,77 @@ def findIndexOfMaxElement(array):
 			maxIndex = index
 	return maxIndex
 
+
+
+
+
+
+
+def getClosestCoordWithinRadius(y, x, coordMap, radius):
+	if coordExists(y, x, coordMap):
+		return y, x
+	
+	yStart, xStart = y, x
+	visited = {(yStart, xStart)}
+	queue = []
+	
+	for stepSize in range(1, radius + 1):
+		boundaries = getBoundaries(yStart, xStart, stepSize)
+		addCentralNeighbors(yStart, xStart, queue, stepSize, radius)
+		while queue:
+			coordToDirectionMap = queue.pop(0)
+			coord, direction = coordToDirectionMap.popitem()
+			y, x = coord
+			if coordExists(y, x, coordMap):
+				return coord
+			visited.add(coord)
+			addNeighbors(y, x, queue, direction, visited, boundaries)
+
+def getBoundaries(yStart, xStart, stepSize):
+	return {
+		"top": yStart - stepSize,
+		"bottom": yStart + stepSize,
+		"left": xStart - stepSize,
+		"right": xStart + stepSize
+	}
+
+def addCentralNeighbors(y, x, queue, stepSize, radius):
+	if stepSize <= radius:
+		queue.append({(y, x - stepSize): "vertical"})
+		queue.append({(y, x + stepSize): "vertical"})
+		queue.append({(y - stepSize, x): "horizontal"})
+		queue.append({(y + stepSize, x): "horizontal"})
+
+def addNeighbors(y, x, queue, direction, visited, boundaries):
+	if direction == "horizontal":
+		addHorizontalNeighbors(y, x, queue, visited, boundaries)
+	else:
+		addVerticalNeighbors(y, x, queue, visited, boundaries)
+
+def addHorizontalNeighbors(y, x, queue, visited, boundaries):
+	if x - 1 >= boundaries["left"] and (y, x - 1) not in visited:
+		queue.append({(y, x - 1): "horizontal"})
+	if x + 1 <= boundaries["right"] and (y, x + 1) not in visited:
+		queue.append({(y, x + 1): "horizontal"})
+
+def addVerticalNeighbors(y, x, queue, visited, boundaries):
+	if y - 1 >= boundaries["top"] and (y - 1, x) not in visited:
+		queue.append({(y - 1, x): "vertical"})
+	if y + 1 <= boundaries["bottom"] and (y + 1, x) not in visited:
+		queue.append({(y + 1, x): "vertical"})
+
+
+
+
+
+
+
+
+
+
+
+
+
 def getCoordPairsFromCoordMap(coordMap):
 	coordList = []
 	for y, xSet in coordMap.items():

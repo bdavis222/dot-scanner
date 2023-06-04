@@ -30,31 +30,39 @@ def coordExistsInPrevFrame(y, x, imageNumber, imageNumberToCoordMap, dotSize,
 			return True
 	return False
 
-def getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, dotSize, 
-	skipsAllowed, removeEdgeFrames):
+def getCoordLifetimeAndDisplacement(y, x, imageNumber, edgeFrameNumbers, imageNumberToCoordMap, 
+	dotSize, skipsAllowed, removeEdgeFrames):
+	startingY, startingX = y, x
 	skipsRemaining = skipsAllowed
 	nextImageNumber = imageNumber + 1
 	
 	if nextImageNumber not in imageNumberToCoordMap and skipsAllowed > 0:
-		return None
+		return None, None
 	
 	while nextImageNumber in imageNumberToCoordMap:
 		nextCoords = imageNumberToCoordMap[nextImageNumber]
 		
-		if dp.coordExistsWithinRadius(y, x, nextCoords, dotSize):
-			if removeEdgeFrames and nextImageNumber in edgeFrameNumbers:
-				return None
-			
-			if skipsRemaining < skipsAllowed:
-				skipsRemaining = skipsAllowed
-				
-		else:
+		closestDotCoords = dp.getClosestCoordWithinRadius(y, x, nextCoords, dotSize)
+		if closestDotCoords is None:
 			if skipsRemaining == 0:
 				break
 			skipsRemaining -= 1
-		nextImageNumber += 1
+		
+		else:
+			if removeEdgeFrames and nextImageNumber in edgeFrameNumbers:
+				return None, None
 			
-	return nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
+			if skipsRemaining < skipsAllowed:
+				skipsRemaining = skipsAllowed
+			
+			y, x = closestDotCoords
+			
+		nextImageNumber += 1
+	
+	lifetime = nextImageNumber - imageNumber - (skipsAllowed - skipsRemaining)
+	displacement = (y - startingY)**2 + (x - startingX)**2
+	
+	return lifetime, displacement
 
 def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
 	firstFrame = 0
@@ -101,7 +109,7 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		
 		ui.printProgressBar(index + 1, numberOfFiles)
 	
-	lifetimes, resultCoords, startImages = [], [], []
+	lifetimes, resultCoords, startImages, displacements = [], [], [], []
 	edgeFrameNumbers = getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed)
 	coordsToPlot = {} # Maps image numbers to coordinate maps for plotting
 	
@@ -112,29 +120,32 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		for y, xSet in coordMap.items():
 			for x in xSet:
 				updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
-					imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
+					displacements, imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, 
 					removeEdgeFrames, userSettings.saveFigures, coordsToPlot)
 	
-	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
-		imageNumberToBlobCoordMap, imageNumberToFilenameMap, middleMicroscopeImage, userSettings, 
-		coordsToPlot, middleMicroscopeImage.polygon)
+	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,
+		imageNumberToCoordMap, imageNumberToBlobCoordMap, imageNumberToFilenameMap, 
+		middleMicroscopeImage, userSettings, coordsToPlot, middleMicroscopeImage.polygon)
 
-def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, imageNumberToCoordMap, 
-	imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage, userSettings, 
-	coordsToPlot, polygon):
+def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements, 
+	imageNumberToCoordMap, imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage, 
+	userSettings, coordsToPlot, polygon):
 	targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME
 	if os.path.exists(targetPath):
 		os.remove(targetPath)
 	
 	with open(targetPath, "a") as file:
 		file.write(strings.lifetimeOutputFileHeader(microscopeImage, userSettings))
-		for lifetime, resultCoord, startImage in zip(lifetimes, resultCoords, startImages):
+		for lifetime, resultCoord, startImage, displacement in zip(lifetimes, resultCoords, 
+			startImages, displacements):
 			y, x = resultCoord
 			filename = imageNumberToFilenameMap[startImage]
-			output = f"{x} {y} {lifetime} {filename}\n"
+			output = f"{x} {y} {lifetime} {filename} {displacement}\n"
 			file.write(output)
 	
 	print(f"{cfg.LIFETIME_OUTPUT_FILENAME} saved.")
+	
+	saveHistogram(directory, lifetimes)
 	
 	if userSettings.saveFigures:
 		saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
@@ -147,8 +158,6 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 	count = 0
 	totalCount = coordsToPlotSize * len(cfg.FIGURE_FILETYPES)
 	ui.printProgressBar(count, totalCount)
-	
-	saveHistogram(directory, lifetimes)
 	
 	for fileExtension in cfg.FIGURE_FILETYPES:
 		for imageNumber, dotCoordSet in coordsToPlot.items():
@@ -222,7 +231,7 @@ def saveHistogram(directory, lifetimes):
 	figure.clf()
 	pl.close(figure)
 
-def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, 
+def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImages, displacements,
 	imageNumberToCoordMap, edgeFrameNumbers, dotSize, skipsAllowed, removeEdgeFrames, saveFigures, 
 	coordsToPlot):
 	if removeEdgeFrames and imageNumber <= skipsAllowed:
@@ -231,8 +240,8 @@ def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImage
 	if coordExistsInPrevFrame(y, x, imageNumber, imageNumberToCoordMap, dotSize, skipsAllowed):
 		return
 		
-	coordLifetime = getCoordLifetime(y, x, imageNumber, edgeFrameNumbers, 
-		imageNumberToCoordMap, dotSize, skipsAllowed, removeEdgeFrames)
+	coordLifetime, coordDisplacement = getCoordLifetimeAndDisplacement(y, x, imageNumber, 
+		edgeFrameNumbers, imageNumberToCoordMap, dotSize, skipsAllowed, removeEdgeFrames)
 	
 	if coordLifetime is None:
 		return
@@ -240,6 +249,7 @@ def updateLifetimeResults(imageNumber, y, x, lifetimes, resultCoords, startImage
 	lifetimes.append(coordLifetime)
 	resultCoords.append((y, x))
 	startImages.append(imageNumber)
+	displacements.append(coordDisplacement)
 	
 	if saveFigures and coordLifetime >= cfg.LIFETIME_MIN_FOR_PLOT:
 		addToPlotCoords(coordsToPlot, y, x, imageNumber, coordLifetime)

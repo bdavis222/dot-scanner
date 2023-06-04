@@ -41,6 +41,125 @@ class TestFunctions(unittest.TestCase):
 	def test_findIndexOfMaxElement(self):
 		self.assertEqual(dp.findIndexOfMaxElement([3,7,2,8,3,1]), 3)
 	
+	def test_getClosestCoordWithinRadius(self):
+		testMap = {
+			3: {4, 6},
+			4: {3, 7},
+			5: {3, 4, 7},
+			6: {3, 6, 7},
+			7: {3, 4, 5, 6}
+		}
+		expectedClosest = (5, 4)
+		closestCoordsRadius2 = dp.getClosestCoordWithinRadius(5, 5, coordMap=testMap, radius=2)
+		closestCoordsRadius5 = dp.getClosestCoordWithinRadius(5, 5, coordMap=testMap, radius=5)
+		closestCoordsRadius20 = dp.getClosestCoordWithinRadius(5, 5, coordMap=testMap, radius=20)
+		
+		self.assertEqual(closestCoordsRadius2, expectedClosest)
+		self.assertEqual(closestCoordsRadius5, expectedClosest)
+		self.assertEqual(closestCoordsRadius20, expectedClosest)
+	
+	def test_getBoundaries(self):
+		boundaries = dp.getBoundaries(yStart=5, xStart=4, stepSize=3)
+		
+		self.assertEqual(boundaries["top"], 2)
+		self.assertEqual(boundaries["bottom"], 8)
+		self.assertEqual(boundaries["left"], 1)
+		self.assertEqual(boundaries["right"], 7)
+	
+	def test_addCentralNeighbors(self):
+		queue = []
+		dp.addCentralNeighbors(5, 4, queue, stepSize=2, radius=3)
+		expectedQueue = [
+			{(5, 2): "vertical"},
+			{(5, 6): "vertical"},
+			{(3, 4): "horizontal"},
+			{(7, 4): "horizontal"}
+		]
+		
+		for item in expectedQueue:
+			self.assertIn(item, queue)
+		
+		queue2 = []
+		dp.addCentralNeighbors(5, 4, queue2, stepSize=3, radius=3)
+		expectedQueue2 = [
+			{(5, 1): "vertical"},
+			{(5, 7): "vertical"},
+			{(2, 4): "horizontal"},
+			{(8, 4): "horizontal"}
+		]
+		
+		for item2 in expectedQueue2:
+			self.assertIn(item2, queue2)
+		
+		queue3 = []
+		dp.addCentralNeighbors(5, 4, queue3, stepSize=4, radius=3)
+		
+		self.assertEqual(len(queue3), 0)
+	
+	def test_addNeighborsHorizontally(self):
+		queue = []
+		visited = {}
+		boundaries = dp.getBoundaries(yStart=5, xStart=14, stepSize=2)
+		dp.addNeighbors(3, 14, queue, "horizontal", visited, boundaries)
+		
+		self.assertIn({(3, 13): "horizontal"}, queue)
+		self.assertIn({(3, 15): "horizontal"}, queue)
+		self.assertEqual(len(queue), 2)
+		
+		queue2 = []
+		visited2 = {(3, 14)}
+		dp.addNeighbors(3, 13, queue2, "horizontal", visited2, boundaries)
+		
+		self.assertIn({(3, 12): "horizontal"}, queue2)
+		self.assertEqual(len(queue2), 1)
+		
+		queue3 = []
+		visited3 = {(3, 13)}
+		dp.addNeighbors(3, 12, queue3, "horizontal", visited3, boundaries)
+		
+		self.assertEqual(len(queue3), 0)
+	
+	def test_addNeighborsVertically(self):
+		queue = []
+		visited = {}
+		boundaries = dp.getBoundaries(yStart=5, xStart=14, stepSize=2)
+		dp.addNeighbors(5, 16, queue, "vertical", visited, boundaries)
+		
+		self.assertIn({(4, 16): "vertical"}, queue)
+		self.assertIn({(6, 16): "vertical"}, queue)
+		self.assertEqual(len(queue), 2)
+		
+		queue2 = []
+		visited2 = {(5, 16)}
+		dp.addNeighbors(6, 16, queue2, "vertical", visited2, boundaries)
+		
+		self.assertIn({(7, 16): "vertical"}, queue2)
+		self.assertEqual(len(queue2), 1)
+		
+		queue3 = []
+		visited3 = {(6, 16)}
+		dp.addNeighbors(7, 16, queue3, "vertical", visited3, boundaries)
+		
+		self.assertEqual(len(queue3), 0)
+	
+	def test_addHorizontalNeighbors(self):
+		queue = []
+		visited = {}
+		boundaries = dp.getBoundaries(yStart=5, xStart=5, stepSize=1)
+		dp.addHorizontalNeighbors(6, 6, queue, visited, boundaries)
+		
+		self.assertIn({(6, 5): "horizontal"}, queue)
+		self.assertEqual(len(queue), 1)
+	
+	def test_addVerticalNeighbors(self):
+		queue = []
+		visited = {}
+		boundaries = dp.getBoundaries(yStart=5, xStart=5, stepSize=1)
+		dp.addVerticalNeighbors(6, 6, queue, visited, boundaries)
+		
+		self.assertIn({(5, 6): "vertical"}, queue)
+		self.assertEqual(len(queue), 1)
+	
 	def test_getCoordPairsFromCoordMap(self):
 		testMap = {
 			1: {1, 2, 5},

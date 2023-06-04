@@ -59,7 +59,7 @@ class TestStrings(unittest.TestCase):
 # Threshold scales: 1.5, 5.0, 2.0\n\
 # Dot size: 2 | Blob size: 5 | Remove edge frames: True | Skips allowed: 1\n\
 #\n\
-# x | y | lifetime | starting image\n"
+# x | y | lifetime | starting image | displacement squared (sq px)\n"
         )
 
 if __name__ == "__main__":

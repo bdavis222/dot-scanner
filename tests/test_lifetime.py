@@ -117,8 +117,8 @@ class TestLifetime(unittest.TestCase):
 		self.assertNotIn(3, edgeFrameNumbers)
 		self.assertNotIn(4, edgeFrameNumbers)
 	
-	def test_getCoordLifetime(self):
-		result = lifetime.getCoordLifetime(
+	def test_getCoordLifetimeAndDisplacement(self):
+		time, displacement = lifetime.getCoordLifetimeAndDisplacement(
 			y=8,
 			x=13,
 			imageNumber=5,
@@ -140,10 +140,36 @@ class TestLifetime(unittest.TestCase):
 			removeEdgeFrames=True
 		)
 		
-		self.assertEqual(result, 3)
+		self.assertEqual(time, 3)
+		self.assertEqual(displacement, 1) # Displacement is actually squared
+		
+		time2, displacement2 = lifetime.getCoordLifetimeAndDisplacement(
+			y=8,
+			x=13,
+			imageNumber=5,
+			edgeFrameNumbers=[0, 1, 9, 10],
+			imageNumberToCoordMap={
+				0: {}, 
+				1: {}, 
+				2: {}, 
+				3: {}, 
+				4: {}, 
+				5: {8 : {13}},
+				6: {10 : {14}},
+				7: {12 : {7, 16}},
+				8: {}, 
+				9: {},
+				10: {}},
+			dotSize=2,
+			skipsAllowed=2,
+			removeEdgeFrames=True
+		)
+		
+		self.assertEqual(time2, 3)
+		self.assertEqual(displacement2, 25) # Displacement is actually squared
 	
 	def test_getCoordLifetime_returnsNone_whenRunningToEdgeFrameWithEdgeFramesRemoved(self):
-		result = lifetime.getCoordLifetime(
+		time, displacement = lifetime.getCoordLifetimeAndDisplacement(
 			y=8,
 			x=13,
 			imageNumber=5,
@@ -162,12 +188,14 @@ class TestLifetime(unittest.TestCase):
 			removeEdgeFrames=True
 		)
 		
-		self.assertEqual(result, None)
+		self.assertEqual(time, None)
+		self.assertEqual(displacement, None)
 	
 	def test_updateLifetimes_notUpdateContainers_whenImNumLessThanSkipsAndEdgeFramesRemoved(self):
 		lifetimes = []
 		resultCoords = []
 		startImages = []
+		displacements = []
 		coordsToPlot = {}
 		
 		lifetime.updateLifetimeResults(
@@ -177,6 +205,7 @@ class TestLifetime(unittest.TestCase):
 			lifetimes=lifetimes,
 			resultCoords=resultCoords,
 			startImages=startImages,
+			displacements=displacements,
 			imageNumberToCoordMap={
 				0: {}, 
 				1: {}, 
@@ -206,6 +235,7 @@ class TestLifetime(unittest.TestCase):
 		lifetimes = []
 		resultCoords = []
 		startImages = []
+		displacements = []
 		coordsToPlot = {}
 		
 		lifetime.updateLifetimeResults(
@@ -215,6 +245,7 @@ class TestLifetime(unittest.TestCase):
 			lifetimes=lifetimes,
 			resultCoords=resultCoords,
 			startImages=startImages,
+			displacements=displacements,
 			imageNumberToCoordMap={
 				0: {}, 
 				1: {}, 
@@ -244,6 +275,7 @@ class TestLifetime(unittest.TestCase):
 		lifetimes = []
 		resultCoords = []
 		startImages = []
+		displacements = []
 		coordsToPlot = {}
 		
 		lifetime.updateLifetimeResults(
@@ -253,6 +285,7 @@ class TestLifetime(unittest.TestCase):
 			lifetimes=lifetimes,
 			resultCoords=resultCoords,
 			startImages=startImages,
+			displacements=displacements,
 			imageNumberToCoordMap={
 				0: {}, 
 				1: {}, 
@@ -278,6 +311,7 @@ class TestLifetime(unittest.TestCase):
 		lifetimes = []
 		resultCoords = []
 		startImages = []
+		displacements = []
 		coordsToPlot = {}
 		
 		lifetime.updateLifetimeResults(
@@ -287,6 +321,7 @@ class TestLifetime(unittest.TestCase):
 			lifetimes=lifetimes,
 			resultCoords=resultCoords,
 			startImages=startImages,
+			displacements=displacements,
 			imageNumberToCoordMap={
 				0: {}, 
 				1: {}, 
@@ -320,6 +355,7 @@ class TestLifetime(unittest.TestCase):
 		lifetimes = []
 		resultCoords = []
 		startImages = []
+		displacements = []
 		coordsToPlot = {}
 		
 		lifetime.updateLifetimeResults(
@@ -329,6 +365,7 @@ class TestLifetime(unittest.TestCase):
 			lifetimes=lifetimes,
 			resultCoords=resultCoords,
 			startImages=startImages,
+			displacements=displacements,
 			imageNumberToCoordMap={
 				0: {}, 
 				1: {}, 
@@ -363,6 +400,7 @@ class TestLifetime(unittest.TestCase):
 		lifetimes = []
 		resultCoords = []
 		startImages = []
+		displacements = []
 		coordsToPlot = {}
 		
 		lifetime.updateLifetimeResults(
@@ -372,6 +410,7 @@ class TestLifetime(unittest.TestCase):
 			lifetimes=lifetimes,
 			resultCoords=resultCoords,
 			startImages=startImages,
+			displacements=displacements,
 			imageNumberToCoordMap={
 				0: {}, 
 				1: {}, 
