@@ -37,12 +37,6 @@ def findIndexOfMaxElement(array):
 			maxIndex = index
 	return maxIndex
 
-
-
-
-
-
-
 def getClosestCoordWithinRadius(y, x, coordMap, radius):
 	if coordExists(y, x, coordMap):
 		return y, x
@@ -95,18 +89,6 @@ def addVerticalNeighbors(y, x, queue, visited, boundaries):
 		queue.append({(y - 1, x): "vertical"})
 	if y + 1 <= boundaries["bottom"] and (y + 1, x) not in visited:
 		queue.append({(y + 1, x): "vertical"})
-
-
-
-
-
-
-
-
-
-
-
-
 
 def getCoordPairsFromCoordMap(coordMap):
 	coordList = []
