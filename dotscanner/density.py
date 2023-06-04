@@ -18,11 +18,14 @@ else:
 def checkUnitsConsistent(directory):
 	if os.path.exists(directory + cfg.DENSITY_OUTPUT_FILENAME):
 		with open(directory + cfg.DENSITY_OUTPUT_FILENAME, "r") as file:
-			firstLine = file.readline().rstrip()
-			unitsInFile = firstLine.split("per sq ")[1].split(")")[0]
-			if unitsInFile != UNITS:
-				showMismatchedUnitsErrorDialog()
-				quit()
+			for line in file:
+				splitLine = line.split()
+				if len(splitLine) > 1 and splitLine[0] == "#" and splitLine[1] == "filename":
+					unitsInFile = line.split("per sq ")[1].split(")")[0]
+					if unitsInFile != UNITS:
+						showMismatchedUnitsErrorDialog()
+						quit()
+					return
 
 def showMismatchedUnitsErrorDialog():
 	DialogWindow(
@@ -85,7 +88,7 @@ def getDensityErrorAndCoords(microscopeImage, blobSize):
 	
 	return dotTotal, surveyedArea, density, error, dotsInPoly, blobsInPoly
 
-def measureDensity(directory, filename, microscopeImage, userSettings):
+def measureDensity(directory, filename, targetPath, microscopeImage, userSettings):
 	if len(microscopeImage.polygon) < 3:
 		return
 	
@@ -95,38 +98,40 @@ def measureDensity(directory, filename, microscopeImage, userSettings):
 		microscopeImage, blobSize)
 	
 	microscopeImage.dotCoords, microscopeImage.blobCoords = dotsInPoly, blobsInPoly
-	saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, error, 
+	saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error, 
 		microscopeImage, userSettings)
 
-def saveDensityDataFiles(directory, filename, dotTotal, surveyedArea, density, error, 
+def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error, 
 	microscopeImage, userSettings, skipped=False):
 	saveFigures = userSettings.saveFigures
 	blobSize = userSettings.blobSize
 	dotSize = userSettings.dotSize
+	lowerContrast = userSettings.lowerContrast
+	upperContrast = userSettings.upperContrast
 	dotCoords = microscopeImage.dotCoords
 	blobCoords = microscopeImage.blobCoords
 	
-	targetPath = directory + cfg.DENSITY_OUTPUT_FILENAME
 	if not os.path.exists(targetPath):
 		with open(targetPath, "a") as file:
 			file.write(strings.densityOutputFileHeader)
 			
 	if skipped:
-		output = f"{filename} skipped - - - - - - - - - -\n"
+		output = f"{filename} skipped - - - - - - - - - - - -\n"
 		
 	else:
 		density = np.round(density, 7)
 		error = np.round(error, 7)
 		output = strings.densityOutput(filename, dotTotal, surveyedArea, density, error, 
-			microscopeImage.thresholds, dotSize, blobSize, microscopeImage.polygon)
+			microscopeImage, userSettings)
 	
-	if not skipped and saveFigures:
-		saveDensityFigure(directory, filename, microscopeImage, userSettings)
+	if (not skipped and saveFigures) or userSettings.reanalysis:
+		outputFilename = targetPath.split("/")[-1]
+		saveDensityFigure(directory, filename, outputFilename, microscopeImage, userSettings)
 	
 	with open(targetPath, "a") as file:
 		file.write(output)
 
-def saveDensityFigure(directory, filename, microscopeImage, userSettings):
+def saveDensityFigure(directory, filename, outputFilename, microscopeImage, userSettings):
 	dotSize = userSettings.dotSize
 	program = userSettings.program
 	
@@ -156,7 +161,7 @@ def saveDensityFigure(directory, filename, microscopeImage, userSettings):
 			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
 				linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 		
-		targetPath = files.getTargetPath(directory, program, fileExtension)
+		targetPath = files.getTargetPath(directory, outputFilename, fileExtension)
 		
 		truncatedFilename = ".".join(filename.split(".")[:-1])
 		

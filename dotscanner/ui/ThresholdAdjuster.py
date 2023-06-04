@@ -168,6 +168,14 @@ class ThresholdAdjuster:
 		self.entryThreshold3 = tk.Entry(self.window, width=5)
 		self.entryThreshold3.insert(0, userSettings.lowerBlobThresh)
 		
+		self.entryDotSizeLabel = tk.Label(self.window, text="Dot size:")
+		self.entryDotSize = tk.Entry(self.window, width=5)
+		self.entryDotSize.insert(0, userSettings.dotSize)
+		
+		self.entryBlobSizeLabel = tk.Label(self.window, text="Blob size:")
+		self.entryBlobSize = tk.Entry(self.window, width=5)
+		self.entryBlobSize.insert(0, userSettings.blobSize)
+		
 		self.editDoneButton = tk.Button(self.window, text="Done", command=self.editFinish, 
 			fg="blue", font=tk.font.Font(weight="bold"))
 		
@@ -216,6 +224,11 @@ class ThresholdAdjuster:
 		self.entryThreshold2.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.entryThresholdLabel3.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.entryThreshold3.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		
+		self.entryDotSizeLabel.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryDotSize.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryBlobSizeLabel.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
+		self.entryBlobSize.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
 		self.editDoneButton.pack(in_=self.buttonBar, side=tk.TOP, pady=(5, 0))
 		
 		self.window.update()
@@ -235,6 +248,11 @@ class ThresholdAdjuster:
 		self.entryThreshold2.pack_forget()
 		self.entryThresholdLabel3.pack_forget()
 		self.entryThreshold3.pack_forget()
+		
+		self.entryDotSizeLabel.pack_forget()
+		self.entryDotSize.pack_forget()
+		self.entryBlobSizeLabel.pack_forget()
+		self.entryBlobSize.pack_forget()
 		self.editDoneButton.pack_forget()
 		
 		self.dotsItem.pack(in_=self.buttonBar, side=tk.TOP, pady=5)
@@ -254,6 +272,19 @@ class ThresholdAdjuster:
 		except:
 			self.setThresholdEntries(self.image.thresholds)
 			print(strings.invalidThresholdEdit)
+			return
+		
+		try:
+			self.dotSize = int(round(float(self.entryDotSize.get()), 0))
+			self.blobSize = int(round(float(self.entryBlobSize.get()), 0))
+			self.image.dotSize = self.dotSize
+			self.image.blobSize = self.blobSize
+			self.userSettings.dotSize = self.dotSize
+			self.userSettings.blobSize = self.blobSize
+		
+		except:
+			self.setDotAndBlobSizeEntries(self.dotSize, self.blobSize)
+			print(strings.invalidDotAndBlobSizeEdit)
 			return
 		
 		self.image.setThresholds(newThresholds)
@@ -302,6 +333,12 @@ class ThresholdAdjuster:
 		self.entryThreshold1.insert(0, thresh1)
 		self.entryThreshold2.insert(0, thresh2)
 		self.entryThreshold3.insert(0, thresh3)
+	
+	def setDotAndBlobSizeEntries(self, dotSize, blobSize):
+		self.entryDotSize.delete(0, tk.END)
+		self.entryBlobSize.delete(0, tk.END)
+		self.entryDotSize.insert(0, dotSize)
+		self.entryBlobSize.insert(0, blobSize)
 	
 	def showCorrectImage(self, index):
 		self.displayCorrectMarkerSize(index)

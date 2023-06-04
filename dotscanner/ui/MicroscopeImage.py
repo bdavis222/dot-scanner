@@ -43,13 +43,14 @@ class MicroscopeImage:
 		self.dotCoords, self.blobCoords = self.getCoords()
 	
 	def getCoords(self):
-		if self.thresholds in self.memoizedCoords:
-			dotCoords, blobCoords = self.memoizedCoords[self.thresholds]
+		combination = (self.thresholds, (self.dotSize, self.blobSize))
+		if combination in self.memoizedCoords:
+			dotCoords, blobCoords = self.memoizedCoords[combination]
 		else:
 			dotCoords, blobCoords = dp.getCoords(self.data, self.sums, self.thresholds, 
 				self.dotSize)
 			dp.cleanDotCoords(self.data, dotCoords, blobCoords, self.blobSize, self.dotSize)
-			self.memoizedCoords[self.thresholds] = (dotCoords, blobCoords)
+			self.memoizedCoords[combination] = (dotCoords, blobCoords)
 		return dotCoords, blobCoords
 	
 	def increaseLowerDotThreshScale(self):

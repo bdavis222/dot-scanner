@@ -270,6 +270,21 @@ class TestFiles(unittest.TestCase):
     def test_allFilesAreNumbered_withOneUnnumberedFile(self):
         testFiles = ["file03.png", "file02.png", "file05.PNG", "file.png", "file11.png"]
         self.assertFalse(files.allFilesAreNumbered(testFiles))
+    
+    def test_filenameIsNumbered(self):
+        self.assertFalse(files.filenameIsNumbered("filename.txt"))
+        self.assertTrue(files.filenameIsNumbered("filename1.txt"))
+    
+    def test_getFilenameWithNewTrailingNumber(self):
+        newFilename = files.getFilenameWithNewTrailingNumber("filename1.txt", 65)
+        newFilename2 = files.getFilenameWithNewTrailingNumber("filename87.txt", 3)
+        
+        self.assertEqual(newFilename, "filename65.txt")
+        self.assertEqual(newFilename2, "filename3.txt")
+    
+    def test_incrementTargetPathName(self):
+        self.assertEqual(files.incrementTargetPathName("path/to/file2.txt"), "path/to/file3.txt")
+        self.assertEqual(files.incrementTargetPathName("path/to/file66.txt"), "path/to/file67.txt")
 
 if __name__ == '__main__':
     unittest.main()

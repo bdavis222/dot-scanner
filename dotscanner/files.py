@@ -139,7 +139,7 @@ def removeImagesBeforeStartingImage(filenames, startImage):
 			filenamesFromStartingImage.append(filename)
 	return filenamesFromStartingImage
 
-def getTargetPath(directory, program, fileExtension):
+def getTargetPath(directory, outputFilename, fileExtension):
 	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
 	if not figureDirectoryName.endswith("/"):
 		figureDirectoryName += "/"
@@ -154,11 +154,46 @@ def getTargetPath(directory, program, fileExtension):
 	if not os.path.exists(figurePath):
 		os.mkdir(figurePath)
 	
-	targetPath = figurePath + f"{program}/"
+	outputFilenameWithoutExtension = outputFilename.split(".")[0]
+	targetPath = figurePath + f"{outputFilenameWithoutExtension}/"
 	if not os.path.exists(targetPath):
 		os.mkdir(targetPath)
 	
 	return targetPath
+
+def getReanalysisTargetPath(directory, filename):
+	targetPath = directory + filename
+	while os.path.exists(targetPath):
+		targetPath = incrementTargetPathName(targetPath)
+	return targetPath
+
+def incrementTargetPathName(targetPath):
+	filename = os.path.basename(targetPath)
+	if not filenameIsNumbered(filename):
+		filenameArray = filename.split(".")
+		filename = filenameArray[0] + "1." + filenameArray[1]
+	trailingNumber = getTrailingNumber(filename)
+	trailingNumber += 1
+	newFilename = getFilenameWithNewTrailingNumber(filename, trailingNumber)
+	directory = fixDirectory(os.path.dirname(targetPath))
+	return directory + newFilename
+
+def getFilenameWithNewTrailingNumber(filename, trailingNumber):
+	rightIndex = getRightEdgeOfTrailingNumber(filename)
+	leftIndex = getLeftEdgeOfTrailingNumber(filename, rightIndex)
+	return f"{filename[:leftIndex]}{trailingNumber}{filename[rightIndex + 1:]}"
+
+def filenameIsNumbered(filename):
+	periodReached = False
+	for index, char in enumerate(reversed(filename)):
+		if char == ".":
+			periodReached = True
+			continue
+		
+		if not periodReached:
+			continue
+		
+		return char.isdigit()
 
 def getTargetPathForLifetimeHistogram(directory):
 	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME

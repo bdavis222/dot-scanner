@@ -10,8 +10,16 @@ class RegionSelector:
 	def __init__(self, image, userSettings, skipButton=True):
 		ui.setupWindow()
 		
-		self.xList = []
-		self.yList = []
+		if userSettings.reanalysis:
+			if userSettings.polygon is None:
+				raise Exception(strings.invalidPolygonWarning)
+			self.xList, self.yList = userSettings.polygon
+			self.drawingBlocked = True
+		
+		else:
+			self.xList, self.yList = [], []
+			self.drawingBlocked = False
+		
 		
 		self.image = image
 		self.dotSize = userSettings.dotSize
@@ -25,8 +33,14 @@ class RegionSelector:
 		
 		self.clickMarkerBackdrop = self.axes.scatter([None], [None], s=100, marker='x', color="k", 
 			linewidth=4)
-		self.underLine, = self.axes.plot([None], [None], linestyle="-", color="k", linewidth=5)
-		self.line, = self.axes.plot([None], [None], linestyle="-", color="C1", linewidth=1.5)
+		self.underLine, = self.axes.plot(
+			self.xList+[self.xList[0]] if userSettings.reanalysis else [None], 
+			self.yList+[self.yList[0]] if userSettings.reanalysis else [None], 
+			linestyle="-", color="k", linewidth=5)
+		self.line, = self.axes.plot(
+			self.xList+[self.xList[0]] if userSettings.reanalysis else [None], 
+			self.yList+[self.yList[0]] if userSettings.reanalysis else [None], 
+			linestyle="-", color="C1", linewidth=1.5)
 		self.dottedLine, = self.axes.plot([None], [None], linestyle=":", color="C1", linewidth=1.5)
 		self.clickMarker = self.axes.scatter([None], [None], s=100, marker='x', color="C1", 
 			linewidth=1.5)
@@ -70,7 +84,7 @@ class RegionSelector:
 		self.window.mainloop()
 
 	def __call__(self, event):
-		if event.inaxes != self.line.axes:
+		if event.inaxes != self.line.axes or self.drawingBlocked:
 			return
 		self.drawLine(event)
 		self.drawclickMarker(event)
@@ -114,6 +128,7 @@ class RegionSelector:
 		quit()
 		
 	def reset(self):
+		self.drawingBlocked = False
 		self.xList = []
 		self.yList = []
 		self.line.set_data(self.xList, self.yList)

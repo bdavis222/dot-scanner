@@ -1,12 +1,24 @@
 import settings.config as cfg
 
+class ProgramType:
+	DENSITY = "Density"
+	LIFETIME = "Lifetime"
+
 configurationsWindowTitle = "Dot Scanner - Configurations"
 
 defaultConfigurationsEditorWindowTitle = "Dot Scanner - Default Configurations"
 
-densityOutputFileHeader = f"# filename | number of dots | number of pixels surveyed | \
+def outputFileTopHeader(programType):
+	return f"\
+# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
+# Generated output file for {programType.lower()} measurement\n#"
+
+densityOutputFileHeader = f"{outputFileTopHeader(ProgramType.DENSITY)}\n\
+# The data columns are organized as follows:\n\
+# filename | number of dots | number of pixels surveyed | \
 density (per sq {'pix' if cfg.SCALE is None else 'um'}) | error | lowerDotThreshScale | \
-upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | polygon vertices (x, y)\n"
+upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | lowerContrast | upperContrast | \
+polygon vertices (x, y)\n#\n"
 
 fileNumberingException = "Filenames must contain sequentially-ordered numbers with no gaps and \
 have valid file extensions to calculate lifetimes."
@@ -17,6 +29,8 @@ lifetimes."
 filepathException = "Filepath must point to a file or directory."
 
 invalidPolygonWarning = "\nNo valid, enclosed polygon drawn. No measurements made."
+
+invalidDotAndBlobSizeEdit = "\nInvalid input. Previous dot and blob size values will be retained."
 
 invalidThresholdEdit = "\nInvalid input. Previous threshold values will be retained."
 
@@ -57,8 +71,14 @@ in each window, and the Escape key will allow for skipping files, when the optio
 def alreadyMeasuredNotification(filename):
 	return f"\nFile {filename} already measured in {cfg.DENSITY_OUTPUT_FILENAME} file. Skipping."
 
-def densityOutput(filename, dotTotal, surveyedArea, density, error, thresholds, dotSize, blobSize,
-	polygon):
+def densityOutput(filename, dotTotal, surveyedArea, density, error, microscopeImage, userSettings):
+	thresholds = microscopeImage.thresholds
+	polygon = microscopeImage.polygon
+	dotSize = userSettings.dotSize
+	blobSize = userSettings.blobSize
+	lowerContrast = userSettings.lowerContrast
+	upperContrast = userSettings.upperContrast
+	
 	verticesStringList = []
 	for vertex in polygon[:-1]:
 		y, x = vertex
@@ -66,7 +86,8 @@ def densityOutput(filename, dotTotal, surveyedArea, density, error, thresholds, 
 	verticesString = ", ".join(verticesStringList)
 	
 	return f"{filename} {dotTotal} {surveyedArea} {density} {error} {thresholds[0]} \
-{thresholds[1]} {thresholds[2]} {blobSize} {dotSize} {verticesString}\n"
+{thresholds[1]} {thresholds[2]} {blobSize} {dotSize} {lowerContrast} {upperContrast} \
+{verticesString}\n"
 
 def fileSkippedNotification(filename):
 	return f"\nFile {filename} skipped"
@@ -83,12 +104,15 @@ def lifetimeOutputFileHeader(microscopeImage, userSettings):
 		thresholdsStringList.append(str(threshold))
 	thresholdsString = ", ".join(thresholdsStringList)
 	
-	return f"# Polygon vertices (x, y): {verticesString}\n\
+	return f"{outputFileTopHeader(ProgramType.LIFETIME)}\n\
+# Polygon vertices (x, y): {verticesString}\n\
 # Threshold scales: {thresholdsString}\n\
+# Contrast settings: {userSettings.lowerContrast}, {userSettings.upperContrast}\n\
 # Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize} | Remove edge frames: \
-{userSettings.removeEdgeFrames} | Skips allowed: {userSettings.skipsAllowed}\n\
-#\n# x | y | lifetime | starting image | displacement squared (sq px)\n"
+{userSettings.removeEdgeFrames} | Save figures: {userSettings.saveFigures} | Skips allowed: \
+{userSettings.skipsAllowed}{getLifetimeStartImageHeaderText(userSettings.startImage)}\n#\n\
+# The data columns are organized as follows:\n\
+# x | y | lifetime | starting image | displacement squared (sq px)\n#\n"
 
-class ProgramType:
-	DENSITY = "Density"
-	LIFETIME = "Lifetime"
+def getLifetimeStartImageHeaderText(startImage):
+	return f" | Start image: {startImage.split('/')[-1]}" if startImage != "" else ""

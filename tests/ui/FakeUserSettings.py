@@ -17,3 +17,4 @@ class FakeUserSettings:
         self.upperDotThresh = upperDotThresh
         self.lowerBlobThresh = lowerBlobThresh
         self.program = program
+        self.polygon = None

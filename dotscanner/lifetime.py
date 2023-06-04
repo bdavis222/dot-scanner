@@ -130,9 +130,12 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements, 
 	imageNumberToCoordMap, imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage, 
 	userSettings, coordsToPlot, polygon):
-	targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME
-	if os.path.exists(targetPath):
-		os.remove(targetPath)
+	if userSettings.polygon: # A polygon from a previous analysis was used
+		targetPath = files.getReanalysisTargetPath(directory, cfg.LIFETIME_OUTPUT_FILENAME)
+	else:
+		targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME
+		if os.path.exists(targetPath):
+			os.remove(targetPath)
 	
 	with open(targetPath, "a") as file:
 		file.write(strings.lifetimeOutputFileHeader(microscopeImage, userSettings))
@@ -143,15 +146,16 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displ
 			output = f"{x} {y} {lifetime} {filename} {displacement}\n"
 			file.write(output)
 	
-	print(f"{cfg.LIFETIME_OUTPUT_FILENAME} saved.")
+	outputFilename = targetPath.split("/")[-1]
+	print(f"{outputFilename} saved.")
 	
-	saveHistogram(directory, lifetimes)
+	saveHistogram(directory, outputFilename, lifetimes)
 	
 	if userSettings.saveFigures:
-		saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
+		saveLifetimeFigures(directory, outputFilename, coordsToPlot, imageNumberToBlobCoordMap, 
 							imageNumberToFilenameMap, userSettings, polygon, lifetimes)
 
-def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap, 
+def saveLifetimeFigures(directory, outputFilename, coordsToPlot, imageNumberToBlobCoordMap, 
 	imageNumberToFilenameMap, userSettings, polygon, lifetimes):
 	print("Saving figures...")
 	coordsToPlotSize = len(list(coordsToPlot.keys()))
@@ -186,7 +190,7 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 				line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
 					linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 			
-			targetPath = files.getTargetPath(directory, userSettings.program, fileExtension)
+			targetPath = files.getTargetPath(directory, outputFilename, fileExtension)
 			truncatedFilename = ".".join(filename.split(".")[:-1])
 			
 			if fileExtension == "pdf":
@@ -202,7 +206,7 @@ def saveLifetimeFigures(directory, coordsToPlot, imageNumberToBlobCoordMap,
 			count += 1
 			ui.printProgressBar(count, totalCount)
 
-def saveHistogram(directory, lifetimes):
+def saveHistogram(directory, outputFilename, lifetimes):
 	figure = pl.figure()
 	axes = figure.add_subplot(111)
 
@@ -226,7 +230,8 @@ def saveHistogram(directory, lifetimes):
 				break
 
 	targetPath = files.getTargetPathForLifetimeHistogram(directory)
-	figure.savefig(f"{targetPath}lifetime_hist.pdf")
+	outputFilenameWithoutExtension = outputFilename.split(".")[0]
+	figure.savefig(f"{targetPath}{outputFilenameWithoutExtension}_hist.pdf")
 
 	figure.clf()
 	pl.close(figure)
