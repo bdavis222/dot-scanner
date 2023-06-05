@@ -9,13 +9,7 @@ class MicroscopeImage:
 		self.polygon = [] # Vertices of the region selected for analysis (mutated by other classes)
 		self.skipped = False # Whether the image should be skipped (mutated by other classes)
 		
-		self.dotSize = userSettings.dotSize
-		self.blobSize = userSettings.blobSize
-		self.saveFigures = userSettings.saveFigures
-		self.startImage = userSettings.startImage
-		self.skipsAllowed = userSettings.skipsAllowed
-		self.removeEdgeFrames = userSettings.removeEdgeFrames
-		
+		self.userSettings = userSettings
 		self.thresholds = userSettings.thresholds
 		self.lowerDotThreshScale = self.thresholds[0]
 		self.upperDotThreshScale = self.thresholds[1]
@@ -43,13 +37,14 @@ class MicroscopeImage:
 		self.dotCoords, self.blobCoords = self.getCoords()
 	
 	def getCoords(self):
-		combination = (self.thresholds, (self.dotSize, self.blobSize))
+		combination = (self.thresholds, (self.userSettings.dotSize, self.userSettings.blobSize))
 		if combination in self.memoizedCoords:
 			dotCoords, blobCoords = self.memoizedCoords[combination]
 		else:
 			dotCoords, blobCoords = dp.getCoords(self.data, self.sums, self.thresholds, 
-				self.dotSize)
-			dp.cleanDotCoords(self.data, dotCoords, blobCoords, self.blobSize, self.dotSize)
+				self.userSettings.dotSize)
+			dp.cleanDotCoords(self.data, dotCoords, blobCoords, self.userSettings.blobSize, 
+				self.userSettings.dotSize)
 			self.memoizedCoords[combination] = (dotCoords, blobCoords)
 		return dotCoords, blobCoords
 	

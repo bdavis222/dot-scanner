@@ -1,7 +1,9 @@
 import dotscanner.strings as strings
 import settings.config as cfg
 import matplotlib
+
 matplotlib.use("TkAgg")
+
 import matplotlib.pyplot as pl
 import numpy as np
 import os

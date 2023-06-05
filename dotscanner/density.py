@@ -140,15 +140,12 @@ def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
 	for index, adjustment in enumerate(adjustments):
 		if adjustment is not None:
 			if index == 0:
-				userSettings.lowerDotThresh = adjustment
 				microscopeImage.lowerDotThreshScale = adjustment
 				threshAdjusted = True
 			elif index == 1:
-				userSettings.upperDotThresh = adjustment
 				microscopeImage.upperDotThreshScale = adjustment
 				threshAdjusted = True
 			elif index == 2:
-				userSettings.lowerBlobThresh = adjustment
 				microscopeImage.lowerBlobThreshScale = adjustment
 				threshAdjusted = True
 			elif index == 3:
@@ -164,8 +161,6 @@ def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
 			elif index == 7:
 				microscopeImage.polygon = adjustment
 	if threshAdjusted:
-		userSettings.thresholds = (userSettings.lowerDotThresh, userSettings.upperDotThresh, 
-			userSettings.lowerBlobThresh)
 		microscopeImage.thresholds = (microscopeImage.lowerDotThreshScale, 
 			microscopeImage.upperDotThreshScale, microscopeImage.lowerBlobThreshScale)
 

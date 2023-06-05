@@ -2,12 +2,14 @@ import dotscanner.dataprocessing as dp
 import dotscanner.strings as strings
 import dotscanner.ui.window as ui
 import matplotlib
+
 matplotlib.use("TkAgg")
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 
 class RegionSelector:
-	def __init__(self, image, userSettings, skipButton=True):
+	def __init__(self, microscopeImage, userSettings, skipButton=True):
 		ui.setupWindow()
 		
 		if userSettings.reanalysis:
@@ -20,16 +22,11 @@ class RegionSelector:
 			self.xList, self.yList = [], []
 			self.drawingBlocked = False
 		
-		
-		self.image = image
-		self.dotSize = userSettings.dotSize
-		self.blobSize = userSettings.blobSize
-		self.data = image.data
-		
+		self.image = microscopeImage
 		self.window = ui.createPlotWindow(strings.regionSelectorWindowTitle)
 		
-		self.figure, self.axes, _, self.dotScatter, self.blobScatter = ui.createPlots(self.data, 
-			userSettings)
+		self.figure, self.axes, _, self.dotScatter, self.blobScatter = ui.createPlots(
+			self.image.data, userSettings)
 		
 		self.clickMarkerBackdrop = self.axes.scatter([None], [None], s=100, marker='x', color="k", 
 			linewidth=4)

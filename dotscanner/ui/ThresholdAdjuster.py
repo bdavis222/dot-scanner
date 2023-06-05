@@ -2,37 +2,38 @@ import dotscanner.dataprocessing as dp
 import dotscanner.strings as strings
 import dotscanner.ui.window as ui
 import matplotlib
+
 matplotlib.use("TkAgg")
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import tkinter as tk
 
 class ThresholdAdjuster:
-	def __init__(self, image, userSettings, skipButton=True, drawUi=True):
+	def __init__(self, microscopeImage, userSettings, skipButton=True, drawUi=True):
 		self.index = 0
 		self.skipButtonExists = skipButton
 		
-		self.image = image
+		self.image = microscopeImage
+		self.userSettings = userSettings
 		self.dotSize = userSettings.dotSize
 		self.blobSize = userSettings.blobSize
 		self.defaultThresholds = userSettings.thresholds
-		self.userSettings = userSettings
-		self.data = image.data
 		
 		self.xBounds = [
-			(0,                     len(self.data[0]) - 1),
-			(0,                     len(self.data[0]) / 2),
-			(len(self.data[0]) / 2, len(self.data[0]) - 1),
-			(0,                     len(self.data[0]) / 2),
-			(len(self.data[0]) / 2, len(self.data[0]) - 1),
+			(0,                           len(self.image.data[0]) - 1),
+			(0,                           len(self.image.data[0]) / 2),
+			(len(self.image.data[0]) / 2, len(self.image.data[0]) - 1),
+			(0,                           len(self.image.data[0]) / 2),
+			(len(self.image.data[0]) / 2, len(self.image.data[0]) - 1),
 		]
 
 		self.yBounds = [
-			(0,                     len(self.data) - 1),
-			(len(self.data) / 2,    len(self.data) - 1),
-			(len(self.data) / 2,    len(self.data) - 1),
-			(0,                     len(self.data) / 2),
-			(0,                     len(self.data) / 2),
+			(0,                           len(self.image.data) - 1),
+			(len(self.image.data) / 2,    len(self.image.data) - 1),
+			(len(self.image.data) / 2,    len(self.image.data) - 1),
+			(0,                           len(self.image.data) / 2),
+			(0,                           len(self.image.data) / 2),
 		]
 		
 		ui.setupWindow()
@@ -40,7 +41,7 @@ class ThresholdAdjuster:
 		self.windowScaling = ui.getWindowScaling()
 	
 		self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = ui.createPlots(
-			self.data, userSettings)
+			self.image.data, userSettings)
 
 		dp.setScatterData(self.image.dotCoords, self.image.blobCoords, self.dotScatter, 
 			self.blobScatter)
@@ -388,13 +389,13 @@ class ThresholdAdjuster:
 	def upperContrastDown(self):
 		self.userSettings.decreaseUpperContrast()
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
-			self.userSettings.upperContrast * np.std(self.data))
+			self.userSettings.upperContrast * np.std(self.image.data))
 		self.canvas.draw()
 	
 	def upperContrastUp(self):
 		self.userSettings.increaseUpperContrast()
 		self.dataPlot.set_clim(self.userSettings.lowerContrast, 
-			self.userSettings.upperContrast * np.std(self.data))
+			self.userSettings.upperContrast * np.std(self.image.data))
 		self.canvas.draw()
 	
 	def upperDotThresholdScaleDown(self):

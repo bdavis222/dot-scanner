@@ -6,7 +6,7 @@ import unittest
 
 class TestMicroscopeImage(unittest.TestCase):
 	@mock.patch("dotscanner.dataprocessing.getData")
-	def getMicroscopeImage(self, mock_getData):
+	def getMicroscopeImageAndUserSettings(self, mock_getData):
 		mock_getData.return_value = np.array([
 			[0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 5, 8, 0, 0, 1, 0, 0, 0],
@@ -15,7 +15,7 @@ class TestMicroscopeImage(unittest.TestCase):
 			[0, 0, 0, 7, 0, 0, 0, 0, 1],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0]
 		])
-		fakeUserSettings = FakeUserSettings(
+		userSettings = FakeUserSettings(
 							dotSize=2,
 							blobSize=5,
 							saveFigures=False,
@@ -23,17 +23,17 @@ class TestMicroscopeImage(unittest.TestCase):
 							skipsAllowed=3,
 							removeEdgeFrames=True,
 							thresholds=(1.5, 5.0, 2.0))
-		return MicroscopeImage("test/directory/", "filename.png", fakeUserSettings)
+		return MicroscopeImage("test/directory/", "filename.png", userSettings), userSettings
 	
 	def test_properLoading_whenClassInitializes(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, userSettings = self.getMicroscopeImageAndUserSettings()
 		
-		self.assertEqual(microscopeImage.dotSize, 2)
-		self.assertEqual(microscopeImage.blobSize, 5)
-		self.assertEqual(microscopeImage.saveFigures, False)
-		self.assertEqual(microscopeImage.startImage, "fakeImage01.png")
-		self.assertEqual(microscopeImage.skipsAllowed, 3)
-		self.assertEqual(microscopeImage.removeEdgeFrames, True)
+		self.assertEqual(userSettings.dotSize, 2)
+		self.assertEqual(userSettings.blobSize, 5)
+		self.assertEqual(userSettings.saveFigures, False)
+		self.assertEqual(userSettings.startImage, "fakeImage01.png")
+		self.assertEqual(userSettings.skipsAllowed, 3)
+		self.assertEqual(userSettings.removeEdgeFrames, True)
 		self.assertEqual(microscopeImage.thresholds, (1.5, 5.0, 2.0))
 		self.assertIn(3, microscopeImage.dotCoords)
 		self.assertIn(1, microscopeImage.dotCoords[3])
@@ -42,7 +42,7 @@ class TestMicroscopeImage(unittest.TestCase):
 	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	@mock.patch('settings.config.LOWER_DOT_THRESH_SCALE', 1.5)
 	def test_decreaseLowerDotThreshScale(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, _ = self.getMicroscopeImageAndUserSettings()
 		
 		microscopeImage.decreaseLowerDotThreshScale()
 		
@@ -55,7 +55,7 @@ class TestMicroscopeImage(unittest.TestCase):
 	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	@mock.patch('settings.config.LOWER_DOT_THRESH_SCALE', 1.5)
 	def test_increaseLowerDotThreshScale(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, _ = self.getMicroscopeImageAndUserSettings()
 		
 		microscopeImage.increaseLowerDotThreshScale()
 		
@@ -68,7 +68,7 @@ class TestMicroscopeImage(unittest.TestCase):
 	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	@mock.patch('settings.config.UPPER_DOT_THRESH_SCALE', 5.0)
 	def test_decreaseUpperDotThreshScale(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, _ = self.getMicroscopeImageAndUserSettings()
 		
 		microscopeImage.decreaseUpperDotThreshScale()
 		
@@ -81,7 +81,7 @@ class TestMicroscopeImage(unittest.TestCase):
 	@mock.patch('settings.config.THRESHOLD_DELTA', 0.1)
 	@mock.patch('settings.config.UPPER_DOT_THRESH_SCALE', 5.0)
 	def test_increaseUpperDotThreshScale(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, _ = self.getMicroscopeImageAndUserSettings()
 		
 		microscopeImage.increaseUpperDotThreshScale()
 		
@@ -92,14 +92,14 @@ class TestMicroscopeImage(unittest.TestCase):
 		self.assertEqual(microscopeImage.upperDotThreshScale, 5.2)
 	
 	def test_setThresholds(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, _ = self.getMicroscopeImageAndUserSettings()
 		
 		microscopeImage.setThresholds((1.26, 5.2, 3))
 		
 		self.assertEqual(microscopeImage.thresholds, (1.3, 5.2, 3.0))
 	
 	def test_updateThresholds(self):
-		microscopeImage = self.getMicroscopeImage()
+		microscopeImage, _ = self.getMicroscopeImageAndUserSettings()
 		
 		microscopeImage.lowerDotThreshScale = 1.2
 		microscopeImage.lowerBlobThreshScale = 2.2

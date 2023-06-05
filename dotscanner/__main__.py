@@ -1,5 +1,7 @@
 import settings.configmanagement as cm
+
 cm.runChecks()
+
 import dotscanner.density as density
 import dotscanner.files as files
 import dotscanner.lifetime as lifetime
