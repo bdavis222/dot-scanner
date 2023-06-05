@@ -65,6 +65,14 @@ There are three thresholds that can be set to adjust the detection sensitivity f
 2. `UPPER_DOT_THRESH_SCALE`: Scaling for the upper threshold defining the brightness of the dots. The default is 5, which corresponds to 5 standard deviations above the mean. Lower this value to reduce the number of bright dots detected, or raise it to increase the number.
 3. `LOWER_BLOB_THRESH_SCALE`: Scaling for the lower threshold defining the brightness of the blobs. The default is 2, which corresponds to 2 times the value of `UPPER_DOT_THRESH_SCALE`. Lower this value to increase the number of blobs detected, or raise it to reduce the number.
 
+#### Edit defaults
+This opens a new window that allows the user to edit the default filepath or edit/reset the entire configuration file directly.
+
+#### Use previous analysis
+This opens a new window that allows the user to browse for a previous analysis file to use to repeat analysis.
+
+Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
+
 ### Descriptions of Configuration Options for the Lifetime Program
 
 #### Start image
@@ -75,11 +83,6 @@ This sets the number of consecutive images that are allowed to be skipped in a l
       
 #### Remove edge frames
 This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis.
-
-#### Edit defaults
-This opens a new window that allows the user to edit the default filepath or edit/reset the entire configuration file directly.
-
-Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
 ## The Threshold Adjustment Window
 This window shows the image data with the dots and blobs identified, and features several button groups on the left sidebar:
@@ -100,10 +103,10 @@ These buttons adjust the sensitivity for detecting “dots” in the image (the 
 These buttons adjust the sensitivity for detecting “blobs” in the image. The user can also press the **right** and **left** arrow keys on the keyboard to make these adjustments. *Note: since increasing the blob sensitivity changes the threshold between blobs and dots, this results in a different number of dots being detected as well.*
 
 #### Edit
-This button changes the left button bar view to display some manual threshold adjustment options:
+This button changes the left button bar view to display some manual threshold and size adjustment options:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
 
-*(Once the thresholds are changed by entering new numbers into the text boxes, clicking the* **Done** *button, or pressing the* **return** *key on the keyboard, saves the settings and returns the left button bar to the original button configuration.)*
+*(Once the thresholds or sizes are changed by entering new numbers into the text boxes, clicking the* **Done** *button, or pressing the* **return** *key on the keyboard, saves the settings and returns the left button bar to the original button configuration.)*
 
 #### Reset
 This button resets the adjusted thresholds back to the default values.
