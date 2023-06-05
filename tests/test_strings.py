@@ -47,6 +47,18 @@ class TestStrings(unittest.TestCase):
 and contains density or lifetime data.'
         )
     
+    def test_outputFileTopHeader(self):
+        self.assertEqual(
+            strings.outputFileTopHeader(strings.ProgramType.DENSITY),
+            f"# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
+# Generated output file for density measurement\n#"
+        )
+        self.assertEqual(
+            strings.outputFileTopHeader(strings.ProgramType.LIFETIME),
+            f"# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
+# Generated output file for lifetime measurement\n#"
+        )
+    
     def test_lifetimeOutputFileHeader(self):
         polygon = [[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]]
         thresholds = (1.5, 5.0, 2.0)
@@ -65,10 +77,20 @@ and contains density or lifetime data.'
 "# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
 # Generated output file for lifetime measurement\n\
 #\n\
+# If this file is selected for re-analysis, the following settings will be read in and used unless \
+changed in the threshold adjustment window. The re-analyzed data will then be given in a new \
+output file in this same directory.\n\
+#\n\
 # Polygon vertices (x, y): (1, 1), (1, 10), (10, 10), (10, 1)\n\
 # Threshold scales: 1.5, 5.0, 2.0\n\
 # Contrast settings: 0.0, 5.0\n\
-# Dot size: 2 | Blob size: 5 | Remove edge frames: True | Save figures: False | Skips allowed: 1\n\
+# Dot size: 2 | Blob size: 5\n\
+#\n\
+# The following settings were used in this analysis, but will not be read in during re-analysis \
+(these and other settings can be adjusted in the config file using the \"Edit defaults\" button \
+in the main configuration window):\n\
+#\n\
+# Remove edge frames: True | Save figures: False | Skips allowed: 1\n\
 #\n\
 # The data columns are organized as follows:\n\
 # x | y | lifetime | starting image | displacement squared (sq px)\n#\n"
@@ -93,10 +115,20 @@ and contains density or lifetime data.'
 "# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
 # Generated output file for lifetime measurement\n\
 #\n\
+# If this file is selected for re-analysis, the following settings will be read in and used unless \
+changed in the threshold adjustment window. The re-analyzed data will then be given in a new \
+output file in this same directory.\n\
+#\n\
 # Polygon vertices (x, y): (1, 1), (1, 10), (10, 10), (10, 1)\n\
 # Threshold scales: 1.5, 5.0, 2.0\n\
 # Contrast settings: 0.0, 5.0\n\
-# Dot size: 2 | Blob size: 5 | Remove edge frames: True | Save figures: False | \
+# Dot size: 2 | Blob size: 5\n\
+#\n\
+# The following settings were used in this analysis, but will not be read in during re-analysis \
+(these and other settings can be adjusted in the config file using the \"Edit defaults\" button \
+in the main configuration window):\n\
+#\n\
+# Remove edge frames: True | Save figures: False | \
 Skips allowed: 1 | Start image: image.png\n\
 #\n\
 # The data columns are organized as follows:\n\

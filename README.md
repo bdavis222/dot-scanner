@@ -69,7 +69,7 @@ There are three thresholds that can be set to adjust the detection sensitivity f
 This opens a new window that allows the user to edit the default filepath or edit/reset the entire configuration file directly.
 
 #### Use previous analysis
-This opens a new window that allows the user to browse for a previous analysis file to use to repeat analysis.
+This opens a new window that allows the user to browse for a previous .txt analysis file to use to repeat the analysis. Information on which settings are reused during re-analysis is included in the header of each analysis file.
 
 Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
@@ -132,7 +132,7 @@ Brian Davis
 
 ## Release History
 
-* 1.3.1
+* 1.3.2
      * Bug fixes
 * 1.3.0
      * Added option to re-analyze data without redrawing regions

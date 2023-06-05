@@ -14,6 +14,17 @@ def outputFileTopHeader(programType):
 # Generated output file for {programType.lower()} measurement\n#"
 
 densityOutputFileHeader = f"{outputFileTopHeader(ProgramType.DENSITY)}\n\
+# If this file is selected for re-analysis, the following settings will be read in and used unless \
+changed in the threshold adjustment window. The re-analyzed data will then be given in a new \
+output file in this same directory.\n\
+#\n\
+# lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blob size | dot size | \
+upper contrast | polygon vertices\n\
+#\n\
+# Any values changed in the threshold adjustment window during re-analysis will be changed for \
+all files listed in the data output below. Other settings can be adjusted in the config file \
+using the \"Edit defaults\" button in the main configuration window.\n\
+#\n\
 # The data columns are organized as follows:\n\
 # filename | number of dots | number of pixels surveyed | \
 density (per sq {'pix' if cfg.SCALE is None else 'um'}) | error | lowerDotThreshScale | \
@@ -110,10 +121,20 @@ def lifetimeOutputFileHeader(microscopeImage, userSettings):
 	thresholdsString = ", ".join(thresholdsStringList)
 	
 	return f"{outputFileTopHeader(ProgramType.LIFETIME)}\n\
+# If this file is selected for re-analysis, the following settings will be read in and used unless \
+changed in the threshold adjustment window. The re-analyzed data will then be given in a new \
+output file in this same directory.\n\
+#\n\
 # Polygon vertices (x, y): {verticesString}\n\
 # Threshold scales: {thresholdsString}\n\
 # Contrast settings: {userSettings.lowerContrast}, {userSettings.upperContrast}\n\
-# Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize} | Remove edge frames: \
+# Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize}\n\
+#\n\
+# The following settings were used in this analysis, but will not be read in during re-analysis \
+(these and other settings can be adjusted in the config file using the \"Edit defaults\" button \
+in the main configuration window):\n\
+#\n\
+# Remove edge frames: \
 {userSettings.removeEdgeFrames} | Save figures: {userSettings.saveFigures} | Skips allowed: \
 {userSettings.skipsAllowed}{getLifetimeStartImageHeaderText(userSettings.startImage)}\n#\n\
 # The data columns are organized as follows:\n\

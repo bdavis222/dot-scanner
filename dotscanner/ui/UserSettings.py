@@ -300,7 +300,6 @@ class UserSettings:
 				print(strings.invalidAnalysisFileWarning(chosenFile))
 				return
 			
-			self.reanalysis = True
 			self.parseAnalysisFile(chosenFile)
 	
 	def parseAnalysisFile(self, chosenFile):
@@ -353,7 +352,8 @@ class UserSettings:
 				
 				self.densityData[filename] = [lowerDotThreshScale, upperDotThreshScale, 
 				lowerBlobThreshScale, blobSize, dotSize, lowerContrast, upperContrast, polygon]
-						
+		
+		self.reanalysis = True			
 		self.window.destroy()
 		self.window.quit()
 	
@@ -394,9 +394,7 @@ class UserSettings:
 					valueArray = [item.split(":")[1] for item in line.split("|")]
 					self.dotSize = int(valueArray[0])
 					self.blobSize = int(valueArray[1])
-					self.removeEdgeFrames = bool(valueArray[2])
-					self.saveFigures = bool(valueArray[3])
-					self.skipsAllowed = int(valueArray[4])
-				
+		
+		self.reanalysis = True		
 		self.window.destroy()
 		self.window.quit()
