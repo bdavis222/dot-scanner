@@ -101,6 +101,74 @@ def measureDensity(directory, filename, targetPath, microscopeImage, userSetting
 	saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error, 
 		microscopeImage, userSettings)
 
+def getReanalysisAdjustments(densityData, newUserSettings, microscopeImage):
+	adjustments = [None for _ in range(8)]
+	if densityData[0] != microscopeImage.lowerDotThreshScale:
+		adjustments[0] = microscopeImage.lowerDotThreshScale
+	if densityData[1] != microscopeImage.upperDotThreshScale:
+		adjustments[1] = microscopeImage.upperDotThreshScale
+	if densityData[2] != microscopeImage.lowerBlobThreshScale:
+		adjustments[2] = microscopeImage.lowerBlobThreshScale
+	if densityData[3] != newUserSettings.blobSize:
+		adjustments[3] = newUserSettings.blobSize
+	if densityData[4] != newUserSettings.dotSize:
+		adjustments[4] = newUserSettings.dotSize
+	if densityData[5] != newUserSettings.lowerContrast:
+		adjustments[5] = newUserSettings.lowerContrast
+	if densityData[6] != newUserSettings.upperContrast:
+		adjustments[6] = newUserSettings.upperContrast
+	if densityData[7] != newUserSettings.polygon:
+		adjustments[7] = newUserSettings.polygon
+	return adjustments
+
+def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
+	# Set the data to what is read from the file
+	userSettings.lowerDotThresh = data[0]
+	userSettings.upperDotThresh = data[1]
+	userSettings.lowerBlobThresh = data[2]
+	userSettings.thresholds = (data[0], data[1], data[2])
+	userSettings.blobSize = data[3]
+	userSettings.dotSize = data[4]
+	microscopeImage.blobSize = userSettings.blobSize
+	microscopeImage.dotSize = userSettings.dotSize
+	userSettings.lowerContrast = data[5]
+	userSettings.upperContrast = data[6]
+	microscopeImage.polygon = data[7]
+	
+	# Adjust the data that was adjusted to be different from the previous analysis
+	threshAdjusted = False
+	for index, adjustment in enumerate(adjustments):
+		if adjustment is not None:
+			if index == 0:
+				userSettings.lowerDotThresh = adjustment
+				microscopeImage.lowerDotThreshScale = adjustment
+				threshAdjusted = True
+			elif index == 1:
+				userSettings.upperDotThresh = adjustment
+				microscopeImage.upperDotThreshScale = adjustment
+				threshAdjusted = True
+			elif index == 2:
+				userSettings.lowerBlobThresh = adjustment
+				microscopeImage.lowerBlobThreshScale = adjustment
+				threshAdjusted = True
+			elif index == 3:
+				userSettings.blobSize = adjustment
+				microscopeImage.blobSize = adjustment
+			elif index == 4:
+				userSettings.dotSize = adjustment
+				microscopeImage.dotSize = adjustment
+			elif index == 5:
+				userSettings.lowerContrast = adjustment
+			elif index == 6:
+				userSettings.upperContrast = adjustment
+			elif index == 7:
+				microscopeImage.polygon = adjustment
+	if threshAdjusted:
+		userSettings.thresholds = (userSettings.lowerDotThresh, userSettings.upperDotThresh, 
+			userSettings.lowerBlobThresh)
+		microscopeImage.thresholds = (microscopeImage.lowerDotThreshScale, 
+			microscopeImage.upperDotThreshScale, microscopeImage.lowerBlobThreshScale)
+
 def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error, 
 	microscopeImage, userSettings, skipped=False):
 	saveFigures = userSettings.saveFigures
@@ -175,7 +243,7 @@ def saveDensityFigure(directory, filename, outputFilename, microscopeImage, user
 		figure.clf()
 		pl.close(figure)
 
-def skipFile(directory, filename, userSettings, microscopeImage):
-	saveDensityDataFiles(directory, filename, None, None, None, None, microscopeImage, userSettings,
-		skipped=True)
+def skipFile(directory, filename, targetPath, userSettings, microscopeImage):
+	saveDensityDataFiles(directory, filename, targetPath, None, None, None, None, microscopeImage, 
+		userSettings, skipped=True)
 	print(strings.fileSkippedNotification(filename))

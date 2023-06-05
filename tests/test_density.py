@@ -1,5 +1,7 @@
 import dotscanner.dataprocessing as dp
 import dotscanner.density as density
+from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
+from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import numpy as np
 import os
@@ -79,6 +81,116 @@ class TestDensity(unittest.TestCase):
 		
 		self.assertEqual(dotTotal, 2)
 		self.assertEqual(blobTotal, 5)
+	
+	def test_setReanalysisAdjustments_doesNothingWithNoChanges(self):
+		lowerDotThresh, upperDotThresh, lowerBlobThresh = 1.5, 5.0, 2.0
+		blobSize, dotSize = 5, 2
+		lowerContrast, upperContrast = 0.0, 6.0
+		polygon = [[1,1], [5,5], [10,5], [5,10], [1,1]]
+		data = [
+			lowerDotThresh, 
+			upperDotThresh, 
+			lowerBlobThresh, 
+			blobSize, 
+			dotSize, 
+			lowerContrast, 
+			upperContrast, 
+			polygon
+		]
+		microscopeImage = FakeMicroscopeImage(
+			lowerDotThreshScale=1.5, 
+			upperDotThreshScale=5.0, 
+			lowerBlobThreshScale=2.0
+		)
+		newUserSettings = FakeUserSettings(
+			dotSize=2, 
+			blobSize=5, 
+			lowerContrast=0.0, 
+			upperContrast=6.0, 
+			polygon=polygon
+		)
+		adjustments = density.getReanalysisAdjustments(data, newUserSettings, microscopeImage)
+		
+		for element in adjustments:
+			self.assertEqual(element, None)
+		
+	def test_setReanalysisAdjustments_identifiesChangesCorrectly(self):
+		lowerDotThresh, upperDotThresh, lowerBlobThresh = 1.5, 5.0, 2.0
+		blobSize, dotSize = 5, 2
+		lowerContrast, upperContrast = 0.0, 6.0
+		polygon = [[1,1], [5,5], [10,5], [5,10], [1,1]]
+		data = [
+			lowerDotThresh, 
+			upperDotThresh, 
+			lowerBlobThresh, 
+			blobSize, 
+			dotSize, 
+			lowerContrast, 
+			upperContrast, 
+			polygon
+		]
+		microscopeImage = FakeMicroscopeImage(
+			lowerDotThreshScale=1.7, 
+			upperDotThreshScale=4.8, 
+			lowerBlobThreshScale=2.0
+		)
+		newUserSettings = FakeUserSettings(
+			dotSize=2, 
+			blobSize=6, 
+			lowerContrast=0.0, 
+			upperContrast=5.5, 
+			polygon=polygon
+		)
+		adjustments = density.getReanalysisAdjustments(data, newUserSettings, microscopeImage)
+		
+		self.assertEqual(adjustments[0], 1.7)
+		self.assertEqual(adjustments[1], 4.8)
+		self.assertEqual(adjustments[2], None)
+		self.assertEqual(adjustments[3], 6)
+		self.assertEqual(adjustments[4], None)
+		self.assertEqual(adjustments[5], None)
+		self.assertEqual(adjustments[6], 5.5)
+		self.assertEqual(adjustments[7], None)
+	
+	def test_setReanalysisDataValues(self):
+		adjustments = [1.7, None, None, None, None, None, None, [[1,1], [5,5], [10,8], [1,1]]]
+		lowerDotThresh, upperDotThresh, lowerBlobThresh = 1.5, 5.0, 2.0
+		blobSize, dotSize = 5, 2
+		lowerContrast, upperContrast = 0.0, 6.0
+		polygon = [[1,1], [5,5], [10,5], [5,10], [1,1]]
+		data = [
+			lowerDotThresh, 
+			upperDotThresh, 
+			lowerBlobThresh, 
+			blobSize, 
+			dotSize, 
+			lowerContrast, 
+			upperContrast, 
+			polygon
+		]
+		microscopeImage = FakeMicroscopeImage(
+			lowerDotThreshScale=1.5, 
+			upperDotThreshScale=5.0, 
+			lowerBlobThreshScale=2.0
+		)
+		userSettings = FakeUserSettings(
+			dotSize=2, 
+			blobSize=5, 
+			lowerContrast=0.0, 
+			upperContrast=6.0, 
+			polygon=polygon
+		)
+		density.setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
+		
+		self.assertEqual(microscopeImage.lowerDotThreshScale, 1.7)
+		self.assertEqual(microscopeImage.upperDotThreshScale, 5.0)
+		self.assertEqual(microscopeImage.lowerBlobThreshScale, 2.0)
+		self.assertEqual(microscopeImage.thresholds, (1.7, 5.0, 2.0))
+		self.assertEqual(userSettings.dotSize, 2)
+		self.assertEqual(userSettings.blobSize, 5)
+		self.assertEqual(userSettings.lowerContrast, 0.0)
+		self.assertEqual(userSettings.upperContrast, 6.0)
+		self.assertEqual(microscopeImage.polygon, [[1,1], [5,5], [10,8], [1,1]])
 
 if __name__ == '__main__':
 	unittest.main()

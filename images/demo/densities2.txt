@@ -1,9 +1,0 @@
-# Dot Scanner (https://github.com/bdavis222/dotscanner)
-# Generated output file for density measurement
-#
-# The data columns are organized as follows:
-# filename | number of dots | number of pixels surveyed | density (per sq pix) | error | lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | lowerContrast | upperContrast | polygon vertices (x, y)
-#
-demo_image1.TIF 78 5540 0.0140794 0.0015942 1.8 5.0 2.0 5 2 0.0 7.5 (61, 465), (58, 397), (157, 325)
-demo_image3.TIF 143 8150 0.017546 0.0014673 1.5 5.0 2.0 5 2 0.0 7.5 (60, 459), (62, 392), (221, 265)
-demo_image4.TIF 20 1140 0.0175439 0.0039229 1.9 4.9 2.0 5 2 0.0 7.5 (110, 400), (112, 349)

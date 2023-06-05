@@ -29,6 +29,7 @@ def getDensityData(directory, filenames, userSettings):
 	
 	density.checkUnitsConsistent(directory)
 	alreadyMeasured = density.getAlreadyMeasured(directory)
+	targetPath = files.getReanalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
 	for filename in filenames:
 		if filename in alreadyMeasured:
 			print(strings.alreadyMeasuredNotification(filename))
@@ -40,42 +41,17 @@ def getDensityData(directory, filenames, userSettings):
 		thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
 		if microscopeImage.skipped:
 			
-			density.skipFile(directory, filename, thresholdAdjuster.userSettings, microscopeImage)
+			density.skipFile(directory, filename, targetPath, thresholdAdjuster.userSettings, 
+				microscopeImage)
 			continue
 		
 		RegionSelector(microscopeImage, thresholdAdjuster.userSettings)
 		if microscopeImage.skipped:
-			density.skipFile(directory, filename, thresholdAdjuster.userSettings, microscopeImage)
+			density.skipFile(directory, filename, targetPath, thresholdAdjuster.userSettings, 
+				microscopeImage)
 			continue
 		
-		density.measureDensity(directory, filename, microscopeImage, userSettings)
-
-def reanalyzeDensityData(directory, userSettings):
-	targetPath = files.getReanalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
-	adjustmentsMade = False
-	for filename, data in userSettings.densityData.items():
-		microscopeImage = MicroscopeImage(directory, filename, userSettings)
-		setDensityDataValues(userSettings, microscopeImage, data)
-		
-		if not adjustmentsMade:
-			thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
-			userSettings = thresholdAdjuster.userSettings
-			adjustmentsMade = not microscopeImage.skipped
-		
 		density.measureDensity(directory, filename, targetPath, microscopeImage, userSettings)
-
-def setDensityDataValues(userSettings, microscopeImage, data):
-	userSettings.lowerDotThreshScale = data[0]
-	userSettings.upperDotThreshScale = data[1]
-	userSettings.lowerBlobThreshScale = data[2]
-	userSettings.thresholds = (data[0], data[1], data[2])
-	userSettings.blobSize = data[3]
-	userSettings.dotSize = data[4]
-	microscopeImage.blobSize = userSettings.blobSize
-	microscopeImage.dotSize = userSettings.dotSize
-	userSettings.lowerContrast = data[5]
-	userSettings.upperContrast = data[6]
-	microscopeImage.polygon = data[7]
 
 def getLifetimeData(directory, filenames, userSettings):
 	lifetime.checkEnoughFramesForLifetimes(filenames, userSettings)
@@ -88,6 +64,24 @@ def getLifetimeData(directory, filenames, userSettings):
 	
 	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, 
 		thresholdAdjuster.userSettings)
+
+def reanalyzeDensityData(directory, userSettings):
+	targetPath = files.getReanalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
+	adjustmentsMade = False
+	for filename, data in userSettings.densityData.items():
+		microscopeImage = MicroscopeImage(directory, filename, userSettings)
+		
+		if not adjustmentsMade:
+			thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
+			newUserSettings = thresholdAdjuster.userSettings
+			adjustments = density.getReanalysisAdjustments(data, newUserSettings, microscopeImage)
+			density.setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
+			adjustmentsMade = not microscopeImage.skipped
+		
+		else:
+			density.setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
+		
+		density.measureDensity(directory, filename, targetPath, microscopeImage, userSettings)
 
 if __name__ == '__main__':
 	main()

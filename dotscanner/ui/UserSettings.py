@@ -342,6 +342,7 @@ class UserSettings:
 				for pair in polygonPairsStringArray:
 					x, y = pair.split(",")
 					polygon.append([int(y), int(x)]) # More convenient shape for densities
+				polygon.append([polygon[0][0], polygon[0][1]])
 				
 				self.densityData[filename] = [lowerDotThreshScale, upperDotThreshScale, 
 				lowerBlobThreshScale, blobSize, dotSize, lowerContrast, upperContrast, polygon]
