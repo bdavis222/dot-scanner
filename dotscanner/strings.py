@@ -92,6 +92,11 @@ def densityOutput(filename, dotTotal, surveyedArea, density, error, microscopeIm
 def fileSkippedNotification(filename):
 	return f"\nFile {filename} skipped"
 
+def invalidAnalysisFileWarning(filepath):
+	filename = filepath.split("/")[-1]
+	return f'\nInvalid analysis file selected: "{filename}". A valid file has a .txt extension \
+and contains density or lifetime data.'
+
 def lifetimeOutputFileHeader(microscopeImage, userSettings):
 	verticesStringList = []
 	for vertex in microscopeImage.polygon[:-1]:

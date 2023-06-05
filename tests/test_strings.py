@@ -40,6 +40,13 @@ class TestStrings(unittest.TestCase):
         
         self.assertEqual(output, "\nFile test.png skipped")
     
+    def test_invalidAnalysisFileWarning(self):
+        self.assertEqual(
+            strings.invalidAnalysisFileWarning("test_file.png"),
+            f'\nInvalid analysis file selected: "test_file.png". A valid file has a .txt extension \
+and contains density or lifetime data.'
+        )
+    
     def test_lifetimeOutputFileHeader(self):
         polygon = [[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]]
         thresholds = (1.5, 5.0, 2.0)

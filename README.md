@@ -132,6 +132,8 @@ Brian Davis
 
 ## Release History
 
+* 1.3.1
+     * Bug fixes
 * 1.3.0
      * Added option to re-analyze data without redrawing regions
      * Added particle displacement tracking during lifetime measurement
