@@ -132,7 +132,7 @@ Brian Davis
 
 ## Release History
 
-* 1.3.2
+* 1.3.3
      * Bug fixes
 * 1.3.0
      * Added option to re-analyze data without redrawing regions
