@@ -31,7 +31,7 @@ def getDensityData(directory, filenames, userSettings):
 	
 	density.checkUnitsConsistent(directory)
 	alreadyMeasured = density.getAlreadyMeasured(directory)
-	targetPath = files.getReanalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
+	targetPath = files.getAnalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
 	for filename in filenames:
 		if filename in alreadyMeasured:
 			print(strings.alreadyMeasuredNotification(filename))

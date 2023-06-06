@@ -190,7 +190,7 @@ def saveLifetimeFigures(directory, outputFilename, coordsToPlot, imageNumberToBl
 				line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
 					linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 			
-			targetPath = files.getTargetPath(directory, outputFilename, fileExtension)
+			targetPath = files.getFigureTargetPath(directory, outputFilename, fileExtension)
 			truncatedFilename = ".".join(filename.split(".")[:-1])
 			
 			if fileExtension == "pdf":
@@ -229,7 +229,7 @@ def saveHistogram(directory, outputFilename, lifetimes):
 				axes.text(i+1, histData[0][i] + yOffset, int(histData[0][i]), fontsize=6, color="C1", horizontalalignment="center")
 				break
 
-	targetPath = files.getTargetPathForLifetimeHistogram(directory)
+	targetPath = files.getLifetimeHistogramTargetPath(directory)
 	outputFilenameWithoutExtension = outputFilename.split(".")[0]
 	figure.savefig(f"{targetPath}{outputFilenameWithoutExtension}_hist.pdf")
 

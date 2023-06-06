@@ -224,7 +224,7 @@ def saveDensityFigure(directory, filename, outputFilename, microscopeImage, user
 			line, = axes.plot(polygonX, polygonY, linestyle="-", color=cfg.POLYGON_COLOR, 
 				linewidth=cfg.POLYGON_THICKNESS, zorder=2)
 		
-		targetPath = files.getTargetPath(directory, outputFilename, fileExtension)
+		targetPath = files.getFigureTargetPath(directory, outputFilename, fileExtension)
 		
 		truncatedFilename = ".".join(filename.split(".")[:-1])
 		

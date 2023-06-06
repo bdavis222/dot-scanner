@@ -139,7 +139,7 @@ def removeImagesBeforeStartingImage(filenames, startImage):
 			filenamesFromStartingImage.append(filename)
 	return filenamesFromStartingImage
 
-def getTargetPath(directory, outputFilename, fileExtension):
+def getFigureTargetPath(directory, outputFilename, fileExtension):
 	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
 	if not figureDirectoryName.endswith("/"):
 		figureDirectoryName += "/"
@@ -159,6 +159,12 @@ def getTargetPath(directory, outputFilename, fileExtension):
 	if not os.path.exists(targetPath):
 		os.mkdir(targetPath)
 	
+	return targetPath
+
+def getAnalysisTargetPath(directory, filename):
+	targetPath = directory + filename
+	if not os.path.exists(targetPath):
+		os.mkdir(targetPath)
 	return targetPath
 
 def getReanalysisTargetPath(directory, filename):
@@ -195,7 +201,7 @@ def filenameIsNumbered(filename):
 		
 		return char.isdigit()
 
-def getTargetPathForLifetimeHistogram(directory):
+def getLifetimeHistogramTargetPath(directory):
 	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
 	if not figureDirectoryName.endswith("/"):
 		figureDirectoryName += "/"
