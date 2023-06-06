@@ -166,14 +166,6 @@ def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
 
 def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error, 
 	microscopeImage, userSettings, skipped=False):
-	saveFigures = userSettings.saveFigures
-	blobSize = userSettings.blobSize
-	dotSize = userSettings.dotSize
-	lowerContrast = userSettings.lowerContrast
-	upperContrast = userSettings.upperContrast
-	dotCoords = microscopeImage.dotCoords
-	blobCoords = microscopeImage.blobCoords
-	
 	if not os.path.exists(targetPath):
 		with open(targetPath, "a") as file:
 			file.write(strings.densityOutputFileHeader)
@@ -187,7 +179,7 @@ def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea
 		output = strings.densityOutput(filename, dotTotal, surveyedArea, density, error, 
 			microscopeImage, userSettings)
 	
-	if (not skipped and saveFigures) or userSettings.reanalysis:
+	if (not skipped and userSettings.saveFigures) or userSettings.reanalysis:
 		outputFilename = targetPath.split("/")[-1]
 		saveDensityFigure(directory, filename, outputFilename, microscopeImage, userSettings)
 	
@@ -195,9 +187,6 @@ def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea
 		file.write(output)
 
 def saveDensityFigure(directory, filename, outputFilename, microscopeImage, userSettings):
-	dotSize = userSettings.dotSize
-	program = userSettings.program
-	
 	data = microscopeImage.data
 	polygon = microscopeImage.polygon
 	dotCoords = microscopeImage.dotCoords
@@ -207,7 +196,7 @@ def saveDensityFigure(directory, filename, outputFilename, microscopeImage, user
 		figure, axes = pl.subplots()
 		axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast, 
 			vmax=userSettings.upperContrast * np.std(data), zorder=0)
-		dotScatter = axes.scatter([None], [None], s=5 * dotSize, facecolors="none", 
+		dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none", 
 			edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2, zorder=4)
 		dotScatter.set_offsets(dotCoords)
 		

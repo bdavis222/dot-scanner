@@ -139,33 +139,8 @@ def removeImagesBeforeStartingImage(filenames, startImage):
 			filenamesFromStartingImage.append(filename)
 	return filenamesFromStartingImage
 
-def getFigureTargetPath(directory, outputFilename, fileExtension):
-	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
-	if not figureDirectoryName.endswith("/"):
-		figureDirectoryName += "/"
-	
-	figurePathWithoutExtension = f"{directory}{figureDirectoryName}"
-	
-	if not os.path.exists(figurePathWithoutExtension):
-		os.mkdir(figurePathWithoutExtension)
-	
-	figurePath = f"{directory}{figureDirectoryName}{fileExtension}/"
-	
-	if not os.path.exists(figurePath):
-		os.mkdir(figurePath)
-	
-	outputFilenameWithoutExtension = outputFilename.split(".")[0]
-	targetPath = figurePath + f"{outputFilenameWithoutExtension}/"
-	if not os.path.exists(targetPath):
-		os.mkdir(targetPath)
-	
-	return targetPath
-
 def getAnalysisTargetPath(directory, filename):
-	targetPath = directory + filename
-	if not os.path.exists(targetPath):
-		os.mkdir(targetPath)
-	return targetPath
+	return directory + filename
 
 def getReanalysisTargetPath(directory, filename):
 	targetPath = directory + filename
@@ -200,6 +175,28 @@ def filenameIsNumbered(filename):
 			continue
 		
 		return char.isdigit()
+
+def getFigureTargetPath(directory, outputFilename, fileExtension):
+	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME
+	if not figureDirectoryName.endswith("/"):
+		figureDirectoryName += "/"
+	
+	figurePathWithoutExtension = f"{directory}{figureDirectoryName}"
+	
+	if not os.path.exists(figurePathWithoutExtension):
+		os.mkdir(figurePathWithoutExtension)
+	
+	figurePath = f"{directory}{figureDirectoryName}{fileExtension}/"
+	
+	if not os.path.exists(figurePath):
+		os.mkdir(figurePath)
+	
+	outputFilenameWithoutExtension = outputFilename.split(".")[0]
+	targetPath = figurePath + f"{outputFilenameWithoutExtension}/"
+	if not os.path.exists(targetPath):
+		os.mkdir(targetPath)
+	
+	return targetPath
 
 def getLifetimeHistogramTargetPath(directory):
 	figureDirectoryName = cfg.FIGURE_DIRECTORY_NAME

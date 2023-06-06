@@ -317,9 +317,11 @@ class UserSettings:
 					if programString == "density":
 						self.program = ProgramType.DENSITY
 						self.parseDensityFile(chosenFile)
+						return
 					else:
 						self.program = ProgramType.LIFETIME
 						self.parseLifetimeFile(chosenFile)
+						return
 		
 		print(strings.invalidAnalysisFileWarning(chosenFile))
 	
