@@ -349,7 +349,7 @@ class UserSettings:
 				polygon = []
 				for pair in polygonPairsStringArray:
 					x, y = pair.split(",")
-					polygon.append([int(y), int(x)]) # More convenient shape for densities
+					polygon.append([int(y), int(x)])
 				polygon.append([polygon[0][0], polygon[0][1]])
 				
 				self.densityData[filename] = [lowerDotThreshScale, upperDotThreshScale, 
@@ -361,7 +361,6 @@ class UserSettings:
 	
 	def parseLifetimeFile(self, chosenFile):
 		self.filepath = os.path.dirname(chosenFile)
-		self.polygon = [[], []]
 		with open(chosenFile, "r") as file:
 			for line in file:
 				if not line.startswith("#"): # Only read the header
@@ -372,13 +371,14 @@ class UserSettings:
 					continue
 				
 				if lineArray[1] == "Polygon":
+					self.polygon = []
 					polygonData = line.split(":")[1].split(")")
 					for item in polygonData:
 						polygonDataArray = item.split("(")
 						if len(polygonDataArray) > 1:
 							x, y = polygonDataArray[1].split(",")
-							self.polygon[0].append(int(x)) # More convenient shape for lifetimes
-							self.polygon[1].append(int(y))
+							self.polygon.append([int(y), int(x)])
+					self.polygon.append([self.polygon[0][0], self.polygon[0][1]])
 				
 				elif lineArray[1] == "Threshold":
 					parsedThresholds = [float(value) for value in line.split(":")[1].split(",")]

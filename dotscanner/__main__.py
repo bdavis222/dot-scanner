@@ -13,7 +13,7 @@ from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
 from dotscanner.ui.UserSettings import UserSettings
 import settings.config as cfg
 
-def main():	
+def main():
 	while True:
 		userSettings = UserSettings()
 		directory, filenames = files.getDirectoryAndFilenames(userSettings)
@@ -26,7 +26,7 @@ def main():
 	
 def getDensityData(directory, filenames, userSettings):
 	if userSettings.reanalysis:
-		reanalyzeDensityData(directory, userSettings)
+		density.reanalyzeDensityData(directory, userSettings)
 		return
 	
 	density.checkUnitsConsistent(directory)
@@ -41,16 +41,14 @@ def getDensityData(directory, filenames, userSettings):
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
 		thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
+		userSettings = thresholdAdjuster.userSettings # Updating with the threshold adjustments
 		if microscopeImage.skipped:
-			
-			density.skipFile(directory, filename, targetPath, thresholdAdjuster.userSettings, 
-				microscopeImage)
+			density.skipFile(directory, filename, targetPath, userSettings, microscopeImage)
 			continue
 		
-		RegionSelector(microscopeImage, thresholdAdjuster.userSettings)
+		RegionSelector(microscopeImage, userSettings)
 		if microscopeImage.skipped:
-			density.skipFile(directory, filename, targetPath, thresholdAdjuster.userSettings, 
-				microscopeImage)
+			density.skipFile(directory, filename, targetPath, userSettings, microscopeImage)
 			continue
 		
 		density.measureDensity(directory, filename, targetPath, microscopeImage, userSettings)
@@ -62,28 +60,10 @@ def getLifetimeData(directory, filenames, userSettings):
 	middleMicroscopeImage = MicroscopeImage(directory, filenames[middleIndex], userSettings)
 	
 	thresholdAdjuster = ThresholdAdjuster(middleMicroscopeImage, userSettings, skipButton=False)
-	RegionSelector(middleMicroscopeImage, thresholdAdjuster.userSettings, skipButton=False)
+	userSettings = thresholdAdjuster.userSettings # Updating with the threshold adjustments
+	RegionSelector(middleMicroscopeImage, userSettings, skipButton=False)
 	
-	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, 
-		thresholdAdjuster.userSettings)
-
-def reanalyzeDensityData(directory, userSettings):
-	targetPath = files.getReanalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
-	adjustmentsMade = False
-	for filename, data in userSettings.densityData.items():
-		microscopeImage = MicroscopeImage(directory, filename, userSettings)
-		
-		if not adjustmentsMade:
-			thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
-			newUserSettings = thresholdAdjuster.userSettings
-			adjustments = density.getReanalysisAdjustments(data, newUserSettings, microscopeImage)
-			density.setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
-			adjustmentsMade = not microscopeImage.skipped
-		
-		else:
-			density.setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
-		
-		density.measureDensity(directory, filename, targetPath, microscopeImage, userSettings)
+	lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings)
 
 if __name__ == '__main__':
 	main()

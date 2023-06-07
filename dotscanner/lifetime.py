@@ -130,7 +130,7 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements, 
 	imageNumberToCoordMap, imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage, 
 	userSettings, coordsToPlot, polygon):
-	if userSettings.polygon: # A polygon from a previous analysis was used
+	if userSettings.reanalysis:
 		targetPath = files.getReanalysisTargetPath(directory, cfg.LIFETIME_OUTPUT_FILENAME)
 	else:
 		targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME

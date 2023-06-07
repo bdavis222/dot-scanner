@@ -159,15 +159,15 @@ class ThresholdAdjuster:
 		
 		self.entryThresholdLabel1 = tk.Label(self.window, text="Dot lower:")
 		self.entryThreshold1 = tk.Entry(self.window, width=5)
-		self.entryThreshold1.insert(0, userSettings.lowerDotThresh)
+		self.entryThreshold1.insert(0, userSettings.lowerDotThresh) # Default value
 		
 		self.entryThresholdLabel2 = tk.Label(self.window, text="Dot upper:")
 		self.entryThreshold2 = tk.Entry(self.window, width=5)
-		self.entryThreshold2.insert(0, userSettings.upperDotThresh)
+		self.entryThreshold2.insert(0, userSettings.upperDotThresh) # Default value
 		
 		self.entryThresholdLabel3 = tk.Label(self.window, text="Blob lower:")
 		self.entryThreshold3 = tk.Entry(self.window, width=5)
-		self.entryThreshold3.insert(0, userSettings.lowerBlobThresh)
+		self.entryThreshold3.insert(0, userSettings.lowerBlobThresh) # Default value
 		
 		self.entryDotSizeLabel = tk.Label(self.window, text="Dot size:")
 		self.entryDotSize = tk.Entry(self.window, width=5)

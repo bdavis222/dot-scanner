@@ -6,8 +6,8 @@ import settings.config as cfg
 class MicroscopeImage:
 	def __init__(self, directory, filename, userSettings):
 		self.memoizedCoords = {}
-		self.polygon = [] # Vertices of the region selected for analysis (mutated by other classes)
-		self.skipped = False # Whether the image should be skipped (mutated by other classes)
+		self.polygon = self.getPolygon(filename, userSettings)
+		self.skipped = False # Whether analysis should be skipped for this image
 		
 		self.userSettings = userSettings
 		self.thresholds = userSettings.thresholds
@@ -47,6 +47,14 @@ class MicroscopeImage:
 				self.userSettings.dotSize)
 			self.memoizedCoords[combination] = (dotCoords, blobCoords)
 		return dotCoords, blobCoords
+	
+	def getPolygon(self, filename, userSettings):
+		if userSettings.polygon:
+			return userSettings.polygon
+		elif userSettings.densityData:
+			return userSettings.densityData[filename][7]
+		else:
+			return []
 	
 	def increaseLowerDotThreshScale(self):
 		value = self.lowerDotThreshScale + cfg.THRESHOLD_DELTA

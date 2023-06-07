@@ -12,15 +12,10 @@ class RegionSelector:
 	def __init__(self, microscopeImage, userSettings, skipButton=True):
 		ui.setupWindow()
 		
+		self.xList, self.yList = [], []
+		self.drawingBlocked = False
 		if userSettings.reanalysis:
-			if userSettings.polygon is None:
-				raise Exception(strings.invalidPolygonWarning)
-			self.xList, self.yList = userSettings.polygon
-			self.drawingBlocked = True
-		
-		else:
-			self.xList, self.yList = [], []
-			self.drawingBlocked = False
+			self.setPolygonData(microscopeImage)
 		
 		self.image = microscopeImage
 		self.window = ui.createPlotWindow(strings.regionSelectorWindowTitle)
@@ -105,14 +100,15 @@ class RegionSelector:
 		self.line.figure.canvas.draw_idle()
 	
 	def finish(self):
-		if len(self.xList) > 2: # If a valid enclosed polygon was drawn
-			self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
-			self.yList.append(self.yList[0])
-			for y, x in zip(self.yList, self.xList):
-				self.image.polygon.append([int(round(y, 0)), int(round(x, 0))])
-		
-		else: # An invalid polygon was drawn
-			print(strings.invalidPolygonWarning)
+		if not self.image.polygon:
+			if len(self.xList) > 2: # If a valid enclosed polygon was drawn
+				self.xList.append(self.xList[0]) # Enclose the polygon to the beginning vertex
+				self.yList.append(self.yList[0])
+				for y, x in zip(self.yList, self.xList):
+					self.image.polygon.append([int(round(y, 0)), int(round(x, 0))])
+			
+			else: # An invalid polygon was drawn
+				print(strings.invalidPolygonWarning)
 		
 		self.line.figure.canvas.mpl_disconnect(self.connectId)
 		self.window.destroy()
@@ -143,6 +139,15 @@ class RegionSelector:
 		self.clickMarker.set_offsets([None, None])
 		self.clickMarkerBackdrop.figure.canvas.draw_idle()
 		self.clickMarker.figure.canvas.draw_idle()
+	
+	def setPolygonData(self, microscopeImage):
+		if not microscopeImage.polygon:
+			raise Exception(strings.invalidPolygonWarning)
+		for pair in microscopeImage.polygon:
+			y, x = pair
+			self.xList.append(x)
+			self.yList.append(y)
+		self.drawingBlocked = True
 	
 	def skip(self):
 		self.image.skipped = True

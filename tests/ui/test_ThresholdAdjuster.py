@@ -65,12 +65,9 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.2, 1.8, 1.3))
 		self.assertEqual(len(dotOffsets), 2)
-		for offset in dotOffsets:
-			x, y = offset
-			if x == 6:
-				self.assertEqual(y, 5)
-			else:
-				self.assertEqual(y, 9)
+		self.assertIn([6, 5], dotOffsets)
+		self.assertIn([11, 9], dotOffsets)
+		self.assertEqual(len(dotOffsets), 2)
 		
 		thresholdAdjuster.upperDotThresholdScaleDown()
 		
@@ -79,9 +76,7 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.2, 1.7, 1.3))
 		self.assertEqual(len(dotOffsets2), 1)
-		x, y = dotOffsets2[0]
-		self.assertEqual(x, 6)
-		self.assertEqual(y, 4)
+		self.assertIn([6, 4], dotOffsets2)
 	
 	def test_upperDotThresholdScaleUp(self):
 		# This is the inverse of the previous test, scaling down first, and then back up
@@ -98,9 +93,7 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.2, 1.7, 1.3))
 		self.assertEqual(len(dotOffsets), 1)
-		x, y = dotOffsets[0]
-		self.assertEqual(x, 6)
-		self.assertEqual(y, 4)
+		self.assertIn([6, 4], dotOffsets)
 		
 		thresholdAdjuster.upperDotThresholdScaleUp()
 		
@@ -109,12 +102,8 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.2, 1.8, 1.3))
 		self.assertEqual(len(dotOffsets2), 2)
-		for offset in dotOffsets2:
-			x, y = offset
-			if x == 6:
-				self.assertEqual(y, 5)
-			else:
-				self.assertEqual(y, 9)
+		self.assertIn([6, 5], dotOffsets2)
+		self.assertIn([11, 9], dotOffsets2)
 	
 	def test_lowerDotThresholdScaleDown(self):
 		'''getFullDataSquareSum generates the following from the given test data:
@@ -149,12 +138,8 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.2, 1.8, 1.3))
 		self.assertEqual(len(dotOffsets), 2)
-		for offset in dotOffsets:
-			x, y = offset
-			if x == 6:
-				self.assertEqual(y, 5)
-			else:
-				self.assertEqual(y, 9)
+		self.assertIn([6, 5], dotOffsets)
+		self.assertIn([11, 9], dotOffsets)
 		
 		thresholdAdjuster.lowerDotThresholdScaleDown()
 		
@@ -163,14 +148,9 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.1, 1.8, 1.3))
 		self.assertEqual(len(dotOffsets2), 3)
-		for offset in dotOffsets2:
-			x, y = offset
-			if x == 0:
-				self.assertEqual(y, 0)
-			elif x == 6:
-				self.assertEqual(y, 5)
-			else:
-				self.assertEqual(y, 9)
+		self.assertIn([0, 0], dotOffsets2)
+		self.assertIn([6, 5], dotOffsets2)
+		self.assertIn([11, 9], dotOffsets2)
 	
 	def test_lowerDotThresholdScaleUp(self):
 		# This is the inverse of the previous test, scaling down first, and then back up
@@ -187,14 +167,9 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.1, 1.8, 1.3))
 		self.assertEqual(len(dotOffsets), 3)
-		for offset in dotOffsets:
-			x, y = offset
-			if x == 0:
-				self.assertEqual(y, 0)
-			elif x == 6:
-				self.assertEqual(y, 5)
-			else:
-				self.assertEqual(y, 9)
+		self.assertIn([0, 0], dotOffsets)
+		self.assertIn([6, 5], dotOffsets)
+		self.assertIn([11, 9], dotOffsets)
 		
 		thresholdAdjuster.lowerDotThresholdScaleUp()
 		
@@ -203,12 +178,8 @@ class TestThresholdAdjuster(unittest.TestCase):
 		
 		self.assertEqual(microscopeImage.thresholds, (1.2, 1.8, 1.3))
 		self.assertEqual(len(dotOffsets2), 2)
-		for offset in dotOffsets2:
-			x, y = offset
-			if x == 6:
-				self.assertEqual(y, 5)
-			else:
-				self.assertEqual(y, 9)
+		self.assertIn([6, 5], dotOffsets2)
+		self.assertIn([11, 9], dotOffsets2)
 
 if __name__ == '__main__':
 	unittest.main()

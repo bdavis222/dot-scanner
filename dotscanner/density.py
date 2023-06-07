@@ -2,6 +2,9 @@ import dotscanner.dataprocessing as dp
 import dotscanner.files as files
 import dotscanner.strings as strings
 from dotscanner.ui.DialogWindow import DialogWindow
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
+from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
+import dotscanner.ui.window as ui
 import settings.config as cfg
 import settings.configmanagement as cm
 import matplotlib.pyplot as pl
@@ -101,6 +104,34 @@ def measureDensity(directory, filename, targetPath, microscopeImage, userSetting
 	saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error, 
 		microscopeImage, userSettings)
 
+def reanalyzeDensityData(directory, userSettings):
+	targetPath = files.getReanalysisTargetPath(directory, cfg.DENSITY_OUTPUT_FILENAME)
+	adjustmentsMade = False
+	
+	numberOfFiles = len(list(userSettings.densityData.keys()))
+	count = 0
+	for filename, data in userSettings.densityData.items():
+		microscopeImage = MicroscopeImage(directory, filename, userSettings)
+				
+		if not adjustmentsMade:
+			thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
+			
+			print("Re-analyzing images...")
+			ui.printProgressBar(0, numberOfFiles)
+			
+			userSettings = thresholdAdjuster.userSettings # Updating with the threshold adjustments
+			adjustments = getReanalysisAdjustments(data, userSettings, microscopeImage)
+			setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
+			adjustmentsMade = not microscopeImage.skipped
+		
+		else:
+			setReanalysisDataValues(adjustments, userSettings, microscopeImage, data)
+		
+		measureDensity(directory, filename, targetPath, microscopeImage, userSettings)
+		
+		ui.printProgressBar(count + 1, numberOfFiles)
+		count += 1
+
 def getReanalysisAdjustments(densityData, newUserSettings, microscopeImage):
 	adjustments = [None for _ in range(8)]
 	if densityData[0] != microscopeImage.lowerDotThreshScale:
@@ -117,20 +148,18 @@ def getReanalysisAdjustments(densityData, newUserSettings, microscopeImage):
 		adjustments[5] = newUserSettings.lowerContrast
 	if densityData[6] != newUserSettings.upperContrast:
 		adjustments[6] = newUserSettings.upperContrast
-	if densityData[7] != newUserSettings.polygon:
-		adjustments[7] = newUserSettings.polygon
+	if densityData[7] != microscopeImage.polygon:
+		adjustments[7] = microscopeImage.polygon
 	return adjustments
 
 def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
 	# Set the data to what is read from the file
-	userSettings.lowerDotThresh = data[0]
-	userSettings.upperDotThresh = data[1]
-	userSettings.lowerBlobThresh = data[2]
-	userSettings.thresholds = (data[0], data[1], data[2])
-	userSettings.blobSize = data[3]
-	userSettings.dotSize = data[4]
-	microscopeImage.blobSize = userSettings.blobSize
-	microscopeImage.dotSize = userSettings.dotSize
+	microscopeImage.lowerDotThreshScale = data[0]
+	microscopeImage.upperDotThreshScale = data[1]
+	microscopeImage.lowerBlobThreshScale = data[2]
+	microscopeImage.thresholds = (data[0], data[1], data[2])
+	microscopeImage.blobSize = data[3]
+	microscopeImage.dotSize = data[4]
 	userSettings.lowerContrast = data[5]
 	userSettings.upperContrast = data[6]
 	microscopeImage.polygon = data[7]
@@ -150,10 +179,8 @@ def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
 				threshAdjusted = True
 			elif index == 3:
 				userSettings.blobSize = adjustment
-				microscopeImage.blobSize = adjustment
 			elif index == 4:
 				userSettings.dotSize = adjustment
-				microscopeImage.dotSize = adjustment
 			elif index == 5:
 				userSettings.lowerContrast = adjustment
 			elif index == 6:
