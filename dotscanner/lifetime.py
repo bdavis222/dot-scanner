@@ -74,7 +74,7 @@ def getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed):
 	lastFrames = range(firstFrameOfBackEdge, lastFrame)
 	return set(list(firstFrames) + list(lastFrames))
 
-def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
+def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, testing=False):
 	if len(middleMicroscopeImage.polygon) < 3:
 		return
 	
@@ -92,8 +92,10 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	imageNumberToFilenameMap = {}
 	
 	numberOfFiles = len(filenames)
-	print("Getting coordinates of all dots...")
-	ui.printProgressBar(0, numberOfFiles)
+	if not testing:
+		print("Getting coordinates of all dots...")
+		ui.printProgressBar(0, numberOfFiles)
+	
 	for index, filename in enumerate(filenames):
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
 		
@@ -107,7 +109,8 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 		if cfg.PLOT_BLOBS:
 			imageNumberToBlobCoordMap[index] = blobCoords
 		
-		ui.printProgressBar(index + 1, numberOfFiles)
+		if not testing:
+			ui.printProgressBar(index + 1, numberOfFiles)
 	
 	lifetimes, resultCoords, startImages, displacements = [], [], [], []
 	edgeFrameNumbers = getEdgeFrameNumbers(imageNumberToCoordMap, skipsAllowed)
@@ -125,15 +128,16 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings):
 	
 	saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,
 		imageNumberToCoordMap, imageNumberToBlobCoordMap, imageNumberToFilenameMap, 
-		middleMicroscopeImage, userSettings, coordsToPlot, middleMicroscopeImage.polygon)
+		middleMicroscopeImage, userSettings, coordsToPlot, middleMicroscopeImage.polygon, 
+		testing=testing)
 
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements, 
 	imageNumberToCoordMap, imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage, 
-	userSettings, coordsToPlot, polygon):
+	userSettings, coordsToPlot, polygon, testing=False):
 	if userSettings.reanalysis:
 		targetPath = files.getReanalysisTargetPath(directory, cfg.LIFETIME_OUTPUT_FILENAME)
 	else:
-		targetPath = directory + cfg.LIFETIME_OUTPUT_FILENAME
+		targetPath = files.getAnalysisTargetPath(directory, cfg.LIFETIME_OUTPUT_FILENAME)
 		if os.path.exists(targetPath):
 			os.remove(targetPath)
 	
@@ -147,7 +151,8 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displ
 			file.write(output)
 	
 	outputFilename = targetPath.split("/")[-1]
-	print(f"{outputFilename} saved.")
+	if not testing:
+		print(f"{outputFilename} saved.")
 	
 	saveHistogram(directory, outputFilename, lifetimes)
 	

@@ -23,7 +23,11 @@ class TestThresholdAdjuster(unittest.TestCase):
  			[-1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0],
  		])
 		mock_getData.return_value = testData
-		fakeUserSettings = FakeUserSettings(dotSize=2, blobSize=3, thresholds=(1.2, 1.8, 1.3))
+		fakeUserSettings = FakeUserSettings(
+			filepath="test/directory/", dotSize=2, blobSize=3, saveFigures=False, 
+			startImage="", skipsAllowed=0, removeEdgeFrames=True, lowerContrast=0.0, 
+			upperContrast=5.0, lowerDotThresh=1.2, upperDotThresh=1.8, lowerBlobThresh=1.3, 
+			program="density", polygon=None, densityData={})
 		microscopeImage = MicroscopeImage("test/directory/", "filename.png", fakeUserSettings)
 		return microscopeImage, fakeUserSettings
 	

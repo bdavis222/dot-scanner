@@ -112,7 +112,7 @@ def reanalyzeDensityData(directory, userSettings):
 	count = 0
 	for filename, data in userSettings.densityData.items():
 		microscopeImage = MicroscopeImage(directory, filename, userSettings)
-				
+			
 		if not adjustmentsMade:
 			thresholdAdjuster = ThresholdAdjuster(microscopeImage, userSettings)
 			

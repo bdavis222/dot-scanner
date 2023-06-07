@@ -106,6 +106,7 @@ class RegionSelector:
 				self.yList.append(self.yList[0])
 				for y, x in zip(self.yList, self.xList):
 					self.image.polygon.append([int(round(y, 0)), int(round(x, 0))])
+				print(self.image.polygon)
 			
 			else: # An invalid polygon was drawn
 				print(strings.invalidPolygonWarning)

@@ -16,10 +16,10 @@ class TestStrings(unittest.TestCase):
         )
     
     def test_densityOutput(self):
-        polygon = [[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]]
-        thresholds=(1.5, 5.0, 2.0)
-        fakeMicroscopeImage = FakeMicroscopeImage(polygon, thresholds)
         fakeUserSettings = FakeUserSettings(dotSize=2, blobSize=5)
+        fakeMicroscopeImage = FakeMicroscopeImage(
+            polygon=[[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]], lowerDotThreshScale=1.5, 
+            upperDotThreshScale=5.0, lowerBlobThreshScale=2.0)
         output = strings.densityOutput(
             filename="test.png", 
             dotTotal=6,
@@ -60,15 +60,12 @@ and contains density or lifetime data.'
         )
     
     def test_lifetimeOutputFileHeader(self):
-        polygon = [[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]]
-        thresholds = (1.5, 5.0, 2.0)
-        fakeMicroscopeImage = FakeMicroscopeImage(polygon, thresholds)
+        fakeMicroscopeImage = FakeMicroscopeImage(
+            polygon=[[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]], lowerDotThreshScale=1.5, 
+            upperDotThreshScale=5.0, lowerBlobThreshScale=2.0)
         fakeUserSettings = FakeUserSettings(
-                                dotSize=2, 
-                                blobSize=5, 
-                                skipsAllowed=1, 
-                                thresholds=(1.5, 5.0, 2.0), 
-                                removeEdgeFrames=True)
+            dotSize=2, blobSize=5, skipsAllowed=1, lowerDotThresh=1.5, upperDotThresh=5.0, 
+            lowerBlobThresh=2.0, removeEdgeFrames=True)
         
         output = strings.lifetimeOutputFileHeader(fakeMicroscopeImage, fakeUserSettings)
         
@@ -97,16 +94,12 @@ in the main configuration window):\n\
         )
     
     def test_lifetimeOutputFileHeaderWithStartImage(self):
-        polygon = [[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]]
-        thresholds = (1.5, 5.0, 2.0)
-        fakeMicroscopeImage = FakeMicroscopeImage(polygon, thresholds)
+        fakeMicroscopeImage = FakeMicroscopeImage(
+            polygon=[[1, 1], [10, 1], [10, 10], [1, 10], [1, 1]], lowerDotThreshScale=1.5, 
+            upperDotThreshScale=5.0, lowerBlobThreshScale=2.0)
         fakeUserSettings = FakeUserSettings(
-                                dotSize=2, 
-                                blobSize=5, 
-                                startImage="path/to/image.png",
-                                skipsAllowed=1, 
-                                thresholds=(1.5, 5.0, 2.0), 
-                                removeEdgeFrames=True)
+            dotSize=2, blobSize=5, startImage="path/to/image.png", skipsAllowed=1, 
+            lowerDotThresh=1.5, upperDotThresh=5.0, lowerBlobThresh=2.0, removeEdgeFrames=True)
         
         output = strings.lifetimeOutputFileHeader(fakeMicroscopeImage, fakeUserSettings)
         

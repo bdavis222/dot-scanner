@@ -16,6 +16,7 @@ class ThresholdAdjuster:
 		
 		self.image = microscopeImage
 		self.userSettings = userSettings
+		
 		self.dotSize = userSettings.dotSize
 		self.blobSize = userSettings.blobSize
 		self.defaultThresholds = userSettings.thresholds

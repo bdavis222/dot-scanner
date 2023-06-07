@@ -1,0 +1,13 @@
+# Dot Scanner (https://github.com/bdavis222/dotscanner)
+# Generated output file for density measurement
+#
+# If this file is selected for re-analysis, the following settings will be read in and used unless changed in the threshold adjustment window. The re-analyzed data will then be given in a new output file in this same directory.
+#
+# lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blob size | dot size | upper contrast | polygon vertices
+#
+# Any values changed in the threshold adjustment window during re-analysis will be changed for all files listed in the data output below. Other settings can be adjusted in the config file using the "Edit defaults" button in the main configuration window.
+#
+# The data columns are organized as follows:
+# filename | number of dots | number of pixels surveyed | density (per sq pix) | error | lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | lowerContrast | upperContrast | polygon vertices (x, y)
+#
+demo_image1.TIF 190 10948 0.0173548 0.001259 1.5 5.0 2.0 5 2 0.0 5.0 (62, 469), (15, 413), (166, 299), (212, 362)

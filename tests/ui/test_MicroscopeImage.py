@@ -16,13 +16,11 @@ class TestMicroscopeImage(unittest.TestCase):
 			[0, 0, 0, 0, 0, 0, 0, 0, 0]
 		])
 		userSettings = FakeUserSettings(
-							dotSize=2,
-							blobSize=5,
-							saveFigures=False,
-							startImage="fakeImage01.png",
-							skipsAllowed=3,
-							removeEdgeFrames=True,
-							thresholds=(1.5, 5.0, 2.0))
+			filepath="test/directory/", dotSize=2, blobSize=5, saveFigures=False, 
+			startImage="fakeImage01.png", skipsAllowed=3, removeEdgeFrames=True, lowerContrast=0.0, 
+			upperContrast=5.0, lowerDotThresh=1.5, upperDotThresh=5.0, lowerBlobThresh=2.0, 
+			program="density", polygon=None)
+		
 		return MicroscopeImage("test/directory/", "filename.png", userSettings), userSettings
 	
 	def test_properLoading_whenClassInitializes(self):

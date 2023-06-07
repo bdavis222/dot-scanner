@@ -26,7 +26,7 @@ class TestDensity(unittest.TestCase):
 
 		return dp.getCoordsInPolygon(data, points, polygonVertices)
 	
-	@mock.patch("settings.config.DENSITY_OUTPUT_FILENAME", "fakeData.txt")
+	@mock.patch("settings.config.DENSITY_OUTPUT_FILENAME", "data/fakeData.txt")
 	def test_getAlreadyMeasured(self):
 		dir_path = os.path.dirname(os.path.realpath(__file__))
 		directory = dir_path if dir_path.endswith("/") else dir_path + "/"
@@ -98,6 +98,7 @@ class TestDensity(unittest.TestCase):
 			polygon
 		]
 		microscopeImage = FakeMicroscopeImage(
+			polygon=polygon,
 			lowerDotThreshScale=1.5, 
 			upperDotThreshScale=5.0, 
 			lowerBlobThreshScale=2.0
@@ -129,17 +130,18 @@ class TestDensity(unittest.TestCase):
 			upperContrast, 
 			polygon
 		]
-		microscopeImage = FakeMicroscopeImage(
-			lowerDotThreshScale=1.7, 
-			upperDotThreshScale=4.8, 
-			lowerBlobThreshScale=2.0
-		)
 		newUserSettings = FakeUserSettings(
 			dotSize=2, 
 			blobSize=6, 
 			lowerContrast=0.0, 
 			upperContrast=5.5, 
 			polygon=polygon
+		)
+		microscopeImage = FakeMicroscopeImage(
+			polygon=polygon,
+			lowerDotThreshScale=1.7, 
+			upperDotThreshScale=4.8, 
+			lowerBlobThreshScale=2.0
 		)
 		adjustments = density.getReanalysisAdjustments(data, newUserSettings, microscopeImage)
 		
