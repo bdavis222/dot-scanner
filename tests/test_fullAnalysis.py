@@ -150,19 +150,7 @@ class TestFullAnalysis(unittest.TestCase):
 		lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, 
 			testing=True)
 		
-		testFileArray = []
-		with open(targetPath, "r") as file:
-			for line in file:
-				testFileArray.append(line)
-		
-		expectedTargetPath = self.getPathFromBase("tests/data/lifetimeExpectedOutput.txt")
-		expectedFileArray = []
-		with open(expectedTargetPath, "r") as file:
-			for line in file:
-				expectedFileArray.append(line)
-		
-		for index in range(len(testFileArray)):
-			self.assertEqual(testFileArray[index], expectedFileArray[index])
+		self.assertTestDataFilesEquivalent("lifetimeTestOutput.txt", "lifetimeExpectedOutput.txt")
 	
 	def test_lifetimeAnalysis2(self):
 		filepath = self.getPathFromBase("images/demo/")
@@ -183,19 +171,7 @@ class TestFullAnalysis(unittest.TestCase):
 		lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, 
 			testing=True)
 		
-		testFileArray = []
-		with open(targetPath, "r") as file:
-			for line in file:
-				testFileArray.append(line)
-		
-		expectedTargetPath = self.getPathFromBase("tests/data/lifetimeExpectedOutput2.txt")
-		expectedFileArray = []
-		with open(expectedTargetPath, "r") as file:
-			for line in file:
-				expectedFileArray.append(line)
-		
-		for index in range(len(testFileArray)):
-			self.assertEqual(testFileArray[index], expectedFileArray[index])
+		self.assertTestDataFilesEquivalent("lifetimeTestOutput.txt", "lifetimeExpectedOutput2.txt")
 
 if __name__ == '__main__':
 	unittest.main()
