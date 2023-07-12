@@ -85,7 +85,7 @@ This sets the number of consecutive images that are allowed to be skipped in a l
 This dictates whether edge frames should be removed from a lifetime calculation. If a particle is detected in the first frame of an image, for example, it cannot be determined whether the particle existed before the first image was taken, so it might not make sense to include this in a lifetime calculation (and the same may also be true for particles in the last frame). If the number of skips allowed in the lifetime calculation is greater than zero, this will increase how many edge frames are removed from analysis.
 
 ## The Threshold Adjustment Window
-Clicking the **Next** button, or pressing the **return** key on the keyboard, from the main Configurations Window saves the configuration settings selected by the user and advances to the Threshold Adjustment Window. This window shows the image data with the dots and blobs identified, and features several button groups on the left sidebar:
+Clicking the **Next** button, or pressing the **return** key on the keyboard, from the Configurations Window saves the configuration settings selected by the user and advances to the Threshold Adjustment Window. This window shows the image data with the dots and blobs identified, and features several button groups on the left sidebar:
 ![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
 
 From top to bottom, these button groups perform the following actions:
