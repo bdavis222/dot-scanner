@@ -324,6 +324,7 @@ class UserSettings:
 						return
 		
 		print(strings.invalidAnalysisFileWarning(chosenFile))
+		return
 	
 	def parseDensityFile(self, chosenFile):
 		self.filepath = os.path.dirname(chosenFile)
@@ -336,14 +337,20 @@ class UserSettings:
 				if splitLine[1] == "skipped":
 					continue
 				
-				filename = splitLine[0]
-				lowerDotThreshScale = round(float(splitLine[5]), 1)
-				upperDotThreshScale = round(float(splitLine[6]), 1)
-				lowerBlobThreshScale = round(float(splitLine[7]), 1)
-				blobSize = int(splitLine[8])
-				dotSize = int(splitLine[9])
-				lowerContrast = round(float(splitLine[10]), 1)
-				upperContrast = round(float(splitLine[11]), 1)
+				# Handle filenames with spaces in them
+				extensionIndex = files.getExtensionIndexFromDensityAnalysisFileLineArray(splitLine)
+				if extensionIndex == -1:
+					print(strings.invalidFilenameInDensityAnalysisFile(splitLine))
+					return
+				filename = " ".join(splitLine[:extensionIndex + 1])
+				
+				lowerDotThreshScale = round(float(splitLine[extensionIndex + 5]), 1)
+				upperDotThreshScale = round(float(splitLine[extensionIndex + 6]), 1)
+				lowerBlobThreshScale = round(float(splitLine[extensionIndex + 7]), 1)
+				blobSize = int(splitLine[extensionIndex + 8])
+				dotSize = int(splitLine[extensionIndex + 9])
+				lowerContrast = round(float(splitLine[extensionIndex + 10]), 1)
+				upperContrast = round(float(splitLine[extensionIndex + 11]), 1)
 				polygonString = line.split("(")[1:]
 				polygonPairsStringArray = [item.split(")")[0] for item in polygonString]
 				polygon = []

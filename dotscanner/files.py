@@ -209,3 +209,11 @@ def getLifetimeHistogramTargetPath(directory):
 		os.mkdir(figurePath)
 	
 	return figurePath
+
+def getExtensionIndexFromDensityAnalysisFileLineArray(lineArray):
+	for index, element in enumerate(lineArray):
+		if "." in element:
+			periodIndex = element.find(".")
+			if not element[periodIndex + 1].isdigit():
+				return index
+	return -1

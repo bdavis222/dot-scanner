@@ -108,6 +108,10 @@ def invalidAnalysisFileWarning(filepath):
 	return f'\nInvalid analysis file selected: "{filename}". A valid file has a .txt extension \
 and contains density or lifetime data.'
 
+def invalidFilenameInDensityAnalysisFile(lineArray):
+	return f"Filename with valid extension not found in the following line in densities file:\n\
+{' '.join(lineArray)}"
+
 def lifetimeOutputFileHeader(microscopeImage, userSettings):
 	verticesStringList = []
 	for vertex in microscopeImage.polygon[:-1]:

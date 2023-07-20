@@ -47,6 +47,13 @@ class TestStrings(unittest.TestCase):
 and contains density or lifetime data.'
         )
     
+    def test_invalidFilenameInDensityAnalysisFile(self):
+        self.assertEqual(
+            strings.invalidFilenameInDensityAnalysisFile(["file", "array", "example"]),
+            f"Filename with valid extension not found in the following line in densities file:\n\
+file array example"
+        )
+    
     def test_outputFileTopHeader(self):
         self.assertEqual(
             strings.outputFileTopHeader(strings.ProgramType.DENSITY),

@@ -285,6 +285,24 @@ class TestFiles(unittest.TestCase):
     def test_incrementTargetPathName(self):
         self.assertEqual(files.incrementTargetPathName("path/to/file2.txt"), "path/to/file3.txt")
         self.assertEqual(files.incrementTargetPathName("path/to/file66.txt"), "path/to/file67.txt")
+    
+    def test_getExtensionIndexFromDensityAnalysisFileLineArray(self):
+        line1 = "SD-RFP-2.tif 290 20247 0.0143231 0.0008411 1.5 5.0 2.0 5 2 0.0 5.0 (168, 425), \
+(151, 392), (62, 148), (112, 109), (230, 379)"
+        line2 = "SD 525-2.tif 195 11325 0.0172185 0.001233 1.5 5.0 2.0 5 2 0.0 5.0 (88, 198), \
+(128, 187), (154, 165), (224, 353), (184, 411)"
+        line3 = "SD 525-2tif 210 13151 0.0159684 0.0011019 1.5 5.0 2.0 5 2 0.0 5.0 (125, 438), \
+(95, 213), (148, 192), (214, 368)"
+        lineArray1 = line1.split()
+        lineArray2 = line2.split()
+        lineArray3 = line3.split()
+        extensionIndex1 = files.getExtensionIndexFromDensityAnalysisFileLineArray(lineArray1)
+        extensionIndex2 = files.getExtensionIndexFromDensityAnalysisFileLineArray(lineArray2)
+        extensionIndex3 = files.getExtensionIndexFromDensityAnalysisFileLineArray(lineArray3)
+        
+        self.assertEqual(extensionIndex1, 0)
+        self.assertEqual(extensionIndex2, 1)
+        self.assertEqual(extensionIndex3, -1)
 
 if __name__ == '__main__':
     unittest.main()
