@@ -35,14 +35,6 @@ density (per sq {'pix' if cfg.SCALE is None else 'um'}) | error | lowerDotThresh
 upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | lowerContrast | upperContrast | \
 polygon vertices (x, y)\n#\n"
 
-reanalysisNotInFile = """Filename not found in reanalysis file:
-{filename}
-Reanalysis requires identical naming."""
-
-reanalysisNotInFolder = """Filename not found in images folder:
-{filename}
-Reanalysis requires identical naming."""
-
 fileNumberingException = "Filenames must contain sequentially-ordered numbers with no gaps and \
 have valid file extensions to calculate lifetimes."
 
@@ -72,7 +64,19 @@ noFilesException = "No valid files selected. Does the folder you've selected con
 valid file extensions (e.g., .tiff)? Subfolders within the selected folder will not be scanned for \
 files. Check the values of 'FILEPATH' and 'START_IMAGE' in the configurations file."
 
+noLifetimesFoundError = """
+No lifetimes measured.
+Check that your images are arranged as a time series."""
+
 programNameException = "Invalid program name selected in configurations file."
+
+reanalysisNotInFile = """Filename not found in reanalysis file:
+{filename}
+Reanalysis requires identical naming."""
+
+reanalysisNotInFolder = """Filename not found in images folder:
+{filename}
+Reanalysis requires identical naming."""
 
 regionSelectorWindowTitle = "Dot Scanner - Region Selection (click the plot to add polygon \
 vertices)"

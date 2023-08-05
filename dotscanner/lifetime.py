@@ -138,6 +138,10 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, t
                                       dotSize, skipsAllowed, removeEdgeFrames,
                                       userSettings.saveFigures, coordsToPlot)
 
+    if not len(lifetimes):
+        print(strings.noLifetimesFoundError)
+        quit()
+
     saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,
                           imageNumberToBlobCoordMap, imageNumberToFilenameMap,
                           middleMicroscopeImage, userSettings, coordsToPlot,
