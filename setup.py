@@ -8,7 +8,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name='dotscanner',
-    version='1.3.5', # Required 
+    version='1.3.6',  # Required
     description='A program designed for analysis of microscope imaging data',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -24,7 +24,8 @@ setup(
         'Operating System :: Microsoft :: Windows'
     ],
     packages=find_packages(),
-    py_modules=['dotscanner', 'dotscanner.ui', 'settings', 'tests', 'tests.ui'],
+    py_modules=['dotscanner', 'dotscanner.ui',
+                'settings', 'tests', 'tests.ui'],
     python_requires='>=3.7, <4',
     install_requires=['matplotlib', 'numpy'],
     project_urls={
