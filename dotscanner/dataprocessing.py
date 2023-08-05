@@ -6,294 +6,329 @@ from PIL import Image
 # e.g., the coordinates (y1, x1) and (y1, x2) would be the following key-value pair:
 # {y1 : {x1, x2}}
 
+
 def addCoordinate(y, x, coordMap):
-	if y not in coordMap:
-		coordMap[y] = set()
-	coordMap[y].add(x)
+    if y not in coordMap:
+        coordMap[y] = set()
+    coordMap[y].add(x)
+
 
 def cleanDotCoords(data, dotCoords, blobCoords, blobSize, dotSize):
-	removeDotsNearBlobs(dotCoords, blobCoords, blobSize)
-	removeDimmerOverlappingDots(dotCoords, data, dotSize)
+    removeDotsNearBlobs(dotCoords, blobCoords, blobSize)
+    removeDimmerOverlappingDots(dotCoords, data, dotSize)
+
 
 def coordExists(y, x, coordMap):
-	return y in coordMap and x in coordMap[y]
+    return y in coordMap and x in coordMap[y]
+
 
 def coordExistsWithinRadius(y, x, coordMap, radius):
-	yRange = range(y - radius, y + radius + 1)
-	xRange = range(x - radius, x + radius + 1)
-	for currentY in yRange:
-		if currentY in coordMap:
-			for currentX in xRange:
-				if currentX in coordMap[currentY]:
-					return True
-	return False
+    yRange = range(y - radius, y + radius + 1)
+    xRange = range(x - radius, x + radius + 1)
+    for currentY in yRange:
+        if currentY in coordMap:
+            for currentX in xRange:
+                if currentX in coordMap[currentY]:
+                    return True
+    return False
+
 
 def findIndexOfMaxElement(array):
-	maxIndex = 0
-	maxElement = float("-inf")
-	for index, element in enumerate(array):
-		if element > maxElement:
-			maxElement = element
-			maxIndex = index
-	return maxIndex
+    maxIndex = 0
+    maxElement = float("-inf")
+    for index, element in enumerate(array):
+        if element > maxElement:
+            maxElement = element
+            maxIndex = index
+    return maxIndex
+
 
 def getClosestCoordWithinRadius(y, x, coordMap, radius):
-	if coordExists(y, x, coordMap):
-		return y, x
-	
-	yStart, xStart = y, x
-	visited = {(yStart, xStart)}
-	queue = []
-	
-	for stepSize in range(1, radius + 1):
-		boundaries = getBoundaries(yStart, xStart, stepSize)
-		addCentralNeighbors(yStart, xStart, queue, stepSize, radius)
-		while queue:
-			coordToDirectionMap = queue.pop(0)
-			coord, direction = coordToDirectionMap.popitem()
-			y, x = coord
-			if coordExists(y, x, coordMap):
-				return coord
-			visited.add(coord)
-			addNeighbors(y, x, queue, direction, visited, boundaries)
+    if coordExists(y, x, coordMap):
+        return y, x
+
+    yStart, xStart = y, x
+    visited = {(yStart, xStart)}
+    queue = []
+
+    for stepSize in range(1, radius + 1):
+        boundaries = getBoundaries(yStart, xStart, stepSize)
+        addCentralNeighbors(yStart, xStart, queue, stepSize, radius)
+        while queue:
+            coordToDirectionMap = queue.pop(0)
+            coord, direction = coordToDirectionMap.popitem()
+            y, x = coord
+            if coordExists(y, x, coordMap):
+                return coord
+            visited.add(coord)
+            addNeighbors(y, x, queue, direction, visited, boundaries)
+
 
 def getBoundaries(yStart, xStart, stepSize):
-	return {
-		"top": yStart - stepSize,
-		"bottom": yStart + stepSize,
-		"left": xStart - stepSize,
-		"right": xStart + stepSize
-	}
+    return {
+        "top": yStart - stepSize,
+        "bottom": yStart + stepSize,
+        "left": xStart - stepSize,
+        "right": xStart + stepSize
+    }
+
 
 def addCentralNeighbors(y, x, queue, stepSize, radius):
-	if stepSize <= radius:
-		queue.append({(y, x - stepSize): "vertical"})
-		queue.append({(y, x + stepSize): "vertical"})
-		queue.append({(y - stepSize, x): "horizontal"})
-		queue.append({(y + stepSize, x): "horizontal"})
+    if stepSize <= radius:
+        queue.append({(y, x - stepSize): "vertical"})
+        queue.append({(y, x + stepSize): "vertical"})
+        queue.append({(y - stepSize, x): "horizontal"})
+        queue.append({(y + stepSize, x): "horizontal"})
+
 
 def addNeighbors(y, x, queue, direction, visited, boundaries):
-	if direction == "horizontal":
-		addHorizontalNeighbors(y, x, queue, visited, boundaries)
-	else:
-		addVerticalNeighbors(y, x, queue, visited, boundaries)
+    if direction == "horizontal":
+        addHorizontalNeighbors(y, x, queue, visited, boundaries)
+    else:
+        addVerticalNeighbors(y, x, queue, visited, boundaries)
+
 
 def addHorizontalNeighbors(y, x, queue, visited, boundaries):
-	if x - 1 >= boundaries["left"] and (y, x - 1) not in visited:
-		queue.append({(y, x - 1): "horizontal"})
-	if x + 1 <= boundaries["right"] and (y, x + 1) not in visited:
-		queue.append({(y, x + 1): "horizontal"})
+    if x - 1 >= boundaries["left"] and (y, x - 1) not in visited:
+        queue.append({(y, x - 1): "horizontal"})
+    if x + 1 <= boundaries["right"] and (y, x + 1) not in visited:
+        queue.append({(y, x + 1): "horizontal"})
+
 
 def addVerticalNeighbors(y, x, queue, visited, boundaries):
-	if y - 1 >= boundaries["top"] and (y - 1, x) not in visited:
-		queue.append({(y - 1, x): "vertical"})
-	if y + 1 <= boundaries["bottom"] and (y + 1, x) not in visited:
-		queue.append({(y + 1, x): "vertical"})
+    if y - 1 >= boundaries["top"] and (y - 1, x) not in visited:
+        queue.append({(y - 1, x): "vertical"})
+    if y + 1 <= boundaries["bottom"] and (y + 1, x) not in visited:
+        queue.append({(y + 1, x): "vertical"})
+
 
 def getCoordPairsFromCoordMap(coordMap):
-	coordList = []
-	for y, xSet in coordMap.items():
-		for x in xSet:
-			coordList.append([x, y]) # For use with set_offsets(), which expects (x, y) coords
-	return coordList
+    coordList = []
+    for y, xSet in coordMap.items():
+        for x in xSet:
+            # For use with set_offsets(), which expects (x, y) coords
+            coordList.append([x, y])
+    return coordList
+
 
 def getCoords(data, sums, thresholds, dotSize):
-	dotCoords = {}
-	blobCoords = {}
-	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = thresholds
-	lowerDotThresh = lowerDotThreshScale * np.std(sums)
-	upperDotThresh = upperDotThreshScale * np.std(sums)
-	lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
-	
-	for y in range(len(sums)):
-		for x in range(len(sums[0])):
-			if sums[y][x] > lowerDotThresh:
-				if sums[y][x] < upperDotThresh:
-					addCoordinate(y, x, dotCoords)
-				else:
-					if squareSum(data, y, x, 3) > lowerBlobThresh:
-						addCoordinate(y, x, blobCoords)
-					else:
-						addCoordinate(y, x, dotCoords)
-							
-	return dotCoords, blobCoords
+    dotCoords = {}
+    blobCoords = {}
+    lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = thresholds
+    lowerDotThresh = lowerDotThreshScale * np.std(sums)
+    upperDotThresh = upperDotThreshScale * np.std(sums)
+    lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
+
+    for y in range(len(sums)):
+        for x in range(len(sums[0])):
+            if sums[y][x] > lowerDotThresh:
+                if sums[y][x] < upperDotThresh:
+                    addCoordinate(y, x, dotCoords)
+                else:
+                    if squareSum(data, y, x, 3) > lowerBlobThresh:
+                        addCoordinate(y, x, blobCoords)
+                    else:
+                        addCoordinate(y, x, dotCoords)
+
+    return dotCoords, blobCoords
+
 
 def getCoordsInPolygon(data, points, polygonVertices):
-	path = matplotlib.path.Path(polygonVertices)
-	flattenedMask = path.contains_points(points)
-	mask = flattenedMask.reshape(len(data), len(data[0]))
-	coordsInPolygon = np.argwhere(mask)
-	return coordsInPolygon
+    path = matplotlib.path.Path(polygonVertices)
+    flattenedMask = path.contains_points(points)
+    mask = flattenedMask.reshape(len(data), len(data[0]))
+    coordsInPolygon = np.argwhere(mask)
+    return coordsInPolygon
 
-def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize, 
-	polygonCoordMap, xMin, xMax, yMin, yMax):
-	dotCoords = {}
-	blobCoords = {}
-	for y in range(yMin, yMax + 1):
-		if y in polygonCoordMap:
-			for x in range(xMin, xMax + 1):
-				if x in polygonCoordMap[y]:
-					if sums[y][x] > lowerDotThresh:
-						if sums[y][x] < upperDotThresh:
-							addCoordinate(y, x, dotCoords)
-						else:
-							if squareSum(data, y, x, 3) > lowerBlobThresh:
-								addCoordinate(y, x, blobCoords)
-							else:
-								addCoordinate(y, x, dotCoords)
-	return dotCoords, blobCoords
+
+def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize,
+                              polygonCoordMap, xMin, xMax, yMin, yMax):
+    dotCoords = {}
+    blobCoords = {}
+    for y in range(yMin, yMax + 1):
+        if y in polygonCoordMap:
+            for x in range(xMin, xMax + 1):
+                if x in polygonCoordMap[y]:
+                    if sums[y][x] > lowerDotThresh:
+                        if sums[y][x] < upperDotThresh:
+                            addCoordinate(y, x, dotCoords)
+                        else:
+                            if squareSum(data, y, x, 3) > lowerBlobThresh:
+                                addCoordinate(y, x, blobCoords)
+                            else:
+                                addCoordinate(y, x, dotCoords)
+    return dotCoords, blobCoords
+
 
 def getData(directory, filename):
-	image = Image.open(directory + filename)
-	data = np.array(image)
-	subtractedData = data - np.median(image)
-	return subtractedData
+    image = Image.open(directory + filename)
+    data = np.array(image)
+    subtractedData = data - np.median(image)
+    return subtractedData
+
 
 def getFullDataSquareSum(data):
-	sums = np.zeros_like(data)
+    sums = np.zeros_like(data)
 
-	sums[:len(data)-1, :len(data[0]) - 1] += data[1:,             1:               ]
-	sums[:len(data)-1, :                ] += data[1:,             :                ]
-	sums[:len(data)-1, 1:               ] += data[1:,             :len(data[0]) - 1]
+    sums[:len(data)-1, :len(data[0]) - 1] += data[1:, 1:]
+    sums[:len(data)-1, :] += data[1:, :]
+    sums[:len(data)-1, 1:] += data[1:, :len(data[0]) - 1]
 
-	sums[:,            :len(data[0]) - 1] += data[:,              1:               ]
-	sums                                  += data
-	sums[:,            1:               ] += data[:,              :len(data[0]) - 1]
+    sums[:, :len(data[0]) - 1] += data[:, 1:]
+    sums += data
+    sums[:, 1:] += data[:, :len(data[0]) - 1]
 
-	sums[1:,           :len(data[0]) - 1] += data[:len(data) - 1, 1:               ]
-	sums[1:,           :                ] += data[:len(data) - 1, :                ]
-	sums[1:,           1:               ] += data[:len(data) - 1, :len(data[0]) - 1]
-	
-	return sums
+    sums[1:, :len(data[0]) - 1] += data[:len(data) - 1, 1:]
+    sums[1:, :] += data[:len(data) - 1, :]
+    sums[1:, 1:] += data[:len(data) - 1, :len(data[0]) - 1]
+
+    return sums
+
 
 def getInPolygonCoordMap(microscopeImage):
-	data = microscopeImage.data
-	points = []
-	for y in range(len(data)):
-		for x in range(len(data[0])):
-			points.append((y, x))
+    data = microscopeImage.data
+    points = []
+    for y in range(len(data)):
+        for x in range(len(data[0])):
+            points.append((y, x))
 
-	path = matplotlib.path.Path(microscopeImage.polygon)
-	flattenedMask = path.contains_points(points)
-	mask = flattenedMask.reshape(len(data), len(data[0]))
-	coordsInPolygon = np.argwhere(mask)
-	
-	polygonCoordMap = {}
-	for coordPair in coordsInPolygon:
-		y, x = coordPair
-		addCoordinate(y, x, polygonCoordMap)
-	
-	return polygonCoordMap
+    path = matplotlib.path.Path(microscopeImage.polygon)
+    flattenedMask = path.contains_points(points)
+    mask = flattenedMask.reshape(len(data), len(data[0]))
+    coordsInPolygon = np.argwhere(mask)
+
+    polygonCoordMap = {}
+    for coordPair in coordsInPolygon:
+        y, x = coordPair
+        addCoordinate(y, x, polygonCoordMap)
+
+    return polygonCoordMap
+
 
 def getNeighborCoords(y, x, coordMap, dotSize):
-	neighborCoords = []
-	yRange = range(y - dotSize, y + dotSize + 1)
-	xRange = range(x - dotSize, x + dotSize + 1)
-	for currentY in yRange:
-		if currentY in coordMap:
-			for currentX in xRange:
-				if currentX in coordMap[currentY]:
-					neighborCoords.append((currentY, currentX))
-	return neighborCoords
+    neighborCoords = []
+    yRange = range(y - dotSize, y + dotSize + 1)
+    xRange = range(x - dotSize, x + dotSize + 1)
+    for currentY in yRange:
+        if currentY in coordMap:
+            for currentX in xRange:
+                if currentX in coordMap[currentY]:
+                    neighborCoords.append((currentY, currentX))
+    return neighborCoords
+
 
 def getNeighborData(neighborCoords, data):
-	neighborData = []
-	for coordPair in neighborCoords:
-		y, x = coordPair
-		neighborData.append(data[y][x])
-	return neighborData
+    neighborData = []
+    for coordPair in neighborCoords:
+        y, x = coordPair
+        neighborData.append(data[y][x])
+    return neighborData
+
 
 def getPolygonLimits(polygon):
-	polygonXMin, polygonXMax = float("inf"), float("-inf")
-	polygonYMin, polygonYMax = float("inf"), float("-inf")
-	
-	for coordPair in polygon:
-		y, x = coordPair
-		polygonYMin = min(y, polygonYMin)
-		polygonYMax = max(y, polygonYMax)
-		polygonXMin = min(x, polygonXMin)
-		polygonXMax = max(x, polygonXMax)
-	
-	polygonYMin = int(round(polygonYMin, 0))
-	polygonYMax = int(round(polygonYMax, 0))
-	polygonXMin = int(round(polygonXMin, 0))
-	polygonXMax = int(round(polygonXMax, 0))
-	
-	return polygonXMin, polygonXMax, polygonYMin, polygonYMax
+    polygonXMin, polygonXMax = float("inf"), float("-inf")
+    polygonYMin, polygonYMax = float("inf"), float("-inf")
+
+    for coordPair in polygon:
+        y, x = coordPair
+        polygonYMin = min(y, polygonYMin)
+        polygonYMax = max(y, polygonYMax)
+        polygonXMin = min(x, polygonXMin)
+        polygonXMax = max(x, polygonXMax)
+
+    polygonYMin = int(round(polygonYMin, 0))
+    polygonYMax = int(round(polygonYMax, 0))
+    polygonXMin = int(round(polygonXMin, 0))
+    polygonXMax = int(round(polygonXMax, 0))
+
+    return polygonXMin, polygonXMax, polygonYMin, polygonYMax
+
 
 def getSortedCoordPairsFromCoordMap(coordMap, data):
-	coordList = []
-	dataList = []
-	for y, xSet in coordMap.items():
-		for x in xSet:
-			coordList.append([x, y]) # For use with set_offsets(), which expects (x, y) coords
-			dataList.append(data[y][x])
-	zippedLists = zip(dataList, coordList)
-	sortedCoordList = [x for _, x in sorted(zippedLists)]
-	return sortedCoordList[::-1]
+    coordList = []
+    dataList = []
+    for y, xSet in coordMap.items():
+        for x in xSet:
+            # For use with set_offsets(), which expects (x, y) coords
+            coordList.append([x, y])
+            dataList.append(data[y][x])
+    zippedLists = zip(dataList, coordList)
+    sortedCoordList = [x for _, x in sorted(zippedLists)]
+    return sortedCoordList[::-1]
+
 
 def getThresholds(microscopeImage):
-	sums = microscopeImage.sums
-	lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = microscopeImage.thresholds
-	lowerDotThresh = lowerDotThreshScale * np.std(sums)
-	upperDotThresh = upperDotThreshScale * np.std(sums)
-	lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
-	return lowerDotThresh, upperDotThresh, lowerBlobThresh
+    sums = microscopeImage.sums
+    lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = microscopeImage.thresholds
+    lowerDotThresh = lowerDotThreshScale * np.std(sums)
+    upperDotThresh = upperDotThreshScale * np.std(sums)
+    lowerBlobThresh = lowerBlobThreshScale * upperDotThresh
+    return lowerDotThresh, upperDotThresh, lowerBlobThresh
+
 
 def getYAndXFromCoordList(coordList):
-	yList = []
-	xList = []
-	for coordPair in coordList:
-		y, x = coordPair
-		yList.append(y)
-		xList.append(x)
-	return yList, xList
+    yList = []
+    xList = []
+    for coordPair in coordList:
+        y, x = coordPair
+        yList.append(y)
+        xList.append(x)
+    return yList, xList
+
 
 def removeAllButBrightestCoords(neighborCoords, indexOfBrightestSum, dotCoords):
-	for index, coordPair in enumerate(neighborCoords):
-		if index == indexOfBrightestSum:
-			continue
-		y, x = coordPair
-		removeCoordinate(y, x, dotCoords)
+    for index, coordPair in enumerate(neighborCoords):
+        if index == indexOfBrightestSum:
+            continue
+        y, x = coordPair
+        removeCoordinate(y, x, dotCoords)
+
 
 def removeCoordinate(y, x, coordMap):
-	if len(coordMap[y]) == 1:
-		del coordMap[y]
-	else:
-		coordMap[y].remove(x)
+    if len(coordMap[y]) == 1:
+        del coordMap[y]
+    else:
+        coordMap[y].remove(x)
+
 
 def removeDimmerOverlappingDots(dotCoords, data, dotSize):
-	coordPairs = getCoordPairsFromCoordMap(dotCoords) # Returns (x, y), not (y, x)
-	# coordPairs = getSortedCoordPairsFromCoordMap(dotCoords, data) # Returns (x, y), not (y, x)
-	for coordPair in coordPairs:
-		x, y = coordPair
-		neighborCoords = getNeighborCoords(y, x, dotCoords, dotSize)
-		if len(neighborCoords) > 1:
-			neighborData = getNeighborData(neighborCoords, data)
-			indexOfBrightestNeighbor = findIndexOfMaxElement(neighborData)
-			removeAllButBrightestCoords(neighborCoords, indexOfBrightestNeighbor, dotCoords)
+    # getCoordPairsFromCoordMap returns (x, y), not (y, x)
+    coordPairs = getCoordPairsFromCoordMap(dotCoords)
+    for coordPair in coordPairs:
+        x, y = coordPair
+        neighborCoords = getNeighborCoords(y, x, dotCoords, dotSize)
+        if len(neighborCoords) > 1:
+            neighborData = getNeighborData(neighborCoords, data)
+            indexOfBrightestNeighbor = findIndexOfMaxElement(neighborData)
+            removeAllButBrightestCoords(
+                neighborCoords, indexOfBrightestNeighbor, dotCoords)
+
 
 def removeDotsNearBlobs(dotCoords, blobCoords, blobSize):
-	coordPairs = getCoordPairsFromCoordMap(dotCoords) # Returns (x, y), not (y, x)
-	for coordPair in coordPairs:
-		x, y = coordPair
-		if coordExistsWithinRadius(y, x, blobCoords, blobSize):
-			removeCoordinate(y, x, dotCoords)
+    # getCoordPairsFromCoordMap returns (x, y), not (y, x)
+    coordPairs = getCoordPairsFromCoordMap(dotCoords)
+    for coordPair in coordPairs:
+        x, y = coordPair
+        if coordExistsWithinRadius(y, x, blobCoords, blobSize):
+            removeCoordinate(y, x, dotCoords)
+
 
 def setScatterData(dotCoords, blobCoords, dotScatter, blobScatter):
-	setScatterOffset(dotCoords, dotScatter)
-	setScatterOffset(blobCoords, blobScatter)
+    setScatterOffset(dotCoords, dotScatter)
+    setScatterOffset(blobCoords, blobScatter)
+
 
 def setScatterOffset(coordMap, scatterPlot):
-	coordList = getCoordPairsFromCoordMap(coordMap)
-	if len(coordList):
-		scatterPlot.set_offsets(coordList)
+    coordList = getCoordPairsFromCoordMap(coordMap)
+    if len(coordList):
+        scatterPlot.set_offsets(coordList)
+
 
 def squareSum(data, y, x, pixelRadius):
-	total = 0 
-	for yValue in range(y - pixelRadius, y + pixelRadius + 1):
-		for xValue in range(x - pixelRadius, x + pixelRadius + 1):
-			if yValue < 0 or yValue >= len(data) or xValue < 0 or xValue >= len(data[0]):
-				continue
-			total += data[yValue, xValue]
-	return total
+    total = 0
+    for yValue in range(y - pixelRadius, y + pixelRadius + 1):
+        for xValue in range(x - pixelRadius, x + pixelRadius + 1):
+            if yValue < 0 or yValue >= len(data) or xValue < 0 or xValue >= len(data[0]):
+                continue
+            total += data[yValue, xValue]
+    return total
