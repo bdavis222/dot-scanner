@@ -1,14 +1,5 @@
 import settings.config as cfg
-
-
-class ProgramType:
-    DENSITY = "Density"
-    LIFETIME = "Lifetime"
-
-
-configurationsWindowTitle = "Dot Scanner - Configurations"
-
-defaultConfigurationsEditorWindowTitle = "Dot Scanner - Default Configurations"
+from src.programtype import ProgramType
 
 
 def outputFileTopHeader(programType):
@@ -16,6 +7,9 @@ def outputFileTopHeader(programType):
 # Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
 # Generated output file for {programType.lower()} measurement\n#"
 
+
+configurationsWindowTitle = "Dot Scanner - Configurations"
+defaultConfigurationsEditorWindowTitle = "Dot Scanner - Default Configurations"
 
 densityOutputFileHeader = f"{outputFileTopHeader(ProgramType.DENSITY)}\n\
 # If this file is selected for re-analysis, the following settings will be read in and used unless \

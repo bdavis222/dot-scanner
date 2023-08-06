@@ -2,8 +2,8 @@ import mock
 import unittest
 
 import src.files as files
+from src.programtype import ProgramType
 import src.strings as strings
-from src.strings import ProgramType
 from tests.ui.FakeUserSettings import FakeUserSettings
 
 

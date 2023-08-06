@@ -2,8 +2,8 @@ from PIL import Image
 import os
 
 import settings.config as cfg
+from src.programtype import ProgramType
 import src.strings as strings
-from src.strings import ProgramType
 
 
 def fixDirectory(string):

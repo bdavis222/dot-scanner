@@ -1,14 +1,14 @@
 import settings.config as cfg
 import settings.configmanagement as cm
+import src.density as density
+import src.files as files
+import src.lifetime as lifetime
+from src.programtype import ProgramType
+import src.strings as strings
 from src.ui.UserSettings import UserSettings
 from src.ui.ThresholdAdjuster import ThresholdAdjuster
 from src.ui.RegionSelector import RegionSelector
 from src.ui.MicroscopeImage import MicroscopeImage
-from src.strings import ProgramType
-import src.strings as strings
-import src.lifetime as lifetime
-import src.files as files
-import src.density as density
 
 cm.runChecks()
 

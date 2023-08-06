@@ -1,8 +1,8 @@
 import mock
 import unittest
 
+from src.programtype import ProgramType
 import src.strings as strings
-import settings.config as cfg
 from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
 from tests.ui.FakeUserSettings import FakeUserSettings
 
@@ -59,12 +59,12 @@ file array example"
 
     def test_outputFileTopHeader(self):
         self.assertEqual(
-            strings.outputFileTopHeader(strings.ProgramType.DENSITY),
+            strings.outputFileTopHeader(ProgramType.DENSITY),
             f"# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
 # Generated output file for density measurement\n#"
         )
         self.assertEqual(
-            strings.outputFileTopHeader(strings.ProgramType.LIFETIME),
+            strings.outputFileTopHeader(ProgramType.LIFETIME),
             f"# Dot Scanner (https://github.com/bdavis222/dotscanner)\n\
 # Generated output file for lifetime measurement\n#"
         )

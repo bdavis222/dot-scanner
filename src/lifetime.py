@@ -1,5 +1,4 @@
 import matplotlib.pyplot as pl
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import os
 

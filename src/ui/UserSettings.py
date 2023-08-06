@@ -4,8 +4,8 @@ from tkinter import filedialog
 
 import settings.config as cfg
 import src.files as files
+from src.programtype import ProgramType
 import src.strings as strings
-from src.strings import ProgramType
 import src.ui.window as ui
 from src.ui.DefaultUserSettingsEditor import DefaultUserSettingsEditor
 
