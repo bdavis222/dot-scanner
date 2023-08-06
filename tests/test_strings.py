@@ -1,9 +1,10 @@
-import dotscanner.strings as strings
+import mock
+import unittest
+
+import src.strings as strings
 import settings.config as cfg
 from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
 from tests.ui.FakeUserSettings import FakeUserSettings
-import mock
-import unittest
 
 
 class TestStrings(unittest.TestCase):

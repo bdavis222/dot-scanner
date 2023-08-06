@@ -1,14 +1,14 @@
 import settings.config as cfg
-from dotscanner.ui.UserSettings import UserSettings
-from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
-from dotscanner.ui.RegionSelector import RegionSelector
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
-from dotscanner.strings import ProgramType
-import dotscanner.strings as strings
-import dotscanner.lifetime as lifetime
-import dotscanner.files as files
-import dotscanner.density as density
 import settings.configmanagement as cm
+from src.ui.UserSettings import UserSettings
+from src.ui.ThresholdAdjuster import ThresholdAdjuster
+from src.ui.RegionSelector import RegionSelector
+from src.ui.MicroscopeImage import MicroscopeImage
+from src.strings import ProgramType
+import src.strings as strings
+import src.lifetime as lifetime
+import src.files as files
+import src.density as density
 
 cm.runChecks()
 

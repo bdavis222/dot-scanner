@@ -1,14 +1,15 @@
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
-from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
-from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import numpy as np
 import unittest
 from unittest.mock import MagicMock
 
+from src.ui.MicroscopeImage import MicroscopeImage
+from src.ui.ThresholdAdjuster import ThresholdAdjuster
+from tests.ui.FakeUserSettings import FakeUserSettings
+
 
 class TestThresholdAdjuster(unittest.TestCase):
-    @mock.patch("dotscanner.dataprocessing.getData")
+    @mock.patch("src.dataprocessing.getData")
     def getMicroscopeImageAndUserSettings(self, mock_getData):
         testData = np.array([
             [2,  0,  0,  0,  0,  0, -2,  0,  0,  0,  0,  0,  0],

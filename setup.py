@@ -35,7 +35,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'dotscanner = dotscanner.__main__:main'
+            'dotscanner = src.__main__:main'
         ]
     }
 )

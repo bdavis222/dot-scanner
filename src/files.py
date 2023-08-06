@@ -1,8 +1,9 @@
-import dotscanner.strings as strings
-from dotscanner.strings import ProgramType
 from PIL import Image
-import settings.config as cfg
 import os
+
+import settings.config as cfg
+import src.strings as strings
+from src.strings import ProgramType
 
 
 def fixDirectory(string):

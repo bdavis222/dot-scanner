@@ -1,13 +1,12 @@
-import dotscanner.__main__ as main
-import dotscanner.density as density
-import dotscanner.files as files
-import dotscanner.lifetime as lifetime
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
-from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
-from tests.ui.FakeUserSettings import FakeUserSettings
 import os
 import unittest
 from unittest.mock import MagicMock
+
+import src.density as density
+import src.files as files
+import src.lifetime as lifetime
+from src.ui.MicroscopeImage import MicroscopeImage
+from tests.ui.FakeUserSettings import FakeUserSettings
 
 
 class TestFullAnalysis(unittest.TestCase):
@@ -86,7 +85,7 @@ class TestFullAnalysis(unittest.TestCase):
         self.assertFilesEquivalent(filepath, filepath)
 
     def test_mainHasNotChanged(self):
-        mainPath = self.getPathFromBase("dotscanner/__main__.py")
+        mainPath = self.getPathFromBase("src/__main__.py")
         mainExpectedPath = self.getPathFromBase("tests/data/mainExpected.txt")
 
         self.assertFilesEquivalent(mainPath, mainExpectedPath)

@@ -1,11 +1,12 @@
-import dotscanner.dataprocessing as dp
-import dotscanner.density as density
-from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
-from tests.ui.FakeUserSettings import FakeUserSettings
 import mock
 import numpy as np
 import os
 import unittest
+
+import src.dataprocessing as dp
+import src.density as density
+from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
+from tests.ui.FakeUserSettings import FakeUserSettings
 
 
 class TestDensity(unittest.TestCase):

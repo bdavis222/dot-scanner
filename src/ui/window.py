@@ -1,10 +1,10 @@
 import tkinter as tk
-import os
 import numpy as np
 import matplotlib.pyplot as pl
-import dotscanner.strings as strings
-import settings.config as cfg
 import matplotlib
+
+import settings.config as cfg
+import src.strings as strings
 
 matplotlib.use("TkAgg")
 

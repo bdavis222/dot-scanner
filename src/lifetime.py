@@ -1,13 +1,14 @@
-import dotscanner.files as files
-import dotscanner.dataprocessing as dp
-import dotscanner.strings as strings
-import dotscanner.ui.window as ui
-from dotscanner.ui.MicroscopeImage import MicroscopeImage
-import settings.config as cfg
 import matplotlib.pyplot as pl
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 import os
+
+import settings.config as cfg
+import src.files as files
+import src.dataprocessing as dp
+import src.strings as strings
+import src.ui.window as ui
+from src.ui.MicroscopeImage import MicroscopeImage
 
 
 def addToPlotCoords(coordsToPlot, y, x, imageNumber, lifetime):

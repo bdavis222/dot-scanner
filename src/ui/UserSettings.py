@@ -1,12 +1,13 @@
-import dotscanner.files as files
-import dotscanner.strings as strings
-from dotscanner.strings import ProgramType
-import dotscanner.ui.window as ui
-from dotscanner.ui.DefaultUserSettingsEditor import DefaultUserSettingsEditor
-import settings.config as cfg
 import os
 import tkinter as tk
 from tkinter import filedialog
+
+import settings.config as cfg
+import src.files as files
+import src.strings as strings
+from src.strings import ProgramType
+import src.ui.window as ui
+from src.ui.DefaultUserSettingsEditor import DefaultUserSettingsEditor
 
 EMPTY_DIRECTORY_SET = set(["", " ", "/"])
 
