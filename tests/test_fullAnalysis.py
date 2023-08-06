@@ -85,7 +85,7 @@ class TestFullAnalysis(unittest.TestCase):
         self.assertFilesEquivalent(filepath, filepath)
 
     def test_mainHasNotChanged(self):
-        mainPath = self.getPathFromBase("src/__main__.py")
+        mainPath = self.getPathFromBase("dotscanner/__main__.py")
         mainExpectedPath = self.getPathFromBase("tests/data/mainExpected.txt")
 
         self.assertFilesEquivalent(mainPath, mainExpectedPath)

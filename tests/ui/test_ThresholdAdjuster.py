@@ -9,7 +9,7 @@ from tests.ui.FakeUserSettings import FakeUserSettings
 
 
 class TestThresholdAdjuster(unittest.TestCase):
-    @mock.patch("src.dataprocessing.getData")
+    @mock.patch("dotscanner.dataprocessing.getData")
     def getMicroscopeImageAndUserSettings(self, mock_getData):
         testData = np.array([
             [2,  0,  0,  0,  0,  0, -2,  0,  0,  0,  0,  0,  0],
