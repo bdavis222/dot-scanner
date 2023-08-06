@@ -217,7 +217,7 @@ class TestFiles(unittest.TestCase):
             directory, filenames = files.getDirectoryAndFilenames(
                 fakeUserSettings, testing=True)
 
-        self.assertTrue(strings.noFilesException in str(context.exception))
+        self.assertTrue(strings.NO_FILES_EXCEPTION in str(context.exception))
 
     @mock.patch("src.files.os.listdir")
     @mock.patch("src.files.os.path.isdir")
@@ -233,7 +233,7 @@ class TestFiles(unittest.TestCase):
             directory, filenames = files.getDirectoryAndFilenames(
                 fakeUserSettings, testing=True)
 
-        self.assertTrue(strings.filepathException in str(context.exception))
+        self.assertTrue(strings.FILEPATH_EXCEPTION in str(context.exception))
 
     @mock.patch("src.files.os.listdir")
     @mock.patch("src.files.os.path.isdir")
@@ -249,7 +249,7 @@ class TestFiles(unittest.TestCase):
             directory, filenames = files.getDirectoryAndFilenames(
                 fakeUserSettings, testing=True)
 
-        self.assertTrue(strings.noFilesException in str(context.exception))
+        self.assertTrue(strings.NO_FILES_EXCEPTION in str(context.exception))
 
     @mock.patch("src.files.os.listdir")
     @mock.patch("src.files.os.path.isdir")

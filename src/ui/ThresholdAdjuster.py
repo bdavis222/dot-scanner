@@ -39,7 +39,8 @@ class ThresholdAdjuster:
         ]
 
         ui.setupWindow()
-        self.window = ui.createPlotWindow(strings.thresholdAdjusterWindowTitle)
+        self.window = ui.createPlotWindow(
+            strings.THRESHOLD_ADJUSTER_WINDOW_TITLE)
         self.windowScaling = ui.getWindowScaling()
 
         self.figure, self.axes, self.dataPlot, self.dotScatter, self.blobScatter = ui.createPlots(
@@ -295,7 +296,7 @@ class ThresholdAdjuster:
 
         except:
             self.setThresholdEntries(self.image.thresholds)
-            print(strings.invalidThresholdEdit)
+            print(strings.INVALID_THRESHOLD_EDIT)
             return
 
         try:
@@ -308,7 +309,7 @@ class ThresholdAdjuster:
 
         except:
             self.setDotAndBlobSizeEntries(self.dotSize, self.blobSize)
-            print(strings.invalidDotAndBlobSizeEdit)
+            print(strings.INVALID_DOT_AND_BLOB_SIZE_EDIT)
             return
 
         self.image.setThresholds(newThresholds)

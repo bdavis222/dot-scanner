@@ -22,7 +22,7 @@ def main():
         elif userSettings.program == ProgramType.LIFETIME:
             getLifetimeData(directory, filenames, userSettings)
         else:
-            raise Exception(strings.programNameException)
+            raise Exception(strings.PROGRAM_NAME_EXCEPTION)
 
 
 def getDensityData(directory, filenames, userSettings):

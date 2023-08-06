@@ -181,7 +181,7 @@ def getMicroscopeImageFromReanalysisFile(directory, filename, userSettings, sing
     except:
         displayFilename = filename if len(
             filename) < 25 else f"{filename[:12]}...{filename[-12:]}"
-        message = strings.reanalysisNotInFile if singleFile else strings.reanalysisNotInFolder
+        message = strings.REANALYSIS_NOT_IN_FILE if singleFile else strings.REANALYSIS_NOT_IN_FOLDER
         DialogWindow("File not found", message.format(filename=displayFilename),
                      "Ok", "Cancel", positiveButtonAction=quit, positiveButtonColor="blue")
         quit()
@@ -254,7 +254,7 @@ def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea
                          microscopeImage, userSettings, skipped=False):
     if not os.path.exists(targetPath):
         with open(targetPath, "a") as file:
-            file.write(strings.densityOutputFileHeader)
+            file.write(strings.DENSITY_OUTPUT_FILE_HEADER)
 
     if skipped:
         output = f"{filename} skipped - - - - - - - - - - - -\n"

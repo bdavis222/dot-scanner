@@ -19,7 +19,7 @@ class RegionSelector:
             self.setPolygonData(microscopeImage)
 
         self.image = microscopeImage
-        self.window = ui.createPlotWindow(strings.regionSelectorWindowTitle)
+        self.window = ui.createPlotWindow(strings.REGION_SELECTOR_WINDOW_TITLE)
 
         self.figure, self.axes, _, self.dotScatter, self.blobScatter = ui.createPlots(
             self.image.data, userSettings)
@@ -117,7 +117,7 @@ class RegionSelector:
                         [int(round(y, 0)), int(round(x, 0))])
 
             else:  # An invalid polygon was drawn
-                print(strings.invalidPolygonWarning)
+                print(strings.INVALID_POLYGON_WARNING)
 
         self.line.figure.canvas.mpl_disconnect(self.connectId)
         self.window.destroy()
@@ -151,7 +151,7 @@ class RegionSelector:
 
     def setPolygonData(self, microscopeImage):
         if not microscopeImage.polygon:
-            raise Exception(strings.invalidPolygonWarning)
+            raise Exception(strings.INVALID_POLYGON_WARNING)
         for pair in microscopeImage.polygon:
             y, x = pair
             self.xList.append(x)

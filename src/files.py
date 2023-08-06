@@ -23,13 +23,13 @@ def getDirectoryAndFilenames(userSettings, testing=False):
         directory = fixDirectory(filepath)
 
     else:
-        raise Exception(strings.filepathException)
+        raise Exception(strings.FILEPATH_EXCEPTION)
 
     filenames = getSortedFilenames(
         directory, startImage, userSettings.program, testing=testing)
 
     if not len(filenames):
-        raise Exception(strings.noFilesException)
+        raise Exception(strings.NO_FILES_EXCEPTION)
 
     return directory, filenames
 
@@ -51,7 +51,7 @@ def verifyImageExtension(directory, filename):
         Image.open(directory + filename)
     except:
         extension = filename.split(".")[-1]
-        print(strings.invalidImageExtension.format(extension=extension))
+        print(strings.INVALID_IMAGE_EXTENSION.format(extension=extension))
         quit()
 
 
@@ -70,7 +70,7 @@ def getLeftEdgeOfTrailingNumber(string, index):
 def getMostCommonFileExtension(directory):
     filenames = os.listdir(directory)
     if not len(filenames):
-        raise Exception(strings.noFilesException)
+        raise Exception(strings.NO_FILES_EXCEPTION)
 
     extensionFrequencies = {}  # Maps the extension string to the number of times it appears
     for filename in filenames:
@@ -91,7 +91,7 @@ def getMostCommonFileExtension(directory):
             mostCommonExtension = extension
 
     if mostCommonExtension is None:
-        raise Exception(strings.noFilesException)
+        raise Exception(strings.NO_FILES_EXCEPTION)
 
     return "." + mostCommonExtension
 
@@ -108,7 +108,7 @@ def getRightEdgeOfTrailingNumber(string):
         if char.isdigit():
             return len(string) - index - 1
 
-    raise Exception(strings.fileNumberingException)
+    raise Exception(strings.FILE_NUMBERING_EXCEPTION)
 
 
 def getSortedFilenames(directory, startImage, programSelected, testing=False):
@@ -121,7 +121,7 @@ def getSortedFilenames(directory, startImage, programSelected, testing=False):
 
     allFilesNumbered = allFilesAreNumbered(filenames)
     if programSelected == ProgramType.LIFETIME and not allFilesNumbered:
-        raise Exception(strings.fileNumberingException)
+        raise Exception(strings.FILE_NUMBERING_EXCEPTION)
 
     if allFilesNumbered:
         filenames.sort(key=lambda filename: getTrailingNumber(filename))

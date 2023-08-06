@@ -153,6 +153,6 @@ def resetConfigFile():
     configFilePath = getConfigFilePath()
 
     with open(configFilePath, "w") as file:
-        file.write(strings.defaultConfigFileContents)
+        file.write(strings.DEFAULT_CONFIG_FILE_CONTENTS)
 
     quit()

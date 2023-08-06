@@ -20,7 +20,7 @@ def addToPlotCoords(coordsToPlot, y, x, imageNumber, lifetime):
 
 def checkEnoughFramesForLifetimes(filenames, userSettings):
     if len(filenames) <= 2 * (userSettings.skipsAllowed + 1):
-        raise Exception(strings.tooFewFramesException)
+        raise Exception(strings.TOO_FEW_FRAMES_EXCEPTION)
 
 
 def coordExistsInPrevFrame(y, x, imageNumber, imageNumberToCoordMap, dotSize, skipsAllowed):
@@ -139,7 +139,7 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, t
                                       userSettings.saveFigures, coordsToPlot)
 
     if not len(lifetimes):
-        print(strings.noLifetimesFoundError)
+        print(strings.NO_LIFETIMES_FOUND_ERROR)
         quit()
 
     saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,

@@ -8,90 +8,68 @@ def outputFileTopHeader(programType):
 # Generated output file for {programType.lower()} measurement\n#"
 
 
-configurationsWindowTitle = "Dot Scanner - Configurations"
-defaultConfigurationsEditorWindowTitle = "Dot Scanner - Default Configurations"
+CONFIGURATIONS_WINDOW_TITLE = "Dot Scanner - Configurations"
+DEFAULT_CONFIGURATIONS_EDITOR_WINDOW_TITLE = "Dot Scanner - Default Configurations"
+REGION_SELECTOR_WINDOW_TITLE = "Dot Scanner - Region Selection (click the plot to add polygon vertices)"
+THRESHOLD_ADJUSTER_WINDOW_TITLE = "Dot Scanner - Threshold Adjustment"
 
-densityOutputFileHeader = f"{outputFileTopHeader(ProgramType.DENSITY)}\n\
-# If this file is selected for re-analysis, the following settings will be read in and used unless \
-changed in the threshold adjustment window. The re-analyzed data will then be given in a new \
-output file in this same directory.\n\
-#\n\
-# lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blob size | dot size | \
-upper contrast | polygon vertices\n\
-#\n\
-# Any values changed in the threshold adjustment window during re-analysis will be changed for \
-all files listed in the data output below. Other settings can be adjusted in the config file \
-using the \"Edit defaults\" button in the main configuration window.\n\
-#\n\
-# The data columns are organized as follows:\n\
-# filename | number of dots | number of pixels surveyed | \
-density (per sq {'pix' if cfg.SCALE is None else 'um'}) | error | lowerDotThreshScale | \
-upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | lowerContrast | upperContrast | \
-polygon vertices (x, y)\n#\n"
+DENSITY_OUTPUT_FILE_HEADER = '''{header}
+# If this file is selected for re-analysis, the following settings will be read in and used unless changed in the threshold adjustment window. The re-analyzed data will then be given in a new output file in this same directory.
+#
+# lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blob size | dot size | upper contrast | polygon vertices
+#
+# Any values changed in the threshold adjustment window during re-analysis will be changed for all files listed in the data output below. Other settings can be adjusted in the config file using the "Edit defaults" button in the main configuration window.
+#
+# The data columns are organized as follows:
+# filename | number of dots | number of pixels surveyed | density (per sq {unit}) | error | lowerDotThreshScale | upperDotThreshScale | lowerBlobThreshScale | blobSize | dotSize | lowerContrast | upperContrast | polygon vertices (x, y)
+#
+'''.format(header=outputFileTopHeader(ProgramType.DENSITY), unit="pix" if cfg.SCALE is None else "um")
 
-fileNumberingException = "Filenames must contain sequentially-ordered numbers with no gaps and \
-have valid file extensions to calculate lifetimes."
+FILE_NUMBERING_EXCEPTION = "Filenames must contain sequentially-ordered numbers with no gaps and have valid file extensions to calculate lifetimes."
 
-fileNumberingWarning = "WARNING: Filenames must contain sequentially-ordered numbers to calculate \
-lifetimes."
+FILE_NUMBERING_WARNING = "WARNING: Filenames must contain sequentially-ordered numbers to calculate lifetimes."
 
-filepathException = "Filepath must point to a file or directory."
+FILEPATH_EXCEPTION = "Filepath must point to a file or directory."
 
-invalidImageExtension = '''
+INVALID_IMAGE_EXTENSION = '''
 "{extension}" is not a valid image extension. 
 Make sure the most common file type in the folder you've selected has a valid extension.'''
 
-invalidPolygonWarning = "\nNo valid, enclosed polygon drawn. No measurements made."
+INVALID_POLYGON_WARNING = "\nNo valid, enclosed polygon drawn. No measurements made."
 
-invalidDotAndBlobSizeEdit = "\nInvalid input. Previous dot and blob size values will be retained."
+INVALID_DOT_AND_BLOB_SIZE_EDIT = "\nInvalid input. Previous dot and blob size values will be retained."
 
-invalidThresholdEdit = "\nInvalid input. Previous threshold values will be retained."
+INVALID_THRESHOLD_EDIT = "\nInvalid input. Previous threshold values will be retained."
 
-lifetimeSingleFileException = "Lifetimes must be calculated using a directory of images, \
-not a single image."
+LIFETIME_SINGLE_FILE_WARNING = "WARNING: Lifetimes must be calculated using a directory of images, not a single image."
 
-lifetimeSingleFileWarning = "WARNING: Lifetimes must be calculated using a directory of images, \
-not a single image."
+LOWER_BLOB_THRESH_SCALE_WARNING = "\nWARNING: Lower blob threshold scale set below 1.0, which means blobs can be dimmer than the brightest dots, which shouldn't happen. Setting to 1.0."
 
-lowerBlobThreshScaleWarning = "\nWARNING: Lower blob threshold scale set below 1.0, which means \
-blobs can be dimmer than the brightest dots, which shouldn't happen. Setting to 1.0."
+MAX_CONTRAST_WARNING = "\nWARNING: Max contrast reached. Previous contrast values will be retained."
 
-maxContrastWarning = "\nWARNING: Max contrast reached. Previous contrast values will be retained."
+NO_FILES_EXCEPTION = "No valid files selected. Does the folder you've selected contain files with valid file extensions (e.g., .tiff)? Subfolders within the selected folder will not be scanned for files. Check the values of 'FILEPATH' and 'START_IMAGE' in the configurations file."
 
-noFilesException = "No valid files selected. Does the folder you've selected contain files with \
-valid file extensions (e.g., .tiff)? Subfolders within the selected folder will not be scanned for \
-files. Check the values of 'FILEPATH' and 'START_IMAGE' in the configurations file."
-
-noLifetimesFoundError = """
+NO_LIFETIMES_FOUND_ERROR = """
 No lifetimes measured.
 Check that your images are arranged as a time series."""
 
-programNameException = "Invalid program name selected in configurations file."
+PROGRAM_NAME_EXCEPTION = "Invalid program name selected in configurations file."
 
-reanalysisNotInFile = """Filename not found in reanalysis file:
+REANALYSIS_NOT_IN_FILE = """Filename not found in reanalysis file:
 {filename}
 Reanalysis requires identical naming."""
 
-reanalysisNotInFolder = """Filename not found in images folder:
+REANALYSIS_NOT_IN_FOLDER = """Filename not found in images folder:
 {filename}
 Reanalysis requires identical naming."""
 
-regionSelectorWindowTitle = "Dot Scanner - Region Selection (click the plot to add polygon \
-vertices)"
+START_IMAGE_DIRECTORY_WARNING = "WARNING: Start image must be in the same directory as the other lifetime files."
 
-startImageDirectoryWarning = "WARNING: Start image must be in the same directory as the other \
-lifetime files."
+TOO_FEW_FRAMES_EXCEPTION = "There are not enough images to get meaningful lifetimes."
 
-thresholdAdjusterWindowTitle = "Dot Scanner - Threshold Adjustment"
+UPPER_DOT_THRESH_SCALE_WARNING = "\nWARNING: Upper dot threshold scale set below lower dot threshold scale. Previous threshold values will be retained."
 
-tooFewFramesException = "There are not enough images to get meaningful lifetimes."
-
-upperDotThreshScaleWarning = "\nWARNING: Upper dot threshold scale set below lower dot threshold \
-scale. Previous threshold values will be retained."
-
-windowSizeWarning = "\nWARNING: The current window height is smaller than 550 pixels, potentially \
-resulting in some buttons not being visible. However, the Return key will still allow confirmation \
-in each window, and the Escape key will allow for skipping files, when the option is available."
+WINDOW_SIZE_WARNING = "\nWARNING: The current window height is smaller than 550 pixels, potentially resulting in some buttons not being visible. However, the Return key will still allow confirmation in each window, and the Escape key will allow for skipping files, when the option is available."
 
 
 def alreadyMeasuredNotification(filename):
@@ -132,6 +110,24 @@ def invalidFilenameInDensityAnalysisFile(lineArray):
 {' '.join(lineArray)}"
 
 
+LIFETIME_OUTPUT_FILE_HEADER_TEMPLATE = '''{header}
+# If this file is selected for re-analysis, the following settings will be read in and used unless changed in the threshold adjustment window. The re-analyzed data will then be given in a new output file in this same directory.
+#
+# Polygon vertices (x, y): {verticesString}
+# Threshold scales: {thresholdsString}
+# Contrast settings: {lowerContrast}, {upperContrast}
+# Dot size: {dotSize} | Blob size: {blobSize}
+#
+# The following settings were used in this analysis, but will not be read in during re-analysis (these and other settings can be adjusted in the config file using the "Edit defaults" button in the main configuration window):
+#
+# Remove edge frames: {removeEdgeFrames} | Save figures: {saveFigures} | Skips allowed: {skipsAllowed}{startImageHeaderText}
+#
+# The data columns are organized as follows:
+# x | y | lifetime | starting image | displacement squared (sq px)
+#
+'''
+
+
 def lifetimeOutputFileHeader(microscopeImage, userSettings):
     verticesStringList = []
     for vertex in microscopeImage.polygon[:-1]:
@@ -144,32 +140,27 @@ def lifetimeOutputFileHeader(microscopeImage, userSettings):
         thresholdsStringList.append(str(threshold))
     thresholdsString = ", ".join(thresholdsStringList)
 
-    return f"{outputFileTopHeader(ProgramType.LIFETIME)}\n\
-# If this file is selected for re-analysis, the following settings will be read in and used unless \
-changed in the threshold adjustment window. The re-analyzed data will then be given in a new \
-output file in this same directory.\n\
-#\n\
-# Polygon vertices (x, y): {verticesString}\n\
-# Threshold scales: {thresholdsString}\n\
-# Contrast settings: {userSettings.lowerContrast}, {userSettings.upperContrast}\n\
-# Dot size: {userSettings.dotSize} | Blob size: {userSettings.blobSize}\n\
-#\n\
-# The following settings were used in this analysis, but will not be read in during re-analysis \
-(these and other settings can be adjusted in the config file using the \"Edit defaults\" button \
-in the main configuration window):\n\
-#\n\
-# Remove edge frames: \
-{userSettings.removeEdgeFrames} | Save figures: {userSettings.saveFigures} | Skips allowed: \
-{userSettings.skipsAllowed}{getLifetimeStartImageHeaderText(userSettings.startImage)}\n#\n\
-# The data columns are organized as follows:\n\
-# x | y | lifetime | starting image | displacement squared (sq px)\n#\n"
+    return LIFETIME_OUTPUT_FILE_HEADER_TEMPLATE.format(
+        header=outputFileTopHeader(ProgramType.LIFETIME),
+        verticesString=verticesString,
+        thresholdsString=thresholdsString,
+        lowerContrast=userSettings.lowerContrast,
+        upperContrast=userSettings.upperContrast,
+        dotSize=userSettings.dotSize,
+        blobSize=userSettings.blobSize,
+        removeEdgeFrames=userSettings.removeEdgeFrames,
+        saveFigures=userSettings.saveFigures,
+        skipsAllowed=userSettings.skipsAllowed,
+        startImageHeaderText=getLifetimeStartImageHeaderText(
+            userSettings.startImage)
+    )
 
 
 def getLifetimeStartImageHeaderText(startImage):
     return f" | Start image: {startImage.split('/')[-1]}" if startImage != "" else ""
 
 
-defaultConfigFileContents = '''# Default selections run by the software (can be changed by the user):
+DEFAULT_CONFIG_FILE_CONTENTS = '''# Default selections run by the software (can be changed by the user):
 
 FILEPATH = ""
 # Path to the file or directory of files that should be used. The default value is an empty string: ""

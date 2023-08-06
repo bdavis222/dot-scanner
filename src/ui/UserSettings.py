@@ -194,13 +194,13 @@ class UserSettings:
                     text="Browse...", fg="black")
                 self.startImage = ""
                 self.labelWarning.configure(
-                    text=strings.lifetimeSingleFileWarning)
+                    text=strings.LIFETIME_SINGLE_FILE_WARNING)
             elif os.path.dirname(chosenFilepath) != self.filepath:
                 self.buttonSelectStartingImage.config(
                     text="Browse...", fg="black")
                 self.startImage = ""
                 self.labelWarning.configure(
-                    text=strings.startImageDirectoryWarning)
+                    text=strings.START_IMAGE_DIRECTORY_WARNING)
 
             else:
                 try:
@@ -218,14 +218,15 @@ class UserSettings:
                         text="Browse...", fg="black")
                     self.startImage = ""
                     self.labelWarning.configure(
-                        text=strings.fileNumberingWarning)
+                        text=strings.FILE_NUMBERING_WARNING)
 
         self.window.update()
         self.window.focus_force()
 
     def checkForWarning(self):
         if os.path.isfile(self.filepath) and self.program == ProgramType.LIFETIME:
-            self.labelWarning.configure(text=strings.lifetimeSingleFileWarning)
+            self.labelWarning.configure(
+                text=strings.LIFETIME_SINGLE_FILE_WARNING)
         else:
             self.labelWarning.configure(text="")
 
@@ -233,7 +234,7 @@ class UserSettings:
         value = self.upperContrast - cfg.CONTRAST_DELTA
         value = round(value, 1)
         if value <= self.lowerContrast:
-            print(strings.maxContrastWarning)
+            print(strings.MAX_CONTRAST_WARNING)
             return
         self.upperContrast = value
 
@@ -250,7 +251,7 @@ class UserSettings:
                            self.upperDotThresh, self.lowerBlobThresh)
         if not cfg.DYNAMIC_WINDOW:
             if cfg.WINDOW_HEIGHT < 550:
-                print(strings.windowSizeWarning)
+                print(strings.WINDOW_SIZE_WARNING)
         self.window.destroy()
         self.window.quit()
 
@@ -266,7 +267,7 @@ class UserSettings:
         elif programString.lower() == "lifetime":
             return ProgramType.LIFETIME
         else:
-            raise Exception(strings.programNameException)
+            raise Exception(strings.PROGRAM_NAME_EXCEPTION)
 
     def filepathNotSet(self):
         return self.filepath in EMPTY_DIRECTORY_SET

@@ -26,7 +26,7 @@ def createPlots(data, userSettings):
 
 def createConfigurationsWindow():
     window = tk.Tk()
-    window.title(strings.configurationsWindowTitle)
+    window.title(strings.CONFIGURATIONS_WINDOW_TITLE)
     width, _ = getWindowDimensions()
     if width > 650:
         width = 650
@@ -36,7 +36,7 @@ def createConfigurationsWindow():
 
 def createDefaultConfigurationsEditorWindow():
     window = tk.Tk()
-    window.title(strings.defaultConfigurationsEditorWindowTitle)
+    window.title(strings.DEFAULT_CONFIGURATIONS_EDITOR_WINDOW_TITLE)
     width, _ = getWindowDimensions()
     if width > 650:
         width = 650
