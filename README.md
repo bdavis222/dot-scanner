@@ -58,7 +58,7 @@ Selecting this option will output graphical plots to a `figures` folder that wil
 
 #### Blob size
 
-This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the “dots”—the dimmer particles of interest in the image—are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots.
+This option sets the radius (or, more accurately, roughly the half width of a square) of exclusion around "blobs" (in pixels). Blobs are regions of the image that are saturated and overexposed. For example, if the blob size is set to 5, then a square region extending 5 pixels in each direction (left, right, up, and down) will be defined from each overexposed pixel (meaning the square will span 11 pixels on each side, including the central pixel), and all of the pixels within those regions will be ignored during analysis. This ensures that the “dots” (the dimmer particles of interest in the image) are not too close to any of these regions, and thus the outer edges of blobs are not confused as dots.
 
 #### Dot size
 
@@ -78,7 +78,10 @@ This opens a new window that allows the user to edit the default filepath or edi
 
 #### Use previous analysis
 
-This opens a new window that allows the user to browse for a previous .txt analysis file to use to repeat the analysis. Information on which settings are reused during re-analysis is included in the header of each analysis file.
+This opens a new window that allows the user to browse for a previous .txt analysis file to use to repeat analysis. Information on which settings are reused during re-analysis is included in the header of each analysis file. There are two main scenarios for using this feature:
+
+1. **Re-analyzing the same image or set of images.** _This is useful if the user wants to tweak one or two parameters of an analysis without running through the entire folder of images one by one again._
+2. **Analyzing a new image or set of images with the same analysis settings as a previous analysis.** _This is useful if the user has already run analysis on a set of green images and wants to run the exact same analysis on their red counterparts, for example._
 
 Clicking **Next**, or pressing the **return** key on the keyboard, will save the user’s selections and open the Threshold Adjustment Window.
 
@@ -153,10 +156,10 @@ Brian Davis
 
 ## Release History
 
-- 1.3.6
-  - Bug fixes
+- 1.4.0
+  - Added option to re-analyze data on different images using previous analysis settings
 - 1.3.0
-  - Added option to re-analyze data without redrawing regions
+  - Added option to re-analyze data on the same image without redrawing regions
   - Added particle displacement tracking during lifetime measurement
   - Added histogram output for lifetimes measurements
 - 1.2.0
