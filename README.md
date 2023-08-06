@@ -163,6 +163,8 @@ Brian Davis
 
 ## Release History
 
+- 1.4.1
+  - Bug fixes
 - 1.4.0
   - Added option to re-analyze data on different images using previous analysis settings
 - 1.3.0
