@@ -2,7 +2,7 @@ import mock
 import numpy as np
 import unittest
 
-from src.ui.MicroscopeImage import MicroscopeImage
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
 from tests.ui.FakeUserSettings import FakeUserSettings
 
 

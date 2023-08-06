@@ -2,10 +2,10 @@ import os
 import unittest
 from unittest.mock import MagicMock
 
-import src.density as density
-import src.files as files
-import src.lifetime as lifetime
-from src.ui.MicroscopeImage import MicroscopeImage
+import dotscanner.density as density
+import dotscanner.files as files
+import dotscanner.lifetime as lifetime
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
 from tests.ui.FakeUserSettings import FakeUserSettings
 
 

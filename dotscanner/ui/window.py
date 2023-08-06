@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as pl
 import matplotlib
 
+import dotscanner.strings as strings
 import settings.config as cfg
-import src.strings as strings
 
 matplotlib.use("TkAgg")
 

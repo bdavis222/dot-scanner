@@ -3,8 +3,8 @@ import numpy as np
 import unittest
 from unittest.mock import MagicMock
 
-from src.ui.MicroscopeImage import MicroscopeImage
-from src.ui.ThresholdAdjuster import ThresholdAdjuster
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
+from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
 from tests.ui.FakeUserSettings import FakeUserSettings
 
 

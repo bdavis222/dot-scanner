@@ -2,15 +2,15 @@ import matplotlib.pyplot as pl
 import numpy as np
 import os
 
+import dotscanner.dataprocessing as dp
+import dotscanner.files as files
+import dotscanner.strings as strings
+from dotscanner.ui.DialogWindow import DialogWindow
+from dotscanner.ui.MicroscopeImage import MicroscopeImage
+from dotscanner.ui.ThresholdAdjuster import ThresholdAdjuster
+import dotscanner.ui.window as ui
 import settings.config as cfg
 import settings.configmanagement as cm
-import src.dataprocessing as dp
-import src.files as files
-import src.strings as strings
-from src.ui.DialogWindow import DialogWindow
-from src.ui.MicroscopeImage import MicroscopeImage
-from src.ui.ThresholdAdjuster import ThresholdAdjuster
-import src.ui.window as ui
 
 if cfg.SCALE is None:
     PIXELS_TO_MICRONS = 1

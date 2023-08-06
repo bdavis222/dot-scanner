@@ -3,9 +3,9 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib
 
-import src.dataprocessing as dp
-import src.strings as strings
-import src.ui.window as ui
+import dotscanner.dataprocessing as dp
+import dotscanner.strings as strings
+import dotscanner.ui.window as ui
 
 matplotlib.use("TkAgg")
 

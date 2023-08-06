@@ -2,7 +2,7 @@ import matplotlib.pyplot as pl
 import numpy as np
 import unittest
 
-import src.dataprocessing as dp
+import dotscanner.dataprocessing as dp
 
 
 class TestFunctions(unittest.TestCase):

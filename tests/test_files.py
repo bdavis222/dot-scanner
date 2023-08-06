@@ -1,9 +1,9 @@
 import mock
 import unittest
 
-import src.files as files
-from src.programtype import ProgramType
-import src.strings as strings
+import dotscanner.files as files
+from dotscanner.programtype import ProgramType
+import dotscanner.strings as strings
 from tests.ui.FakeUserSettings import FakeUserSettings
 
 

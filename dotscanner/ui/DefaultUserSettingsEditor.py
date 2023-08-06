@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 
-import src.ui.window as ui
+import dotscanner.ui.window as ui
 import settings.configmanagement as cm
 
 EMPTY_DIRECTORY_SET = set(["", " ", "/"])

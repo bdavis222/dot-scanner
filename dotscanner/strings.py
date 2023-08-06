@@ -1,5 +1,5 @@
+from dotscanner.programtype import ProgramType
 import settings.config as cfg
-from src.programtype import ProgramType
 
 
 def outputFileTopHeader(programType):

@@ -1,8 +1,8 @@
 import mock
 import unittest
 
-from src.programtype import ProgramType
-import src.strings as strings
+from dotscanner.programtype import ProgramType
+import dotscanner.strings as strings
 from tests.ui.FakeMicroscopeImage import FakeMicroscopeImage
 from tests.ui.FakeUserSettings import FakeUserSettings
 

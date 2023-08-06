@@ -1,8 +1,8 @@
 import matplotlib.colors as colors
 import traceback
 
-from src import strings
-from src.ui.DialogWindow import DialogWindow
+from dotscanner import strings
+from dotscanner.ui.DialogWindow import DialogWindow
 
 
 def runChecks():
