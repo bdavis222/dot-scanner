@@ -183,7 +183,7 @@ def getMicroscopeImageFromReanalysisFile(directory, filename, userSettings, sing
             filename) < 25 else f"{filename[:12]}...{filename[-12:]}"
         message = strings.reanalysisNotInFile if singleFile else strings.reanalysisNotInFolder
         DialogWindow("File not found", message.format(filename=displayFilename),
-                     "Ok", "Cancel", positiveButtonColor="blue")
+                     "Ok", "Cancel", positiveButtonAction=quit, positiveButtonColor="blue")
         quit()
     return microscopeImage
 
