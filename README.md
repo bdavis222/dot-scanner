@@ -80,7 +80,7 @@ There are three thresholds that can be set to adjust the detection sensitivity f
 
 This opens a new window that allows the user to edit the default filepath or edit/reset the entire configuration file directly.
 
-#### Use previous analysis
+#### Use previous settings
 
 This opens a new window that allows the user to browse for a previous .txt analysis file to use to repeat analysis. Information on which settings are reused during re-analysis is included in the header of each analysis file. There are two main scenarios for using this feature:
 
