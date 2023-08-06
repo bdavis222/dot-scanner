@@ -1,5 +1,6 @@
 import dotscanner.strings as strings
 from dotscanner.strings import ProgramType
+from PIL import Image
 import settings.config as cfg
 import os
 
@@ -8,7 +9,7 @@ def fixDirectory(string):
     return string if string.endswith("/") else string + "/"
 
 
-def getDirectoryAndFilenames(userSettings):
+def getDirectoryAndFilenames(userSettings, testing=False):
     filepath = userSettings.filepath
     startImage = userSettings.startImage
 
@@ -23,7 +24,8 @@ def getDirectoryAndFilenames(userSettings):
     else:
         raise Exception(strings.filepathException)
 
-    filenames = getSortedFilenames(directory, startImage, userSettings.program)
+    filenames = getSortedFilenames(
+        directory, startImage, userSettings.program, testing=testing)
 
     if not len(filenames):
         raise Exception(strings.noFilesException)
@@ -31,12 +33,25 @@ def getDirectoryAndFilenames(userSettings):
     return directory, filenames
 
 
-def getFilenamesWithExtension(directory, fileExtension):
+def getFilenamesWithExtension(directory, fileExtension, testing=False):
     filenames = []
     for filename in os.listdir(directory):
         if filename.lower().endswith(fileExtension.lower()):
             filenames.append(filename)
+
+    if not testing:
+        verifyImageExtension(directory, filenames[0])
+
     return filenames
+
+
+def verifyImageExtension(directory, filename):
+    try:
+        Image.open(directory + filename)
+    except:
+        extension = filename.split(".")[-1]
+        print(strings.invalidImageExtension.format(extension=extension))
+        quit()
 
 
 def getLeftEdgeOfTrailingNumber(string, index):
@@ -58,7 +73,7 @@ def getMostCommonFileExtension(directory):
 
     extensionFrequencies = {}  # Maps the extension string to the number of times it appears
     for filename in filenames:
-        if filename.startswith("."):
+        if filename.startswith(".") or filename.endswith(".txt"):
             continue
 
         if len(filename.split(".")) > 1:
@@ -95,12 +110,13 @@ def getRightEdgeOfTrailingNumber(string):
     raise Exception(strings.fileNumberingException)
 
 
-def getSortedFilenames(directory, startImage, programSelected):
+def getSortedFilenames(directory, startImage, programSelected, testing=False):
     if hasNoValidFiles(directory):
         return []
 
     fileExtension = getMostCommonFileExtension(directory)
-    filenames = getFilenamesWithExtension(directory, fileExtension)
+    filenames = getFilenamesWithExtension(
+        directory, fileExtension, testing=testing)
 
     allFilesNumbered = allFilesAreNumbered(filenames)
     if programSelected == ProgramType.LIFETIME and not allFilesNumbered:

@@ -60,7 +60,7 @@ class TestFiles(unittest.TestCase):
         mock_listdir.return_value = self.getTestFilenames()
 
         unsortedFilenames = files.getFilenamesWithExtension(
-            "test/directory/", ".png")
+            "test/directory/", ".png", testing=True)
 
         self.assertIn("file03.png", unsortedFilenames)
         self.assertIn("file02.png", unsortedFilenames)
@@ -73,7 +73,7 @@ class TestFiles(unittest.TestCase):
         self.assertNotIn("directory2/", unsortedFilenames)
 
         unsortedFilenames2 = files.getFilenamesWithExtension(
-            "test/directory/", ".md")
+            "test/directory/", ".md", testing=True)
 
         self.assertIn("readme.md", unsortedFilenames2)
         self.assertNotIn("file02.png", unsortedFilenames2)
@@ -89,8 +89,8 @@ class TestFiles(unittest.TestCase):
     def test_getSortedFilenames_withDensityProgramNumbered(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png",
-                                                   programSelected="density")
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="file01.png", programSelected="density", testing=True)
 
         self.assertEqual(
             sortedFilenames,
@@ -98,8 +98,8 @@ class TestFiles(unittest.TestCase):
                 "file04.png", "file05.PNG", "file11.png"]
         )
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png",
-                                                   programSelected="density")
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="file04.png", programSelected="density", testing=True)
 
         # The value of startImage should be ignored for a density program
         self.assertEqual(
@@ -113,8 +113,8 @@ class TestFiles(unittest.TestCase):
         mock_listdir.return_value = ["filec.png", "fileb.png", "filea.png", "filef.png",
                                      "filee.PNG", "filed.png"]
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="filec.png",
-                                                   programSelected="density")
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="filec.png", programSelected="density", testing=True)
 
         # The value of startImage should be ignored for a density program
         self.assertEqual(
@@ -128,8 +128,8 @@ class TestFiles(unittest.TestCase):
         mock_listdir.return_value = ["filec.png", "fileb.png", "filea.png", "filef.png",
                                      "filee.PNG", "filed.png"]
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="",
-                                                   programSelected="density")
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="", programSelected="density", testing=True)
 
         # The value of startImage should be ignored for a density program
         self.assertEqual(
@@ -142,8 +142,8 @@ class TestFiles(unittest.TestCase):
     def test_getSortedFilenames_withLifetimeProgram(self, mock_listdir):
         mock_listdir.return_value = self.getTestFilenames()
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file01.png",
-                                                   programSelected="lifetime")
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="file01.png", programSelected="lifetime", testing=True)
 
         self.assertEqual(
             sortedFilenames,
@@ -151,16 +151,17 @@ class TestFiles(unittest.TestCase):
                 "file04.png", "file05.PNG", "file11.png"]
         )
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="file04.png",
-                                                   programSelected=ProgramType.LIFETIME)
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="file04.png", programSelected=ProgramType.LIFETIME,
+            testing=True)
 
         self.assertEqual(
             sortedFilenames,
             ["file04.png", "file05.PNG", "file11.png"]
         )
 
-        sortedFilenames = files.getSortedFilenames("test/directory/", startImage="",
-                                                   programSelected="lifetime")
+        sortedFilenames = files.getSortedFilenames(
+            "test/directory/", startImage="", programSelected="lifetime", testing=True)
 
         self.assertEqual(
             sortedFilenames,
@@ -177,7 +178,8 @@ class TestFiles(unittest.TestCase):
         mock_dirname.return_value = "test/directory/"
         mock_basename.return_value = "testFile.png"
 
-        directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            fakeUserSettings, testing=True)
 
         self.assertEqual(directory, "test/directory/")
         self.assertEqual(filenames, ["testFile.png"])
@@ -191,7 +193,8 @@ class TestFiles(unittest.TestCase):
         mock_isdir.return_value = True
         mock_listdir.return_value = self.getTestFilenames()
 
-        directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            fakeUserSettings, testing=True)
 
         self.assertEqual(directory, fakeUserSettings.filepath)
         self.assertEqual(
@@ -211,7 +214,7 @@ class TestFiles(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             directory, filenames = files.getDirectoryAndFilenames(
-                fakeUserSettings)
+                fakeUserSettings, testing=True)
 
         self.assertTrue(strings.noFilesException in str(context.exception))
 
@@ -227,7 +230,7 @@ class TestFiles(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             directory, filenames = files.getDirectoryAndFilenames(
-                fakeUserSettings)
+                fakeUserSettings, testing=True)
 
         self.assertTrue(strings.filepathException in str(context.exception))
 
@@ -243,7 +246,7 @@ class TestFiles(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             directory, filenames = files.getDirectoryAndFilenames(
-                fakeUserSettings)
+                fakeUserSettings, testing=True)
 
         self.assertTrue(strings.noFilesException in str(context.exception))
 
@@ -257,7 +260,8 @@ class TestFiles(unittest.TestCase):
         mock_isdir.return_value = True
         mock_listdir.return_value = ["filec.png", "filez.png", "filea.png"]
 
-        directory, filenames = files.getDirectoryAndFilenames(fakeUserSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            fakeUserSettings, testing=True)
 
         self.assertEqual(filenames, ["filea.png", "filec.png", "filez.png"])
 

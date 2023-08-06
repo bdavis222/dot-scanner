@@ -100,7 +100,8 @@ class TestFullAnalysis(unittest.TestCase):
                                         polygon=[[469, 62], [413, 15], [299, 166], [362, 212], [469, 62]], densityData={},
                                         reanalysis=False)
 
-        directory, filenames = files.getDirectoryAndFilenames(userSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            userSettings, testing=True)
         filename = filenames[0]
 
         targetPath = self.getPathFromBase("tests/data/densityTestOutput.txt")
@@ -123,7 +124,8 @@ class TestFullAnalysis(unittest.TestCase):
                                         polygon=[[469, 62], [413, 15], [299, 166], [362, 212], [469, 62]], densityData={},
                                         reanalysis=False)
 
-        directory, filenames = files.getDirectoryAndFilenames(userSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            userSettings, testing=True)
         filename = filenames[0]
 
         targetPath = self.getPathFromBase("tests/data/densityTestOutput.txt")
@@ -146,7 +148,8 @@ class TestFullAnalysis(unittest.TestCase):
                                         polygon=[[469, 58], [420, 14], [303, 161], [361, 205], [469, 58]], densityData={},
                                         reanalysis=False)
 
-        directory, filenames = files.getDirectoryAndFilenames(userSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            userSettings, testing=True)
         middleIndex = len(filenames) // 2
         middleMicroscopeImage = MicroscopeImage(
             directory, filenames[middleIndex], userSettings)
@@ -169,7 +172,8 @@ class TestFullAnalysis(unittest.TestCase):
                                         polygon=[[469, 58], [420, 14], [303, 161], [361, 205], [469, 58]], densityData={},
                                         reanalysis=False)
 
-        directory, filenames = files.getDirectoryAndFilenames(userSettings)
+        directory, filenames = files.getDirectoryAndFilenames(
+            userSettings, testing=True)
         middleIndex = len(filenames) // 2
         middleMicroscopeImage = MicroscopeImage(
             directory, filenames[middleIndex], userSettings)

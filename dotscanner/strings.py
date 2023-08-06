@@ -43,6 +43,10 @@ lifetimes."
 
 filepathException = "Filepath must point to a file or directory."
 
+invalidImageExtension = '''
+"{extension}" is not a valid image extension. 
+Make sure the most common file type in the folder you've selected has a valid extension.'''
+
 invalidPolygonWarning = "\nNo valid, enclosed polygon drawn. No measurements made."
 
 invalidDotAndBlobSizeEdit = "\nInvalid input. Previous dot and blob size values will be retained."
