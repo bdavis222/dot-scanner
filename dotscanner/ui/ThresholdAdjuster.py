@@ -318,14 +318,14 @@ class ThresholdAdjuster:
                           self.blobScatter)
         self.canvas.draw()
 
-    def editFinishWithReturnKey(self, event):
+    def editFinishWithReturnKey(self, _):
         self.editFinish()
 
     def finish(self):
         self.window.destroy()
         self.window.quit()
 
-    def finishWithReturnKey(self, event):
+    def finishWithReturnKey(self, _):
         self.finish()
 
     def lowerDotThresholdScaleDown(self):
@@ -335,7 +335,7 @@ class ThresholdAdjuster:
                           self.blobScatter)
         self.canvas.draw()
 
-    def lowerDotThresholdScaleDownWithUpKey(self, event):
+    def lowerDotThresholdScaleDownWithUpKey(self, _):
         self.lowerDotThresholdScaleDown()
 
     def lowerDotThresholdScaleUp(self):
@@ -345,7 +345,7 @@ class ThresholdAdjuster:
                           self.blobScatter)
         self.canvas.draw()
 
-    def lowerDotThresholdScaleUpWithDownKey(self, event):
+    def lowerDotThresholdScaleUpWithDownKey(self, _):
         self.lowerDotThresholdScaleUp()
 
     def setThresholdEntries(self, thresholds):
@@ -393,10 +393,10 @@ class ThresholdAdjuster:
         self.image.skipped = True
         self.finish()
 
-    def skipWithEscapeKey(self, event):
+    def skipWithEscapeKey(self, _):
         self.skip()
 
-    def quitWithQKey(self, event):
+    def quitWithQKey(self, _):
         quit()
 
     def resetThreshScalesToDefaultValues(self):
@@ -427,7 +427,7 @@ class ThresholdAdjuster:
                           self.blobScatter)
         self.canvas.draw()
 
-    def upperDotThresholdScaleDownWithRightKey(self, event):
+    def upperDotThresholdScaleDownWithRightKey(self, _):
         self.upperDotThresholdScaleDown()
 
     def upperDotThresholdScaleUp(self):
@@ -437,5 +437,5 @@ class ThresholdAdjuster:
                           self.blobScatter)
         self.canvas.draw()
 
-    def upperDotThresholdScaleUpWithLeftKey(self, event):
+    def upperDotThresholdScaleUpWithLeftKey(self, _):
         self.upperDotThresholdScaleUp()

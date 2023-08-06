@@ -253,7 +253,7 @@ class UserSettings:
         self.window.destroy()
         self.window.quit()
 
-    def doneWithReturnKey(self, event):
+    def doneWithReturnKey(self, _):
         self.done()
 
     def editDefaults(self):
@@ -275,7 +275,7 @@ class UserSettings:
         value = round(value, 1)
         self.upperContrast = value
 
-    def quitWithQKey(self, event):
+    def quitWithQKey(self, _):
         quit()
 
     def setRemoveEdge(self):

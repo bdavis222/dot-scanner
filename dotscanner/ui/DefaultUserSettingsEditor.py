@@ -86,10 +86,10 @@ class DefaultUserSettingsEditor:
         self.filepath = ""
         self.showFilepath()
 
-    def closeWindowWithWKey(self, event):
+    def closeWindowWithWKey(self, _):
         self.window.destroy()
 
-    def quitWithQKey(self, event):
+    def quitWithQKey(self, _):
         quit()
 
     def saveDefaultPath(self):

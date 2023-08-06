@@ -111,7 +111,7 @@ def getCoordPairsFromCoordMap(coordMap):
     return coordList
 
 
-def getCoords(data, sums, thresholds, dotSize):
+def getCoords(data, sums, thresholds):
     dotCoords = {}
     blobCoords = {}
     lowerDotThreshScale, upperDotThreshScale, lowerBlobThreshScale = thresholds
@@ -141,7 +141,7 @@ def getCoordsInPolygon(data, points, polygonVertices):
     return coordsInPolygon
 
 
-def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh, dotSize,
+def getCoordMapsWithinPolygon(data, sums, lowerDotThresh, upperDotThresh, lowerBlobThresh,
                               polygonCoordMap, xMin, xMax, yMin, yMax):
     dotCoords = {}
     blobCoords = {}

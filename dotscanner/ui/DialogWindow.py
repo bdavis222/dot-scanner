@@ -52,14 +52,14 @@ class DialogWindow:
 
         self.window.mainloop()
 
-    def closeWindowWithEscapeKey(self, event):
+    def closeWindowWithEscapeKey(self, _):
         self.window.destroy()
 
-    def closeWindowWithWKey(self, event):
+    def closeWindowWithWKey(self, _):
         self.window.destroy()
 
-    def positiveButtonWithReturnKey(self, event):
+    def positiveButtonWithReturnKey(self, _):
         self.positiveButtonAction()
 
-    def quitWithQKey(self, event):
+    def quitWithQKey(self, _):
         quit()

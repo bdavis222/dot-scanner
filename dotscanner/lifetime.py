@@ -110,8 +110,8 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, t
         dotCoords, blobCoords = dp.getCoordMapsWithinPolygon(microscopeImage.data,
                                                              microscopeImage.sums, lowerDotThresh,
                                                              upperDotThresh, lowerBlobThresh,
-                                                             dotSize, middleImagePolygonCoordMap,
-                                                             xMin, xMax, yMin, yMax)
+                                                             middleImagePolygonCoordMap, xMin, xMax,
+                                                             yMin, yMax)
         dp.cleanDotCoords(microscopeImage.data, dotCoords,
                           blobCoords, blobSize, dotSize)
 

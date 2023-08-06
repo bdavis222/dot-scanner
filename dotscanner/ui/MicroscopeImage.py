@@ -44,7 +44,7 @@ class MicroscopeImage:
             dotCoords, blobCoords = self.memoizedCoords[combination]
         else:
             dotCoords, blobCoords = dp.getCoords(
-                self.data, self.sums, self.thresholds, self.userSettings.dotSize)
+                self.data, self.sums, self.thresholds)
             dp.cleanDotCoords(self.data, dotCoords, blobCoords, self.userSettings.blobSize,
                               self.userSettings.dotSize)
             self.memoizedCoords[combination] = (dotCoords, blobCoords)

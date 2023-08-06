@@ -122,10 +122,10 @@ class RegionSelector:
         self.window.destroy()
         self.window.after(100, self.window.quit)
 
-    def finishWithReturnKey(self, event):
+    def finishWithReturnKey(self, _):
         self.finish()
 
-    def quitWithQKey(self, event):
+    def quitWithQKey(self, _):
         quit()
 
     def reset(self):
@@ -139,7 +139,7 @@ class RegionSelector:
         self.line.figure.canvas.draw_idle()
         self.restartclickMarker()
 
-    def resetWithDeleteKey(self, event):
+    def resetWithDeleteKey(self, _):
         self.reset()
 
     def restartclickMarker(self):
@@ -162,5 +162,5 @@ class RegionSelector:
         self.window.destroy()
         self.window.quit()
 
-    def skipWithEscapeKey(self, event):
+    def skipWithEscapeKey(self, _):
         self.skip()
