@@ -71,6 +71,9 @@ def getWindowDimensions():
         height = cfg.WINDOW_HEIGHT
         width = cfg.WINDOW_WIDTH
 
+    if height < 650:
+        print(strings.WINDOW_SIZE_WARNING)
+
     return width, height
 
 

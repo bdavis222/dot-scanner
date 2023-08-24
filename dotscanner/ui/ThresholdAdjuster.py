@@ -106,7 +106,8 @@ class ThresholdAdjuster:
         self.blobsDownButton = tk.Button(
             self.window, text="v", command=self.upperDotThresholdScaleUp)
 
-        self.thresholdsLabel = tk.Label(self.window, text="Thresholds:")
+        self.thresholdsLabel = tk.Label(self.window, text="Thresholds")
+        self.thresholdsLabel2 = tk.Label(self.window, text="and sizes:")
 
         self.editButton = tk.Button(
             self.window, text="Edit", command=self.edit)
@@ -167,6 +168,7 @@ class ThresholdAdjuster:
         self.blobsButtons.pack(in_=self.blobsItem, side=tk.TOP)
 
         self.thresholdsLabel.pack(in_=self.thresholdEditItem, side=tk.TOP)
+        self.thresholdsLabel2.pack(in_=self.thresholdEditItem, side=tk.TOP)
         self.editButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
         self.resetButton.pack(in_=self.thresholdEditItem, side=tk.TOP)
 

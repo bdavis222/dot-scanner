@@ -69,7 +69,7 @@ TOO_FEW_FRAMES_EXCEPTION = "There are not enough images to get meaningful lifeti
 
 UPPER_DOT_THRESH_SCALE_WARNING = "\nWARNING: Upper dot threshold scale set below lower dot threshold scale. Previous threshold values will be retained."
 
-WINDOW_SIZE_WARNING = "\nWARNING: The current window height is smaller than 550 pixels, potentially resulting in some buttons not being visible. However, the Return key will still allow confirmation in each window, and the Escape key will allow for skipping files, when the option is available."
+WINDOW_SIZE_WARNING = "\nWARNING: Due to the device's screen size or the window height that has been manually selected, the window height will be smaller than 650 pixels for the threshold-adjustment and region-selection windows, potentially resulting in some buttons not being visible. However, the Return key will still allow confirmation in each window, and the Escape key will allow for skipping files, when the option is available."
 
 
 def alreadyMeasuredNotification(filename):

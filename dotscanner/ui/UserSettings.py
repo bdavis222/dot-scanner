@@ -249,9 +249,7 @@ class UserSettings:
         self.skipsAllowed = int(self.entrySkipsAllowed.get())
         self.thresholds = (self.lowerDotThresh,
                            self.upperDotThresh, self.lowerBlobThresh)
-        if not cfg.DYNAMIC_WINDOW:
-            if cfg.WINDOW_HEIGHT < 550:
-                print(strings.WINDOW_SIZE_WARNING)
+
         self.window.destroy()
         self.window.quit()
 
