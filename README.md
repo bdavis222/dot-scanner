@@ -30,17 +30,17 @@ To launch the main graphical user interface (GUI), run the following command:
 dotscanner
 ```
 
-Some demo images are included in the [demo images folder](https://github.com/bdavis222/dotscanner/blob/main/images/demo/) of this GitHub project, which can be downloaded and used as explained below to familiarize oneself with how the software works.
+Some demo images are included in the [demo images folder](https://github.com/bdavis222/dot-scanner/blob/main/images/demo/) of this GitHub project, which can be downloaded and used as explained below to familiarize oneself with how the software works.
 
 ## The Configurations Window
 
 The first window displayed in the GUI is the Configurations Window:
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/3.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/3.png)
 
-If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis (the images in the [demo images folder](https://github.com/bdavis222/dotscanner/blob/main/images/demo/) can be downloaded to try this out for oneself):
+If the **File** or **Folder** buttons are clicked, another window opens, allowing the user to select a file or folder for analysis (the images in the [demo images folder](https://github.com/bdavis222/dot-scanner/blob/main/images/demo/) can be downloaded to try this out for oneself):
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/4.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/4.png)
 
 If repeated analysis is being performed at the same target filepath, the user can avoid continuously repeating this step by setting a default filepath. This is done by clicking the "Edit defaults" button. An entire configurations file is editable for other defaults as well. Any of the variables in this configurations file can be modified to change the default behavior of the software.
 
@@ -48,11 +48,11 @@ The software will run as expected on any folder where the most common file exten
 
 If a folder containing several images is selected, the user has the option to change the default program from **Density** to **Lifetime**. _(Note that trying to run a lifetime program on a single image will not be allowed by the software.)_ This selection is made through the **Program** dropdown menu:
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/5.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/5.png)
 
 If **Lifetime** is selected, some additional options will appear:
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/6.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/6.png)
 
 ### Descriptions of Configuration Options
 
@@ -107,7 +107,7 @@ This dictates whether edge frames should be removed from a lifetime calculation.
 
 Clicking the **Next** button, or pressing the **return** key on the keyboard, from the Configurations Window saves the configuration settings selected by the user and advances to the Threshold Adjustment Window. This window shows the image data with the dots and blobs identified, and features several button groups on the left sidebar:
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/7.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/7.png)
 
 From top to bottom, these button groups perform the following actions:
 
@@ -131,7 +131,7 @@ These buttons adjust the sensitivity for detecting “blobs” in the image. The
 
 This button changes the left button bar view to display some manual threshold and size adjustment options:
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/8.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/8.png)
 
 _(Once the thresholds or sizes are changed by entering new numbers into the text boxes, clicking the_ **Done** _button, or pressing the_ **return** _key on the keyboard, saves the settings and returns the left button bar to the original button configuration.)_
 
@@ -147,7 +147,7 @@ This button skips the current image (for example, if the user decides the data q
 
 Clicking the **Done** button, or pressing the **return** key on the keyboard, from the main Threshold Adjustment Window saves the threshold settings selected by the user and advances to the Region Selector Window:
 
-![](https://github.com/bdavis222/dotscanner/blob/main/images/9.png)
+![](https://github.com/bdavis222/dot-scanner/blob/main/images/9.png)
 
 This window allows the user to click different locations on the image to set the vertices of a polygon within which the measurements will be made. At any point, the polygon can be reset by clicking the **Reset** button, or by pressing the **backspace** key on the keyboard. It is important to note that after at least three vertices have been placed, the dotted line shows how the program will enclose the polygon once the **Done** button, or the **return** key on the keyboard, is pressed. _(In other words, it is not necessary to re-click the first vertex created to close the polygon.)_
 
@@ -181,7 +181,7 @@ Brian Davis
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/bdavis222/dotscanner/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/bdavis222/dot-scanner/blob/main/LICENSE) file for details.
 
 ## Development
 
@@ -205,7 +205,7 @@ _(Note that the_ `python3` _command may be required instead of_ `python` _for so
 
 ### Bug Reports and Feature Requests
 
-To report a bug, visit the [issues page](https://github.com/bdavis222/dotscanner/issues). New feature requests are also welcome!
+To report a bug, visit the [issues page](https://github.com/bdavis222/dot-scanner/issues). New feature requests are also welcome!
 
 ## Citations
 
