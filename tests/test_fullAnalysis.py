@@ -46,10 +46,10 @@ class TestFullAnalysis(unittest.TestCase):
         filename2 = self.getPathFromBase("folder/filename2.txt")
         filename3 = self.getPathFromBase("two/folders/filename3.txt")
 
-        self.assertTrue(filename1.endswith("dotscanner/filename1.txt"))
-        self.assertTrue(filename2.endswith("dotscanner/folder/filename2.txt"))
+        self.assertTrue(filename1.endswith("dot-scanner/filename1.txt"))
+        self.assertTrue(filename2.endswith("dot-scanner/folder/filename2.txt"))
         self.assertTrue(filename3.endswith(
-            "dotscanner/two/folders/filename3.txt"))
+            "dot-scanner/two/folders/filename3.txt"))
 
     def test_removeFileAndAssertNonexistent(self):
         # Test first without a real file

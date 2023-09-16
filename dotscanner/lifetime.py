@@ -197,7 +197,7 @@ def saveLifetimeFigures(directory, outputFilename, coordsToPlot, imageNumberToBl
             data = microscopeImage.data
 
             figure, axes = pl.subplots()
-            axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast,
+            axes.imshow(data, cmap="gray", vmin=userSettings.lowerContrast,
                         vmax=userSettings.upperContrast * np.std(data), zorder=0)
             dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none",
                                       edgecolors=cfg.DOT_COLOR,

@@ -12,7 +12,7 @@ matplotlib.use("TkAgg")
 def createPlots(data, userSettings):
     windowScaling = getWindowScaling()
     figure, axes = pl.subplots()
-    dataPlot = axes.imshow(data, origin="lower", cmap="gray",
+    dataPlot = axes.imshow(data, cmap="gray",
                            vmin=userSettings.lowerContrast,
                            vmax=userSettings.upperContrast * np.std(data))
     dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize * windowScaling,

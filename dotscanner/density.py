@@ -282,7 +282,7 @@ def saveDensityFigure(directory, filename, outputFilename, microscopeImage, user
 
     for fileExtension in cfg.FIGURE_FILETYPES:
         figure, axes = pl.subplots()
-        axes.imshow(data, origin="lower", cmap="gray", vmin=userSettings.lowerContrast,
+        axes.imshow(data, cmap="gray", vmin=userSettings.lowerContrast,
                     vmax=userSettings.upperContrast * np.std(data), zorder=0)
         dotScatter = axes.scatter([None], [None], s=5 * userSettings.dotSize, facecolors="none",
                                   edgecolors=cfg.DOT_COLOR, linewidths=cfg.DOT_THICKNESS/2,
