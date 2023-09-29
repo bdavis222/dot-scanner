@@ -142,15 +142,38 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, t
         print(strings.NO_LIFETIMES_FOUND_ERROR)
         quit()
 
+    filteredLifetimeIndices = getFilteredLifetimeIndices(lifetimes)
+
     saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,
-                          imageNumberToBlobCoordMap, imageNumberToFilenameMap,
-                          middleMicroscopeImage, userSettings, coordsToPlot,
-                          middleMicroscopeImage.polygon, testing=testing)
+                          filteredLifetimeIndices, imageNumberToBlobCoordMap,
+                          imageNumberToFilenameMap, middleMicroscopeImage, userSettings,
+                          coordsToPlot, middleMicroscopeImage.polygon, testing=testing)
+
+
+def getFilteredLifetimeIndices(lifetimes):
+    statistic = np.mean(lifetimes) / np.std(lifetimes)
+    indices = list(range(len(lifetimes)))
+    while statistic < cfg.NOISE_STATISTIC:
+        lifetimes, indices = getLifetimesAndIndicesWithoutMin(
+            lifetimes, indices)
+        statistic = np.mean(lifetimes) / np.std(lifetimes)
+    return set(indices)
+
+
+def getLifetimesAndIndicesWithoutMin(lifetimes, indices):
+    minLifetime = min(lifetimes)
+    filteredLifetimes = []
+    filteredIndices = []
+    for lifetime, index in zip(lifetimes, indices):
+        if lifetime != minLifetime:
+            filteredLifetimes.append(lifetime)
+            filteredIndices.append(index)
+    return filteredLifetimes, filteredIndices
 
 
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,
-                          imageNumberToBlobCoordMap, imageNumberToFilenameMap, microscopeImage,
-                          userSettings, coordsToPlot, polygon, testing=False):
+                          filteredIndices, imageNumberToBlobCoordMap, imageNumberToFilenameMap,
+                          microscopeImage, userSettings, coordsToPlot, polygon, testing=False):
     if userSettings.reanalysis:
         targetPath = files.getReanalysisTargetPath(
             directory, cfg.LIFETIME_OUTPUT_FILENAME)
@@ -163,11 +186,14 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displ
     with open(targetPath, "a") as file:
         file.write(strings.lifetimeOutputFileHeader(
             microscopeImage, userSettings))
-        for lifetime, resultCoord, startImage, displacement in zip(lifetimes, resultCoords,
-                                                                   startImages, displacements):
+        for index, lifetime, resultCoord, startImage, displacement in zip(range(len(lifetimes)),
+                                                                          lifetimes, resultCoords,
+                                                                          startImages,
+                                                                          displacements):
             y, x = resultCoord
             filename = imageNumberToFilenameMap[startImage]
-            output = f"{x} {y} {lifetime} {filename} {displacement}\n"
+            note = "" if index in filteredIndices else " y"
+            output = f"{x} {y} {lifetime} {filename} {displacement}{note}\n"
             file.write(output)
 
     outputFilename = targetPath.split("/")[-1]
@@ -175,6 +201,8 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displ
         print(f"{outputFilename} saved.")
 
     saveHistogram(directory, outputFilename, lifetimes)
+    saveNoiseStatisticHistogram(
+        directory, outputFilename, lifetimes, filteredIndices)
 
     if userSettings.saveFigures:
         saveLifetimeFigures(directory, outputFilename, coordsToPlot, imageNumberToBlobCoordMap,
@@ -267,6 +295,38 @@ def saveHistogram(directory, outputFilename, lifetimes):
     targetPath = files.getLifetimeHistogramTargetPath(directory)
     outputFilenameWithoutExtension = outputFilename.split(".")[0]
     figure.savefig(f"{targetPath}{outputFilenameWithoutExtension}_hist.pdf")
+
+    figure.clf()
+    pl.close(figure)
+
+
+def saveNoiseStatisticHistogram(directory, outputFilename, lifetimes, filteredIndices):
+    figure = pl.figure()
+    axes = figure.add_subplot(111)
+
+    filteredLifetimes = []
+    for index in filteredIndices:
+        filteredLifetimes.append(lifetimes[index])
+
+    plotBins = max(lifetimes) + 1
+    filteredHistData = axes.hist(filteredLifetimes, bins=np.arange(plotBins)+0.5,
+                                 rwidth=0.9, color="C0", density=True, label="Filtered data")
+
+    histData = axes.hist(lifetimes, bins=np.arange(
+        plotBins)+0.5, rwidth=0.9, color="C1", density=True, label="All data")
+    yOffset = max(histData[0]) * 0.005
+
+    for i in range(plotBins - 1):
+        if plotBins < 25 or (i+1) % 5 == 0:
+            axes.text(i+1, yOffset, i+1, fontsize=6,
+                      horizontalalignment="center")
+
+    axes.legend()
+
+    targetPath = files.getLifetimeHistogramTargetPath(directory)
+    outputFilenameWithoutExtension = outputFilename.split(".")[0]
+    figure.savefig(
+        f"{targetPath}{outputFilenameWithoutExtension}_noise_hist.pdf")
 
     figure.clf()
     pl.close(figure)

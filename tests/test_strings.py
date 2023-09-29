@@ -101,7 +101,7 @@ in the main configuration window):\n\
 # Remove edge frames: True | Save figures: False | Skips allowed: 1\n\
 #\n\
 # The data columns are organized as follows:\n\
-# x | y | lifetime | starting image | displacement squared (sq px)\n#\n"
+# x | y | lifetime | starting image | displacement squared (sq px) | potentially unreliable?\n#\n"
         )
 
     def test_lifetimeOutputFileHeaderWithStartImage(self):
@@ -137,7 +137,7 @@ in the main configuration window):\n\
 Skips allowed: 1 | Start image: image.png\n\
 #\n\
 # The data columns are organized as follows:\n\
-# x | y | lifetime | starting image | displacement squared (sq px)\n#\n"
+# x | y | lifetime | starting image | displacement squared (sq px) | potentially unreliable?\n#\n"
         )
 
 
