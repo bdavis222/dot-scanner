@@ -158,6 +158,7 @@ class TestFullAnalysis(unittest.TestCase):
         targetPath = self.getPathFromBase("tests/data/lifetimeTestOutput.txt")
         files.getAnalysisTargetPath = MagicMock(return_value=targetPath)
         lifetime.saveHistogram = MagicMock(return_value=None)
+        lifetime.saveNoiseStatisticHistogram = MagicMock(return_value=None)
         lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings,
                                  testing=True)
 
@@ -183,6 +184,7 @@ class TestFullAnalysis(unittest.TestCase):
         targetPath = self.getPathFromBase("tests/data/lifetimeTestOutput.txt")
         files.getAnalysisTargetPath = MagicMock(return_value=targetPath)
         lifetime.saveHistogram = MagicMock(return_value=None)
+        lifetime.saveNoiseStatisticHistogram = MagicMock(return_value=None)
         lifetime.measureLifetime(directory, filenames, middleMicroscopeImage, userSettings,
                                  testing=True)
 
