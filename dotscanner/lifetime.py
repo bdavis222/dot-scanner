@@ -191,8 +191,6 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displ
         print(f"{outputFilename} saved.")
 
     saveHistogram(directory, outputFilename, lifetimes)
-    saveNoiseStatisticHistogram(
-        directory, outputFilename, lifetimes, filteredIndices)
 
     if userSettings.saveFigures:
         saveLifetimeFigures(directory, outputFilename, coordsToPlot, imageNumberToBlobCoordMap,
@@ -285,38 +283,6 @@ def saveHistogram(directory, outputFilename, lifetimes):
     targetPath = files.getLifetimeHistogramTargetPath(directory)
     outputFilenameWithoutExtension = outputFilename.split(".")[0]
     figure.savefig(f"{targetPath}{outputFilenameWithoutExtension}_hist.pdf")
-
-    figure.clf()
-    pl.close(figure)
-
-
-def saveNoiseStatisticHistogram(directory, outputFilename, lifetimes, filteredIndices):
-    figure = pl.figure()
-    axes = figure.add_subplot(111)
-
-    filteredLifetimes = []
-    for index in filteredIndices:
-        filteredLifetimes.append(lifetimes[index])
-
-    plotBins = max(lifetimes) + 1
-    filteredHistData = axes.hist(filteredLifetimes, bins=np.arange(plotBins)+0.5,
-                                 rwidth=0.9, color="C0", density=True, label="Filtered data")
-
-    histData = axes.hist(lifetimes, bins=np.arange(
-        plotBins)+0.5, rwidth=0.9, color="C1", density=True, label="All data")
-    yOffset = max(histData[0]) * 0.005
-
-    for i in range(plotBins - 1):
-        if plotBins < 25 or (i+1) % 5 == 0:
-            axes.text(i+1, yOffset, i+1, fontsize=6,
-                      horizontalalignment="center")
-
-    axes.legend()
-
-    targetPath = files.getLifetimeHistogramTargetPath(directory)
-    outputFilenameWithoutExtension = outputFilename.split(".")[0]
-    figure.savefig(
-        f"{targetPath}{outputFilenameWithoutExtension}_noise_hist.pdf")
 
     figure.clf()
     pl.close(figure)
