@@ -151,24 +151,14 @@ def measureLifetime(directory, filenames, middleMicroscopeImage, userSettings, t
 
 
 def getFilteredLifetimeIndices(lifetimes):
-    statistic = np.mean(lifetimes) / np.std(lifetimes)
-    indices = list(range(len(lifetimes)))
-    while statistic < cfg.NOISE_STATISTIC:
-        lifetimes, indices = getLifetimesAndIndicesWithoutMin(
-            lifetimes, indices)
-        statistic = np.mean(lifetimes) / np.std(lifetimes)
-    return set(indices)
+    if cfg.LIFETIME_THRESHOLD == 0:
+        return list(range(len(lifetimes)))
 
-
-def getLifetimesAndIndicesWithoutMin(lifetimes, indices):
-    minLifetime = min(lifetimes)
-    filteredLifetimes = []
     filteredIndices = []
-    for lifetime, index in zip(lifetimes, indices):
-        if lifetime != minLifetime:
-            filteredLifetimes.append(lifetime)
+    for index, lifetime in enumerate(lifetimes):
+        if lifetime > cfg.LIFETIME_THRESHOLD:
             filteredIndices.append(index)
-    return filteredLifetimes, filteredIndices
+    return filteredIndices
 
 
 def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displacements,

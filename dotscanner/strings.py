@@ -213,8 +213,8 @@ REMOVE_EDGE_FRAMES = True
 LIFETIME_MIN_FOR_PLOT = 1
 # Minimum lifetime to mark a dot in the output figure. The default value is 1, so that all dots with a lifetime of 1 or greater are plotted.
 
-NOISE_STATISTIC = 2.5
-# Used to remove noisy data from detected lifetime dots. The default value is 2.5. Increase to include less noise (and remove shorter lifetimes), and decrease for the opposite.
+LIFETIME_THRESHOLD = 0
+# Used to mark shorter lifetimes as unreliable from noisy datsets (with a "y" in the last column of the output file). The value given will be the upper limit of the lifetimes marked as reliable (e.g., a value of 3 will mark lifetimes of 1, 2, and 3). Increase to include less noise (and remove shorter lifetimes), and decrease for the opposite. The default value is 0, which is the minimum value that includes all lifetimes.
 
 ######################################
 ############ DOT SETTINGS ############

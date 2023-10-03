@@ -43,7 +43,7 @@ def scanConfigFileForErrors():
     assert cfg.SKIPS_ALLOWED >= 0
     assert type(cfg.REMOVE_EDGE_FRAMES) == bool
     assert type(cfg.LIFETIME_MIN_FOR_PLOT) == int
-    assert type(cfg.NOISE_STATISTIC) in [int, float]
+    assert type(cfg.LIFETIME_THRESHOLD) == int
 
     assert type(cfg.DOT_SIZE) == int
     assert cfg.DOT_COLOR in matplotlibColors

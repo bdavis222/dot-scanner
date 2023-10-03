@@ -139,7 +139,7 @@ class TestFullAnalysis(unittest.TestCase):
         self.assertTestDataFilesEquivalent(
             "densityTestOutput.txt", "densityExpectedOutput2.txt")
 
-    @mock.patch("settings.config.NOISE_STATISTIC", 2.5)
+    @mock.patch("settings.config.LIFETIME_THRESHOLD", 1)
     def test_lifetimeAnalysis(self):
         filepath = self.getPathFromBase("images/demo/")
         userSettings = FakeUserSettings(filepath=filepath, dotSize=2, blobSize=5,
@@ -165,7 +165,7 @@ class TestFullAnalysis(unittest.TestCase):
         self.assertTestDataFilesEquivalent(
             "lifetimeTestOutput.txt", "lifetimeExpectedOutput.txt")
 
-    @mock.patch("settings.config.NOISE_STATISTIC", 2.5)
+    @mock.patch("settings.config.LIFETIME_THRESHOLD", 1)
     def test_lifetimeAnalysis2(self):
         filepath = self.getPathFromBase("images/demo/")
         userSettings = FakeUserSettings(filepath=filepath, dotSize=2, blobSize=5,
