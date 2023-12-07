@@ -37,6 +37,23 @@ class TestDensity(unittest.TestCase):
         self.assertEqual(len(alreadyMeasured), 3)
         self.assertIn("108.TIF", alreadyMeasured)
 
+    def test_getFilenameFromLine(self):
+        name1 = density.getFilenameFromLine("file1.png 1 95 thing.thing 92")
+        name2 = density.getFilenameFromLine("file 1.png 1 95 thing.thing 92")
+        name3 = density.getFilenameFromLine("file name 1.png 1 95 thing.thing")
+        name4 = density.getFilenameFromLine("file1 .png 1 95 thing.thing 92")
+        name5 = density.getFilenameFromLine("file.1.png 1 95 thing.thing 92")
+        name6 = density.getFilenameFromLine("file .1.png 1 95 thing.thing 92")
+        name7 = density.getFilenameFromLine("file name .1.png 1 95 thing.thi")
+
+        self.assertEqual("file1.png", name1)
+        self.assertEqual("file 1.png", name2)
+        self.assertEqual("file name 1.png", name3)
+        self.assertEqual("file1 .png", name4)
+        self.assertEqual("file.1.png", name5)
+        self.assertEqual("file .1.png", name6)
+        self.assertEqual("file name .1.png", name7)
+
     def test_getCoordsInPolygon(self):
         coordsInPolygon = self.getTestCoordsInPolygon()
         coordTuples = []
