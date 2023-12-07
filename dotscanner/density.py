@@ -54,11 +54,16 @@ def getAlreadyMeasured(directory):
     if os.path.exists(directory + cfg.DENSITY_OUTPUT_FILENAME):
         with open(directory + cfg.DENSITY_OUTPUT_FILENAME, "r") as file:
             for line in file:
-                lineList = line.split()
-                if len(lineList) and lineList[0] != "#":
-                    filename = lineList[0]
-                    alreadyMeasured.add(filename)
+                if not line.startswith("#") and len(line.split()):
+                    alreadyMeasured.add(getFilenameFromLine(line))
     return alreadyMeasured
+
+
+def getFilenameFromLine(line):
+    extensionStartIndex = line.find(".")
+    extensionEndIndex = line[extensionStartIndex:].find(
+        " ") + extensionStartIndex
+    return line[:extensionEndIndex]
 
 
 def getTotalsAndCoords(coordsInPolygon, dotCoords, blobCoords, blobSize):
@@ -253,25 +258,25 @@ def setReanalysisDataValues(adjustments, userSettings, microscopeImage, data):
 def saveDensityDataFiles(directory, filename, targetPath, dotTotal, surveyedArea, density, error,
                          microscopeImage, userSettings, skipped=False):
     if not os.path.exists(targetPath):
-        with open(targetPath, "a") as file:
-            file.write(strings.DENSITY_OUTPUT_FILE_HEADER)
+        files.safelyAddLineToFile(
+            targetPath, strings.DENSITY_OUTPUT_FILE_HEADER)
 
     if skipped:
         output = f"{filename} skipped - - - - - - - - - - - -\n"
+        files.safelyAddLineToFile(targetPath, output)
+        return
 
-    else:
-        density = np.round(density, 7)
-        error = np.round(error, 7)
-        output = strings.densityOutput(filename, dotTotal, surveyedArea, density, error,
-                                       microscopeImage, userSettings)
+    density = np.round(density, 7)
+    error = np.round(error, 7)
+    output = strings.densityOutput(filename, dotTotal, surveyedArea, density, error,
+                                   microscopeImage, userSettings)
 
-    if not skipped and userSettings.saveFigures:
+    files.safelyAddLineToFile(targetPath, output)
+
+    if userSettings.saveFigures:
         outputFilename = targetPath.split("/")[-1]
         saveDensityFigure(directory, filename, outputFilename,
                           microscopeImage, userSettings)
-
-    with open(targetPath, "a") as file:
-        file.write(output)
 
 
 def saveDensityFigure(directory, filename, outputFilename, microscopeImage, userSettings):

@@ -53,6 +53,19 @@ NO_LIFETIMES_FOUND_ERROR = """
 No lifetimes measured.
 Check that your images are arranged as a time series."""
 
+PERMISSION_ERROR = """
+\033[31;1mError:\033[0m \033[1mThe following folder may not have Read & Write permissions:\033[0m
+
+\033[95;1m{filepath}\033[0m
+
+Read & Write permissions are required for a data output file to be created.
+To fix this, follow these instructions:
+
+\033[1mmacOS:\033[0m \033[34;4mhttps://support.apple.com/en-gb/guide/mac-help/mchlp1203/mac#:~:text=On%20your%20Mac%2C%20select%20a,then%20choose%20a%20privilege%20setting.\033[0m
+
+\033[1mWindows:\033[0m \033[34;4mhttps://answers.microsoft.com/en-us/windows/forum/all/how-do-i-fix-file-explorer-permissions/26017dc2-77cc-40c9-863e-98cbcc550b94\033[0m
+"""
+
 PROGRAM_NAME_EXCEPTION = "Invalid program name selected in configurations file."
 
 REANALYSIS_NOT_IN_FILE = """Filename not found in reanalysis file:
@@ -68,6 +81,12 @@ START_IMAGE_DIRECTORY_WARNING = "WARNING: Start image must be in the same direct
 TOO_FEW_FRAMES_EXCEPTION = "There are not enough images to get meaningful lifetimes."
 
 UPPER_DOT_THRESH_SCALE_WARNING = "\nWARNING: Upper dot threshold scale set below lower dot threshold scale. Previous threshold values will be retained."
+
+WELCOME_MESSAGE = """
+\033[94;1mDot Scanner\033[0m
+\033[37;3mMicroscope image analysis software\033[0m
+Please report any issues to \033[96mgithub.com/bdavis222/dotscanner/issues\033[0m
+"""
 
 WINDOW_SIZE_WARNING = "\nWARNING: Due to the device's screen size or the window height that has been manually selected, the window height will be smaller than 650 pixels for the threshold-adjustment and region-selection windows, potentially resulting in some buttons not being visible. However, the Return key will still allow confirmation in each window, and the Escape key will allow for skipping files, when the option is available."
 

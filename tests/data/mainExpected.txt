@@ -14,6 +14,7 @@ cm.runChecks()
 
 
 def main():
+    print(strings.WELCOME_MESSAGE)
     while True:
         userSettings = UserSettings()
         directory, filenames = files.getDirectoryAndFilenames(userSettings)

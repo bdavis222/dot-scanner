@@ -259,3 +259,48 @@ def getExtensionIndexFromDensityAnalysisFileLineArray(lineArray):
             if not element[periodIndex + 1].isdigit():
                 return index
     return -1
+
+
+def safelyAddLineToFile(filepath, lineToAdd):
+    try:
+        with open(filepath, "a") as file:
+            file.write(lineToAdd)
+
+    except PermissionError:
+        failWithPermissionError(filepath)
+
+
+def safelyRemoveFile(filepath):
+    try:
+        os.remove(filepath)
+
+    except PermissionError:
+        failWithPermissionError(filepath)
+
+
+def safelyWriteLifetimeData(filepath, lifetimes, resultCoords, startImages, displacements,
+                            filteredIndices, imageNumberToFilenameMap,  microscopeImage,
+                            userSettings):
+    try:
+        with open(filepath, "a") as file:
+            file.write(strings.lifetimeOutputFileHeader(
+                microscopeImage, userSettings))
+            for index, lifetime, resultCoord, startImage, displacement in zip(range(len(lifetimes)),
+                                                                              lifetimes,
+                                                                              resultCoords,
+                                                                              startImages,
+                                                                              displacements):
+                y, x = resultCoord
+                filename = imageNumberToFilenameMap[startImage]
+                note = "" if index in filteredIndices else " y"
+                output = f"{x} {y} {lifetime} {filename} {displacement}{note}\n"
+                file.write(output)
+
+    except PermissionError:
+        failWithPermissionError(filepath)
+
+
+def failWithPermissionError(filepath):
+    folderPath = "/".join(filepath.split("/")[:-1])
+    print(strings.PERMISSION_ERROR.format(filepath=folderPath))
+    quit()

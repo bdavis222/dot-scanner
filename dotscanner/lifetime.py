@@ -171,20 +171,11 @@ def saveLifetimeDataFiles(directory, lifetimes, resultCoords, startImages, displ
         targetPath = files.getAnalysisTargetPath(
             directory, cfg.LIFETIME_OUTPUT_FILENAME)
         if os.path.exists(targetPath):
-            os.remove(targetPath)
+            files.safelyRemoveFile(targetPath)
 
-    with open(targetPath, "a") as file:
-        file.write(strings.lifetimeOutputFileHeader(
-            microscopeImage, userSettings))
-        for index, lifetime, resultCoord, startImage, displacement in zip(range(len(lifetimes)),
-                                                                          lifetimes, resultCoords,
-                                                                          startImages,
-                                                                          displacements):
-            y, x = resultCoord
-            filename = imageNumberToFilenameMap[startImage]
-            note = "" if index in filteredIndices else " y"
-            output = f"{x} {y} {lifetime} {filename} {displacement}{note}\n"
-            file.write(output)
+    files.safelyWriteLifetimeData(targetPath, lifetimes, resultCoords, startImages, displacements,
+                                  filteredIndices, imageNumberToFilenameMap,  microscopeImage,
+                                  userSettings)
 
     outputFilename = targetPath.split("/")[-1]
     if not testing:
