@@ -165,7 +165,7 @@ Brian Davis
 
 ## Release History
 
-- 1.5.2
+- 1.5.3
   - Bug fixes
 - 1.5.0
   - Added ability to remove unreliable lifetime data from noisy datasets
