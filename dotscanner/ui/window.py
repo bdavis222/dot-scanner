@@ -30,7 +30,7 @@ def createConfigurationsWindow():
     width, _ = getWindowDimensions()
     if width > 650:
         width = 650
-    window.geometry(f"{width}x275+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
+    window.geometry(f"{width}x280+{cfg.WINDOW_X}+{cfg.WINDOW_Y}")
     return window
 
 

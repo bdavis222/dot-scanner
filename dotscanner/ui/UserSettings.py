@@ -75,11 +75,12 @@ class UserSettings:
             offvalue=False, command=self.setSaveFigs)
         self.checkboxSaveFigsVar.set(self.saveFigures)
 
-        self.labelProgram.pack(in_=self.programFrame, side=tk.LEFT)
+        self.labelProgram.pack(in_=self.programFrame,
+                               side=tk.LEFT, pady=(5, 0))
         self.menuProgramSelect.pack(
-            in_=self.programFrame, side=tk.LEFT)
+            in_=self.programFrame, side=tk.LEFT, pady=(5, 0))
         self.checkboxSaveFigs.pack(
-            in_=self.programFrame, side=tk.LEFT, padx=(15, 0))
+            in_=self.programFrame, side=tk.LEFT, pady=(5, 0), padx=(15, 0))
 
         self.sizesFrame = tk.Frame(self.window)
         self.labelSizes = tk.Label(
