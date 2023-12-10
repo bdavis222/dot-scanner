@@ -169,8 +169,8 @@ class UserSettings:
         self.buttonEditDefaults.pack(
             in_=self.bottomButtons, side=tk.LEFT, pady=(5, 0))
         self.buttonUsePreviousAnalysis.pack(
-            in_=self.bottomButtons, side=tk.LEFT)
-        self.buttonNext.pack(in_=self.bottomButtons, side=tk.LEFT)
+            in_=self.bottomButtons, side=tk.LEFT, pady=(5, 0))
+        self.buttonNext.pack(in_=self.bottomButtons, side=tk.LEFT, pady=(5, 0))
 
         self.labelWarning = tk.Label(self.window, text="", fg="red")
 
