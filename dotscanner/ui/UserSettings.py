@@ -48,15 +48,18 @@ class UserSettings:
         self.navigation = tk.Frame(self.window)
 
         self.labelBrowse = tk.Label(self.window, text="Browse:")
-
         self.buttonSelectFile = tk.Button(
             self.window, text="File", command=self.browseFiles)
-
         self.buttonSelectFolder = tk.Button(
             self.window, text="Folder", command=self.browseFolders)
 
-        self.labelProgram = tk.Label(self.window, text="Program:")
+        self.labelBrowse.pack(in_=self.navigation, side=tk.LEFT)
+        self.buttonSelectFile.pack(in_=self.navigation, side=tk.LEFT)
+        self.buttonSelectFolder.pack(in_=self.navigation, side=tk.LEFT)
 
+        self.programFrame = tk.Frame(self.window)
+
+        self.labelProgram = tk.Label(self.window, text="Program:")
         self.menuProgramSelectVar = tk.StringVar(self.window)
         self.menuProgramSelectVar.set(self.program)  # default value
         self.menuProgramSelect = tk.OptionMenu(
@@ -66,49 +69,67 @@ class UserSettings:
             ProgramType.LIFETIME,
             command=self.toggleExtraOptions
         )
-
         self.checkboxSaveFigsVar = tk.BooleanVar()
         self.checkboxSaveFigs = tk.Checkbutton(
             self.window, text="Save figures", variable=self.checkboxSaveFigsVar, onvalue=True,
             offvalue=False, command=self.setSaveFigs)
         self.checkboxSaveFigsVar.set(self.saveFigures)
 
-        self.labelBrowse.pack(in_=self.navigation, side=tk.LEFT)
-        self.buttonSelectFile.pack(in_=self.navigation, side=tk.LEFT)
-        self.buttonSelectFolder.pack(in_=self.navigation, side=tk.LEFT)
-        self.labelProgram.pack(in_=self.navigation, side=tk.LEFT)
-        self.menuProgramSelect.pack(in_=self.navigation, side=tk.LEFT)
-        self.checkboxSaveFigs.pack(in_=self.navigation, side=tk.LEFT)
+        self.labelProgram.pack(in_=self.programFrame, side=tk.LEFT)
+        self.menuProgramSelect.pack(
+            in_=self.programFrame, side=tk.LEFT)
+        self.checkboxSaveFigs.pack(
+            in_=self.programFrame, side=tk.LEFT, padx=(15, 0))
 
-        self.entries = tk.Frame(self.window)
+        self.sizesFrame = tk.Frame(self.window)
+        self.labelSizes = tk.Label(
+            self.window, text="Sizes", font=tk.font.Font(weight="bold"))
+        self.labelSizes.pack(in_=self.sizesFrame, side=tk.LEFT, pady=(5, 0))
 
-        self.labelDotSize = tk.Label(self.window, text="Dot size:")
+        self.sizesEntries = tk.Frame(self.window)
+
+        self.labelDotSize = tk.Label(self.window, text="Dots:")
         self.entryDotSize = tk.Entry(self.window, width=5)
         self.entryDotSize.insert(0, self.dotSize)
 
-        self.labelBlobSize = tk.Label(self.window, text="Blob size:")
+        self.labelBlobSize = tk.Label(self.window, text="Blobs:")
         self.entryBlobSize = tk.Entry(self.window, width=5)
         self.entryBlobSize.insert(0, self.blobSize)
 
-        self.labelThresholds = tk.Label(self.window, text="Thresholds:")
+        self.labelDotSize.pack(in_=self.sizesEntries, side=tk.LEFT)
+        self.entryDotSize.pack(in_=self.sizesEntries, side=tk.LEFT)
+        self.labelBlobSize.pack(in_=self.sizesEntries,
+                                side=tk.LEFT, padx=(15, 0))
+        self.entryBlobSize.pack(in_=self.sizesEntries, side=tk.LEFT)
 
+        self.thresholdsFrame = tk.Frame(self.window)
+        self.labelThresholds = tk.Label(
+            self.window, text="Thresholds", font=tk.font.Font(weight="bold"))
+        self.labelThresholds.pack(
+            in_=self.thresholdsFrame, side=tk.LEFT, pady=(5, 0))
+
+        self.thresholdEntries = tk.Frame(self.window)
+
+        self.labelLowerDotThresh = tk.Label(self.window, text="Lower dot:")
         self.entryThreshold1 = tk.Entry(self.window, width=5)
         self.entryThreshold1.insert(0, self.lowerDotThresh)
 
+        self.labelUpperDotThresh = tk.Label(self.window, text="Upper dot:")
         self.entryThreshold2 = tk.Entry(self.window, width=5)
         self.entryThreshold2.insert(0, self.upperDotThresh)
 
+        self.labelLowerBlobThresh = tk.Label(self.window, text="Lower blob:")
         self.entryThreshold3 = tk.Entry(self.window, width=5)
         self.entryThreshold3.insert(0, self.lowerBlobThresh)
 
-        self.labelDotSize.pack(in_=self.entries, side=tk.LEFT)
-        self.entryDotSize.pack(in_=self.entries, side=tk.LEFT)
-        self.labelBlobSize.pack(in_=self.entries, side=tk.LEFT)
-        self.entryBlobSize.pack(in_=self.entries, side=tk.LEFT)
-        self.labelThresholds.pack(in_=self.entries, side=tk.LEFT)
-        self.entryThreshold1.pack(in_=self.entries, side=tk.LEFT)
-        self.entryThreshold2.pack(in_=self.entries, side=tk.LEFT)
-        self.entryThreshold3.pack(in_=self.entries, side=tk.LEFT)
+        self.labelLowerDotThresh.pack(in_=self.thresholdEntries, side=tk.LEFT)
+        self.entryThreshold1.pack(in_=self.thresholdEntries, side=tk.LEFT)
+        self.labelUpperDotThresh.pack(
+            in_=self.thresholdEntries, side=tk.LEFT, padx=(15, 0))
+        self.entryThreshold2.pack(in_=self.thresholdEntries, side=tk.LEFT)
+        self.labelLowerBlobThresh.pack(
+            in_=self.thresholdEntries, side=tk.LEFT, padx=(15, 0))
+        self.entryThreshold3.pack(in_=self.thresholdEntries, side=tk.LEFT)
 
         self.lifetimeOptions = tk.Frame(self.window)
 
@@ -129,21 +150,24 @@ class UserSettings:
         self.labelStartImage.pack(in_=self.lifetimeOptions, side=tk.LEFT)
         self.buttonSelectStartingImage.pack(
             in_=self.lifetimeOptions, side=tk.LEFT)
-        self.labelSkipsAllowed.pack(in_=self.lifetimeOptions, side=tk.LEFT)
+        self.labelSkipsAllowed.pack(
+            in_=self.lifetimeOptions, side=tk.LEFT, padx=(15, 0))
         self.entrySkipsAllowed.pack(in_=self.lifetimeOptions, side=tk.LEFT)
-        self.checkboxRemoveEdge.pack(in_=self.lifetimeOptions, side=tk.LEFT)
+        self.checkboxRemoveEdge.pack(
+            in_=self.lifetimeOptions, side=tk.LEFT, padx=(15, 0))
 
         self.bottomButtons = tk.Frame(self.window)
 
         self.buttonEditDefaults = tk.Button(
-            self.window, text="Edit defaults...", command=self.editDefaults)
+            self.window, text="Edit defaults...", command=self.editDefaults, fg="red")
         self.buttonUsePreviousAnalysis = tk.Button(
             self.window, text="Use previous settings...", command=self.usePreviousAnalysis)
         self.buttonNext = tk.Button(
             self.window, text="Next", command=self.done, fg="blue",
             font=tk.font.Font(weight="bold"))
 
-        self.buttonEditDefaults.pack(in_=self.bottomButtons, side=tk.LEFT)
+        self.buttonEditDefaults.pack(
+            in_=self.bottomButtons, side=tk.LEFT, pady=(5, 0))
         self.buttonUsePreviousAnalysis.pack(
             in_=self.bottomButtons, side=tk.LEFT)
         self.buttonNext.pack(in_=self.bottomButtons, side=tk.LEFT)
@@ -152,7 +176,11 @@ class UserSettings:
 
         self.filepathFrame.pack()
         self.navigation.pack()
-        self.entries.pack()
+        self.programFrame.pack()
+        self.sizesFrame.pack()
+        self.sizesEntries.pack()
+        self.thresholdsFrame.pack()
+        self.thresholdEntries.pack()
         self.lifetimeOptions.pack()
         self.bottomButtons.pack()
         self.labelWarning.pack()
