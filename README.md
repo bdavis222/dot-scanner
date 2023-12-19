@@ -11,16 +11,38 @@ Dot Scanner is designed to simplify analysis of microscope imaging data. The pro
 ### Dependencies
 
 [Python 3](https://www.python.org/downloads/) must be installed before Dot Scanner can be installed.
+**Python 2 is not supported.**
+To make sure you have Python 3 installed, open a terminal window and run the following command:
+
+```
+python3 --version
+```
+
+_(Note: Running this command might require installing command line developer tools. This is normal, and it is ok to install this.)_
+
+This should give version number (i.e., Python 3.x.x). If a "command not found" message is shown instead, then Python 3 is not properly installed.
 
 ### Installation
 
 To install Dot Scanner, open a terminal window and run the following command:
 
 ```
-pip install dotscanner
+pip3 install dotscanner
 ```
 
-_(Note that the_ `pip3` _command may be required instead of_ `pip` _for some Python installations.)_
+_(Note that the_ `pip` _command may be required instead of_ `pip3` _for some Python 3 installations.)_
+
+To update Dot Scanner to the latest version, run the following command _(again, using_ `pip` _instead of_ `pip3` _for some Python 3 installations)_:
+
+```
+pip3 install dotscanner --upgrade
+```
+
+Dot Scanner can also be uninstalled at any time using the following command _(again, using_ `pip` _instead of_ `pip3` _for some Python 3 installations)_:
+
+```
+pip3 uninstall dotscanner
+```
 
 ### Running the Software
 
@@ -29,6 +51,14 @@ To launch the main graphical user interface (GUI), run the following command:
 ```
 dotscanner
 ```
+
+**Note:** if you are getting an error when trying to run the program, run the following command to check your Python version:
+
+```
+python3 --version
+```
+
+Python 2 is _not_ supported, and Python 3 _must_ be installed to run Dot Scanner.
 
 Some demo images are included in the [demo images folder](https://github.com/bdavis222/dot-scanner/blob/main/images/demo/) of this GitHub project, which can be downloaded and used as explained below to familiarize oneself with how the software works.
 
@@ -155,7 +185,7 @@ This window allows the user to click different locations on the image to set the
 
 Information about the image processing will be displayed in the terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
 
-_Note: the extraneous `+[CATransaction synchronize]` output in the terminal window is a known bug in macOS 13 that will not affect your data._
+_Note: the extraneous `+[CATransaction synchronize]` output in the terminal window is a [known bug](https://developer.apple.com/forums/thread/722889) in macOS that will not affect your data._
 
 ## Authors
 
@@ -165,7 +195,7 @@ Brian Davis
 
 ## Release History
 
-- 1.5.6
+- 1.5.8
   - Bug fixes
 - 1.5.0
   - Added ability to remove unreliable lifetime data from noisy datasets
@@ -215,4 +245,4 @@ To report a bug, visit the [issues page](https://github.com/bdavis222/dot-scanne
 
 When using this program on data used in published works, please cite:
 
-Allen, H., Davis, B., Patel, J., & Gu, Y. 2023 (in prep.)
+Allen, H., Davis, B., Patel, J., & Gu, Y. 2024 _(in prep.)_
