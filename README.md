@@ -59,7 +59,9 @@ python3 --version
 ```
 
 Python 2 is _not_ supported, and Python 3 _must_ be installed to run Dot Scanner.
+
 Additionally, if there are any other errors that prevent the program from working as expected, follow the link above in the Dependencies section to download and install the most up-to-date version of Python 3 and try again.
+This will correct many common issues.
 
 Some demo images are included in the [demo images folder](https://github.com/bdavis222/dot-scanner/blob/main/images/demo/) of this GitHub project, which can be downloaded and used as explained below to familiarize oneself with how the software works.
 
