@@ -188,7 +188,7 @@ This window allows the user to click different locations on the image to set the
 
 Information about the image processing will be displayed in the terminal, including progress bars to estimate the time to completion of longer processes, like lifetime calculations and the saving of multiple figures.
 
-_Note: the extraneous `+[CATransaction synchronize]` output in the terminal window is a [known bug](https://developer.apple.com/forums/thread/722889) in macOS that will not affect your data. There are other extraneous bits of terminal output that have been know to pop up as well (`ApplePersistenceIgnoreState`, `NSApplicationDelegate`, etc.). These are all harmless and will not affect your data._
+_Note: the extraneous `+[CATransaction synchronize]` output in the terminal window is a [known bug](https://developer.apple.com/forums/thread/722889) in macOS. There are other extraneous bits of terminal output that have been know to pop up as well (`ApplePersistenceIgnoreState`, `NSApplicationDelegate`, etc.). These are all harmless messages, and will not affect your data._
 
 ## Authors
 
