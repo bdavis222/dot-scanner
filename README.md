@@ -248,4 +248,4 @@ To report a bug, visit the [issues page](https://github.com/bdavis222/dot-scanne
 
 When using this program on data used in published works, please cite:
 
-Allen, H., Davis, B., Patel, J., & Gu, Y. 2024 _(in prep.)_
+Allen, H., Davis, B., Patel, J. and Gu, Y. (2024), Dot Scanner: open-source software for quantitative live-cell imaging in planta. _Plant Journal_. https://doi.org/10.1111/tpj.16662
