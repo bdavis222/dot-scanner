@@ -18,7 +18,9 @@ To make sure you have Python 3 installed, open a terminal window and run the fol
 python3 --version
 ```
 
-_(Note: Running this command might require installing command line developer tools. This is normal, and it is ok to install this.)_
+_(Note that the_ `python` _command may be required instead of_ `python3` _for some Python 3 installations.)_
+
+_(Also, running this command might require installing command line developer tools. This is normal, and it is ok to install this.)_
 
 This should give version number (i.e., Python 3.x.x). If a "command not found" message is shown instead, then Python 3 is not properly installed.
 
